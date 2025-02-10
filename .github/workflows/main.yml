@@ -31,4 +31,4 @@ jobs:
         BASE_BRANCH: main
         BRANCH: prod
         ACCESS_TOKEN: ${{ secrets.GH_TOKEN }}
-        FOLDER: dist/jdev-king.github.io
+        FOLDER: dist/browser
