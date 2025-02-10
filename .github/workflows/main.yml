@@ -2,7 +2,7 @@ name: Angular Build and Deploy
 on:
   push:
     branches:
-      - gh-pages
+      - main
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -26,8 +26,9 @@ jobs:
       run: pnpm install && pnpm run build:production
 
     - name: Deploy to GitHub Pages
-      run: |
-        npx angular-cli-ghpages --dir=dist/jdev-king.github.io/browser
-      env:
-        CI: true
+      uses: JamesIves/github-pages-deploy-action@releases/v2
+      with:
+        BASE_BRANCH: main
+        BRANCH: prod
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        FOLDER: dist/jdev-king.github.io
