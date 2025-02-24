@@ -1,0 +1,14 @@
+.article-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.25rem;
+	margin-bottom: 0.5rem;
+}
+
+.article-tag {
+	background-color: #1e293b;
+	color: #94a3b8;
+	font-size: 0.75rem;
+	padding: 0.25rem 0.5rem;
+	border-radius: 9999px;
+}

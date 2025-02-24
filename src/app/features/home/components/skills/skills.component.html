@@ -16,7 +16,8 @@
 				</div>
 
 				<div class="skills-list">
-					<div *ngFor="let skill of category.skills" class="skill-item">
+					@for (skill of category.skills; track $index) {
+					<div lass="skill-item">
 						<div class="skill-header">
 							<span class="skill-name">{{ skill.name }}</span>
 							<span class="skill-level">{{ skill.level }}</span>
@@ -26,12 +27,17 @@
 							<div class="progress-fill" [style.width.%]="skill.proficiency"></div>
 						</div>
 
-						<div class="tools-list" *ngIf="skill.tools.length">
-							<span *ngFor="let tool of skill.tools" class="tool-tag">
+						@if (skill.tools.length) {
+						<div class="tools-list">
+							@for (tool of skill.tools; track $index) {
+							<span class="tool-tag">
 								{{ tool }}
 							</span>
+							}
 						</div>
+						}
 					</div>
+					}
 				</div>
 			</div>
 		</div>

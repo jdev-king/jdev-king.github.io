@@ -1,1 +1,86 @@
-<p>work works!</p>
+<div class="relative">
+	<h2 class="text-4xl font-mono mb-8">Work</h2>
+	<div class="space-y-4">
+		@for (work of workExperience; track $index) {
+		<div
+			class="grid grid-cols-[0.5fr_1fr_1fr] gap-4 border-b border-gray-800 pb-4 rounded-lg hover:bg-gray-200 hover:text-gray-900 transition-colors group"
+			(click)="openSidebar(work)"
+		>
+			<div>
+				<div class="text-gray-400 group-hover:text-gray-900 pl-2">
+					{{ work.startDate | date : 'YYYY' }} -
+					{{ work.endDate.getUTCDay() == currentDate.getUTCDay() ? 'Currently' : (work.endDate | date : 'YYYY') }}
+				</div>
+				<p class="text-sm text-gray-500 group-hover:text-gray-900 pl-2">
+					{{ calculateDuration(work.startDate, work.endDate) }}
+				</p>
+			</div>
+			<div>
+				<a href="{{ work.companyUrl }}" target="_blank" class="hover:text-blue-900">{{ work.company }}</a>
+			</div>
+			<div>{{ work.position }} | {{ work.tech.join(', ') }}</div>
+		</div>
+		}
+	</div>
+
+	<!-- Sidebar -->
+	<div
+		class="fixed top-0 right-0 h-full w-full md:w-[60dvw] lg:w-[40dvw] bg-gray-900 transform transition-transform duration-300 ease-in-out z-50 overflow-y-auto"
+		[class.translate-x-0]="sidebarVisible()"
+		[class.translate-x-full]="!sidebarVisible()"
+	>
+		@if (selectedWork()) {
+		<div class="p-6">
+			<div class="flex justify-between items-center mb-6">
+				<h3 class="text-2xl font-mono">{{ selectedWork()?.company }}</h3>
+				<button class="text-gray-400 hover:text-white" (click)="closeSidebar()">✕</button>
+			</div>
+
+			<div class="space-y-4">
+				<div>
+					<h4 class="text-gray-400 pb-1">Position</h4>
+					<p class="text-white">{{ selectedWork()?.position }}</p>
+				</div>
+
+				<div>
+					<h4 class="text-gray-400 pb-1">Duration</h4>
+					<p class="text-white">
+						{{ selectedWork()?.startDate | date : 'MMM YYYY' }} -
+						{{ selectedWork()?.endDate ? (selectedWork()?.endDate | date : 'MMM YYYY') : 'Present' }}
+					</p>
+				</div>
+
+				<div>
+					<h4 class="text-gray-400 pb-1">Technologies</h4>
+					<div class="flex flex-wrap gap-2 mt-2">
+						@for (tech of selectedWork()?.tech; track tech) {
+						<span class="px-2 py-1 bg-gray-800 rounded-md text-sm">
+							{{ tech }}
+						</span>
+						}
+					</div>
+				</div>
+
+				<div>
+					<h4 class="text-gray-400 pb-1">Description</h4>
+					<p class="text-white">{{ selectedWork()?.description }}</p>
+				</div>
+
+				<div>
+					<h4 class="text-gray-400 pb-1">Key Responsibilities</h4>
+					<ul class="list-disc list-inside text-white space-y-2">
+						@for (responsibility of selectedWork()?.responsibilities; track responsibility) {
+						<li>{{ responsibility }}</li>
+						}
+					</ul>
+				</div>
+			</div>
+		</div>
+		}
+	</div>
+
+	<!-- Overlay -->
+	@if (sidebarVisible()) {
+	<div class="fixed inset-0 backdrop-blur-sm bg-black/30 transition-opacity z-40" (click)="closeSidebar()"></div>
+	}
+</div>

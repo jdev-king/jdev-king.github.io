@@ -1,5 +1,20 @@
 @use 'tailwindcss';
 
-html, body {
-    font-family: 'Fira Code';
+html,
+body {
+	font-family: 'Fira Code';
+}
+
+::-webkit-scrollbar {
+	width: 0.5rem; /* Remove scrollbar space */
+	background: black; /* Optional: just make scrollbar invisible */
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--color-gray-900);
+	border-radius: 2rem;
+}
+
+html {
+	scroll-behavior: smooth;
 }

@@ -1,0 +1,42 @@
+<h2 class="text-4xl font-mono mb-12 text-right">Articles</h2>
+<!-- Article Navigation -->
+<div class="flex gap-4 mb-8">
+	@for (page of getPageNumbers(); track $index) {
+	<button
+		(click)="setArticlePage($index + 1)"
+		class="w-8 h-8 rounded-full border border-gray-700 flex items-center justify-center transition-colors hover:text-white hover:bg-gray-800"
+		[class.text-white]="currentArticlePage === $index + 1"
+		[class.text-gray-500]="currentArticlePage !== $index + 1"
+		[class.bg-gray-800]="currentArticlePage === $index + 1"
+	>
+		{{ $index + 1 }}
+	</button>
+	}
+</div>
+
+<!-- Articles Grid -->
+<div class="grid grid-cols-2 gap-6">
+	@for (article of visibleArticles; track article) {
+	<div class="bg-[#111111] rounded-3xl p-8 flex flex-col transform transition-all duration-300 hover:scale-105">
+		<h3 class="text-xl font-mono mb-4">{{ article.title }}</h3>
+		<p class="text-gray-400 mb-2 flex-grow">EXAMPLE DESCRIPTION TEMPORARY</p>
+		@if (article.categories.length) {
+		<div class="article-list">
+			@for (tag of article.categories; track $index) {
+			<span class="article-tag">
+				{{ tag }}
+			</span>
+			}
+		</div>
+		}
+		<div class="flex items-center justify-end">
+			<button
+				(click)="openExternalLink(article.link)"
+				class="text-white bg-transparent hover:bg-gray-800 transition-colors px-6 py-2 rounded-full border border-gray-700"
+			>
+				Read more →
+			</button>
+		</div>
+	</div>
+	}
+</div>

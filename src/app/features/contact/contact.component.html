@@ -1,0 +1,48 @@
+<div class="contact-container">
+	<div class="contact-grid">
+		<!-- Contact Info Section -->
+		<div class="contact-info">
+			<h1 class="text-2xl font-mono">Let's Connect</h1>
+			<p>I'm always interested in hearing about new projects and opportunities. Feel free to reach out!</p>
+
+			<div class="social-links">
+				<a href="mailto:jesussebastiandiezplasencia@gmail.com" target="_blank" class="social-item">
+					<i class="fa-regular fa-envelope"></i>
+					<span>{{ 'jesussebastiandiezplasencia@gmail.com' }}</span>
+				</a>
+
+				<div class="social-icons">
+					<a href="https://github.com/jdev-king" target="_blank" aria-label="GitHub">
+						<i class="fa-brands fa-github fa-xl"></i>
+					</a>
+					<a href="https://www.linkedin.com/in/jesusdiezp/" target="_blank" aria-label="LinkedIn">
+						<i class="fa-brands fa-linkedin fa-xl"></i>
+					</a>
+					<a href="https://instagram.com/jdev-king" target="_blank" aria-label="Instagram">
+						<i class="fa-brands fa-instagram fa-xl"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<!-- Contact Form Section -->
+		<form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
+			<div class="form-group">
+				<label for="name">Name</label>
+				<input type="text" id="name" formControlName="name" placeholder="Your name" />
+			</div>
+
+			<div class="form-group">
+				<label for="email">Email</label>
+				<input type="email" id="email" formControlName="email" placeholder="your@email.com" />
+			</div>
+
+			<div class="form-group">
+				<label for="message">Message</label>
+				<textarea id="message" formControlName="message" placeholder="Your message" rows="5"></textarea>
+			</div>
+
+			<button type="submit" [disabled]="!contactForm.valid">Send Message</button>
+		</form>
+	</div>
+</div>

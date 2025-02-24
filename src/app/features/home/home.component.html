@@ -1,224 +1,24 @@
 <div class="min-h-screen bg-black text-white p-8">
-	<!-- Header -->
-	<header class="flex justify-between items-center mb-12">
-		<div>
-			<h1 class="text-2xl font-mono">Jesus Diez</h1>
-			<h2 class="text-xl font-mono text-gray-400">{{ '@jdev-king' }}</h2>
-		</div>
-		<nav class="space-x-4">
-			<a href="#" class="text-white hover:text-gray-300">About</a>
-			<a href="#" class="text-white hover:text-gray-300">Projects</a>
-			<a href="#" class="text-white hover:text-gray-300">Articles</a>
-			<a href="#" class="text-white hover:text-gray-300">Contacts</a>
-			<!-- <select class="bg-black text-white border border-gray-700 rounded">
-				<option>EN</option>
-				<option>GE</option>
-			</select> -->
-		</nav>
-	</header>
-
 	<!-- Hero Section -->
 	<section id="hero-section" class="mb-16">
-		<div class="flex sm:flex-row sm:justify-between flex-col justify-center">
-			<div>
-				<h1 class="text-6xl font-mono mb-4">AI<br />Developer</h1>
-				<p class="text-gray-400 max-w-lg">
-					I design and implement end-to-end AI solutions that optimize system performance, automate complex workflows,
-					and drive efficiency.
-				</p>
-
-				<!-- Social Links -->
-				<div class="flex space-x-4 mt-6">
-					<a href="https://github.com/jdev-king" target="_blank" class="text-gray-400 hover:text-white">
-						<i class="fa-brands fa-github fa-xl"></i>
-					</a>
-					<a href="https://www.linkedin.com/in/jesusdiezp/" target="_blank" class="text-gray-400 hover:text-white">
-						<i class="fa-brands fa-linkedin fa-xl"></i>
-					</a>
-					<a href="https://www.instagram.com/jdev_king/" target="_blank" class="text-gray-400 hover:text-white">
-						<i class="fa-brands fa-instagram fa-xl"></i>
-					</a>
-				</div>
-			</div>
-			<div class="flex">
-				<img
-					src="imgs/black_background.jpg"
-					alt="Hero background"
-					class="sm:w-[50dvw] w-[100dvw] h-90 rounded-lg object-cover sm:[mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_100%)] sm:mt-0 mt-8"
-				/>
-			</div>
-		</div>
+		<app-hero-section />
 	</section>
 
 	<!-- Projects Carousel -->
-	<section class="mb-16">
-		<div class="flex justify-between items-center mb-8">
-			<h2 class="text-4xl font-mono">Projects</h2>
-			@if (!isGridView) {
-			<button
-				(click)="toggleView()"
-				class="text-white border border-gray-700 px-4 py-2 rounded-full hover:bg-gray-800 transition-colors"
-			>
-				Show More <i class="fa-solid fa-plus"></i>
-			</button>
-			} @else {
-			<div class="flex space-x-4">
-				<button
-					[disabled]="currentProjectIndex === 0"
-					(click)="navigateProjects('prev')"
-					class="p-2 rounded-full border border-gray-700 hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-				>
-					←
-				</button>
-				<button
-					[disabled]="currentProjectIndex >= projects.length - projectsToShow"
-					(click)="navigateProjects('next')"
-					class="p-2 rounded-full border border-gray-700 hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-				>
-					→
-				</button>
-			</div>
-			}
-		</div>
-
-		@if (!isGridView) {
-		<div
-			class="w-full inline-flex flex-nowrap overflow-hidden p-[0.5rem] [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-200px),transparent_100%)]"
-		>
-			<div class="flex whitespace-nowrap animate-marquee hover:pause">
-				<!-- First set of projects -->
-				<div class="flex shrink-0">
-					@for (project of projects; track project) {
-					<div class="w-[400px] mx-4">
-						<div class="bg-gray-900 rounded-lg p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl">
-							<img [src]="project.image" [alt]="project.title" class="rounded-lg mb-4 w-full h-48 object-cover" />
-							<h3 class="text-xl mb-2">{{ project.title }}</h3>
-							<p class="text-gray-400 mb-4">{{ project.description }}</p>
-							<button
-								class="text-white border border-gray-700 px-4 py-2 rounded-full hover:bg-gray-800 transition-colors"
-							>
-								Read more →
-							</button>
-						</div>
-					</div>
-					}
-				</div>
-				<!-- Duplicate set for seamless loop -->
-				<div class="flex shrink-0" aria-hidden="true">
-					@for (project of projects; track project) {
-					<div class="w-[400px] mx-4">
-						<div class="bg-gray-900 rounded-lg p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl">
-							<img [src]="project.image" [alt]="project.title" class="rounded-lg mb-4 w-full h-48 object-cover" />
-							<h3 class="text-xl mb-2">{{ project.title }}</h3>
-							<p class="text-gray-400 mb-4">{{ project.description }}</p>
-							<button
-								class="text-white border border-gray-700 px-4 py-2 rounded-full hover:bg-gray-800 transition-colors"
-							>
-								Read more →
-							</button>
-						</div>
-					</div>
-					}
-				</div>
-			</div>
-			<div class="flex justify-center items-center h-48">
-				<p class="text-gray-400">Loading projects...</p>
-			</div>
-		</div>
-		} @if (isGridView) {
-		<div class="mb-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-			@for (project of visibleProjects; track project) {
-			<div class="w-full">
-				<div class="bg-gray-900 rounded-lg p-4 md:p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl">
-					<img
-						[src]="project.image"
-						[alt]="project.title"
-						class="rounded-lg mb-3 md:mb-4 w-full h-36 sm:h-48 object-cover"
-					/>
-					<h3 class="text-lg md:text-xl mb-2">{{ project.title }}</h3>
-					<p class="text-gray-400 text-sm md:text-base mb-3 md:mb-4">{{ project.description }}</p>
-					<button
-						class="w-full sm:w-auto text-white border border-gray-700 px-3 md:px-4 py-2 rounded-full hover:bg-gray-800 transition-colors text-sm md:text-base"
-					>
-						Read more →
-					</button>
-				</div>
-			</div>
-			}
-		</div>
-		<div class="flex justify-center mb-8">
-			<button
-				(click)="toggleView()"
-				class="text-white border border-gray-700 px-6 py-3 rounded-full hover:bg-gray-800 transition-colors"
-			>
-				Show Less <i class="fa-solid fa-chevron-up"></i>
-			</button>
-		</div>
-		}
+	<section id="projects" class="mb-16">
+		<app-projects />
 	</section>
 
 	<!-- Skills Section -->
-	<section class="mb-16">
+	<section id="skills" class="mb-16">
 		<app-skills></app-skills>
 	</section>
 	<!-- Work Experience -->
-	<section class="mb-16">
-		<h2 class="text-4xl font-mono mb-8">Work</h2>
-		<div class="space-y-4">
-			@for (work of workExperience; track $index) {
-			<div
-				class="grid grid-cols-[0.5fr_1fr_1fr] gap-4 border-b border-gray-800 pb-4 rounded-lg hover:bg-gray-200 hover:text-gray-900 transition-colors group"
-			>
-				<div>
-					<div class="text-gray-400 group-hover:text-gray-900">
-						{{ work.startDate | date : 'YYYY' }} -
-						{{ work.endDate.getUTCDay() == currentDate.getUTCDay() ? 'Currently' : (work.endDate | date : 'YYYY') }}
-					</div>
-					<p class="text-sm text-gray-500 group-hover:text-gray-900">
-						{{ calculateDuration(work.startDate, work.endDate) }}
-					</p>
-				</div>
-				<div>
-					<a href="{{ work.companyUrl }}" target="_blank" class="hover:text-blue-900">{{ work.company }}</a>
-				</div>
-				<div>{{ work.position }} | {{ work.tech }}</div>
-			</div>
-			}
-		</div>
+	<section id="experience" class="mb-16">
+		<app-work />
 	</section>
 	<!-- Articles Section -->
-	<section class="mt-16">
-		<h2 class="text-4xl font-mono mb-12 text-right">Articles</h2>
-		<!-- Article Navigation -->
-		<div class="flex gap-4 mb-8">
-			@for (page of getPageNumbers(); track $index) {
-			<button
-				(click)="setArticlePage($index + 1)"
-				class="w-8 h-8 rounded-full border border-gray-700 flex items-center justify-center transition-colors hover:text-white hover:bg-gray-800"
-				[class.text-white]="currentArticlePage === $index + 1"
-				[class.text-gray-500]="currentArticlePage !== $index + 1"
-				[class.bg-gray-800]="currentArticlePage === $index + 1"
-			>
-				{{ $index + 1 }}
-			</button>
-			}
-		</div>
-
-		<!-- Articles Grid -->
-		<div class="grid grid-cols-2 gap-6">
-			@for (article of visibleArticles; track article) {
-			<div class="bg-[#111111] rounded-3xl p-8 flex flex-col transform transition-all duration-300 hover:scale-105">
-				<h3 class="text-xl font-mono mb-4">{{ article.title }}</h3>
-				<p class="text-gray-400 mb-6 flex-grow">{{ article.description }}</p>
-				<div class="flex items-center">
-					<button
-						class="text-white bg-transparent hover:bg-gray-800 transition-colors px-6 py-2 rounded-full border border-gray-700"
-					>
-						Read more →
-					</button>
-				</div>
-			</div>
-			}
-		</div>
+	<section id="articles" class="mt-16">
+		<app-articles />
 	</section>
 </div>

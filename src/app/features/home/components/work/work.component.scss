@@ -1,0 +1,13 @@
+:host {
+	display: block;
+}
+
+/* Ensure the sidebar appears above the overlay */
+.sidebar {
+	z-index: 2000;
+}
+
+/* Ensure the overlay appears above the main content */
+.overlay {
+	z-index: 40;
+}

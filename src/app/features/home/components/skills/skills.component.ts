@@ -47,6 +47,30 @@ export class SkillsComponent {
 			]
 		},
 		{
+			title: 'Database & Storage',
+			icon: 'fas fa-database',
+			skills: [
+				{
+					name: 'Vector & Graph Databases',
+					level: 'Intermediate',
+					proficiency: 55,
+					tools: ['Pinecone', 'Neo4j']
+				}
+			]
+		},
+		{
+			title: 'Automation',
+			icon: 'fas fa-bolt',
+			skills: [
+				{
+					name: 'Workflow',
+					level: 'Intermediate',
+					proficiency: 60,
+					tools: ['N8N', 'Make']
+				}
+			]
+		},
+		{
 			title: 'Cloud & DevOps',
 			icon: 'fas fa-cloud',
 			skills: [
@@ -85,30 +109,6 @@ export class SkillsComponent {
 					level: 'Intermediate',
 					proficiency: 60,
 					tools: ['Spring Boot', 'Flask', 'FastAPI']
-				}
-			]
-		},
-		{
-			title: 'Database & Storage',
-			icon: 'fas fa-database',
-			skills: [
-				{
-					name: 'Vector & Graph Databases',
-					level: 'Intermediate',
-					proficiency: 55,
-					tools: ['Pinecone', 'Neo4j']
-				}
-			]
-		},
-		{
-			title: 'Automation',
-			icon: 'fas fa-bolt',
-			skills: [
-				{
-					name: 'Workflow',
-					level: 'Intermediate',
-					proficiency: 60,
-					tools: ['N8N', 'Make']
 				}
 			]
 		}
