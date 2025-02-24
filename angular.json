@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/",
+            "outputPath": "dist/jdev-king.github.io/",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -101,6 +101,15 @@
               "src/styles.scss"
             ],
             "scripts": []
+          }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {
+            "project": "jdev-king.github.io",
+            "remote": "origin",
+            "branch": "master",
+            "dir": "dist/jdev-king.github.io/browser"
           }
         }
       }
