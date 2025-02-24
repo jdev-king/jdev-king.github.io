@@ -107,6 +107,8 @@
           "builder": "angular-cli-ghpages:deploy",
           "options": {
             "project": "jdev-king.github.io",
+            "baseHref": "https://jdev-king.github.io/angular-cli-ghpages/",
+            "branch": "gh-pages",
             "dir": "dist/jdev-king.github.io/browser"
           }
         }
