@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GitHubRepo, RepoWithImage } from '../../shared/domain/GitHubRepo';
+import { GitHubRepo, RepoWithImage } from '../../../shared/domain/GitHubRepo';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, filter, forkJoin, map, mergeMap, of, tap } from 'rxjs';
 
@@ -12,10 +12,10 @@ export class GitHubService {
 	private cachedReposWithImages: { [username: string]: RepoWithImage[] } = {};
 
 	constructor(private http: HttpClient) {
-		const token = '';
+		// const token = '';
 		this.headers = new HttpHeaders({
-			Accept: 'application/vnd.github.v3+json',
-			Authorization: `token ${token}`
+			Accept: 'application/vnd.github.v3+json'
+			// Authorization: `token ${token}`
 		});
 	}
 

@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/jdev-king.github.io/",
+            "outputPath": "dist/",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -108,9 +108,9 @@
           "options": {
             "buildTarget": "jdev-king.github.io:build:production",
             "project": "jdev-king.github.io",
-            "baseHref": "https://jdev-king.github.io/jdev-king.github.io/",
+            "baseHref": "https://jdev-king.github.io/",
             "branch": "gh-pages",
-            "dir": "dist/jdev-king.github.io/browser"
+            "dir": "dist/browser"
           }
         }
       }

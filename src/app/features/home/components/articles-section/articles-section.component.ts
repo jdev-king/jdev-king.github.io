@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { MediumService } from '../../../../core/services/medium.service';
+import { MediumService } from '../../services/medium.service';
 import { MediumPost } from '../../../../shared/domain/MediumPost';
 import { environment } from '../../../../../environments/environment.development';
 

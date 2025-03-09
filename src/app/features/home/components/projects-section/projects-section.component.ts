@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { map } from 'rxjs';
-import { GitHubService } from '../../../../core/services/github.service';
+import { GitHubService } from '../../services/github.service';
 import { RepoWithImage } from '../../../../shared/domain/GitHubRepo';
 
 @Component({
