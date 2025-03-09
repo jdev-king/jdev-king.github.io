@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
 				<h1 class="text-2xl font-mono">Jesus Diez</h1>
 				<h2 class="text-xl font-mono text-gray-400">{{ '@jdev-king' }}</h2>
 			</div>
-			<nav class="space-x-5">
+			<nav class="flex items-center" [style]="{ gap: '1rem' }">
 				<a href="/" class="text-white hover:text-gray-300">Home</a>
 				<a href="#projects" class="text-white hover:text-gray-300">Projects</a>
 				<a href="#skills" class="text-white hover:text-gray-300">Expertise</a>
