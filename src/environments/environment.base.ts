@@ -1,5 +1,5 @@
 export const baseEnvironment = {
-	production: false,
+	production: true,
 	apiUrl: 'http://localhost:3000/api',
 	featureFlags: {
 		enableNewUI: false,
