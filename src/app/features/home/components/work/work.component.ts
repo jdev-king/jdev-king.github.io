@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, signal, computed, HostListener, ChangeDetectionStrategy } from '@angular/core';
 
 interface WorkExperience {
   startDate: Date;
@@ -17,11 +17,49 @@ interface WorkExperience {
   imports: [CommonModule],
   templateUrl: './work.component.html',
   styleUrl: './work.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WorkComponent {
+  // Responsive breakpoints
+  private readonly MOBILE_BREAKPOINT = 768;
+  private readonly TABLET_BREAKPOINT = 1024;
+
+  // Signals for state management
   sidebarVisible = signal(false);
   selectedWork = signal<WorkExperience | null>(null);
+  screenWidth = signal(typeof window !== 'undefined' ? window.innerWidth : 1024);
   currentDate = new Date();
+
+  // Computed properties for responsive behavior
+  isMobile = computed(() => this.screenWidth() < this.MOBILE_BREAKPOINT);
+  isTablet = computed(() => this.screenWidth() >= this.MOBILE_BREAKPOINT && this.screenWidth() < this.TABLET_BREAKPOINT);
+  isDesktop = computed(() => this.screenWidth() >= this.TABLET_BREAKPOINT);
+
+  // Responsive grid classes
+  gridClasses = computed(() => {
+    if (this.isMobile()) {
+      return 'grid grid-cols-1 gap-3';
+    } else if (this.isTablet()) {
+      return 'grid grid-cols-[0.4fr_1fr] gap-4';
+    }
+    return 'grid grid-cols-[0.5fr_1fr_1fr] gap-4';
+  });
+
+  // Responsive sidebar width
+  sidebarClasses = computed(() => {
+    if (this.isMobile()) {
+      return 'w-full';
+    } else if (this.isTablet()) {
+      return 'w-[70dvw]';
+    }
+    return 'w-[40dvw]';
+  });
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    const target = event.target as Window;
+    this.screenWidth.set(target.innerWidth);
+  }
   workExperience: WorkExperience[] = [
     {
       startDate: new Date('2024-01-02'),

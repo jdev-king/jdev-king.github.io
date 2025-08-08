@@ -1,42 +1,115 @@
-<h2 class="text-4xl font-mono mb-12 text-right">Articles</h2>
-<!-- Article Navigation -->
-<div class="flex gap-4 mb-8">
-	@for (page of getPageNumbers(); track $index) {
-	<button
-		(click)="setArticlePage($index + 1)"
-		class="w-8 h-8 rounded-full border border-gray-700 flex items-center justify-center transition-colors hover:text-white hover:bg-gray-800"
-		[class.text-white]="currentArticlePage === $index + 1"
-		[class.text-gray-500]="currentArticlePage !== $index + 1"
-		[class.bg-gray-800]="currentArticlePage === $index + 1"
-	>
-		{{ $index + 1 }}
-	</button>
-	}
+<!-- Responsive Header -->
+<h2
+  class="text-2xl sm:text-3xl lg:text-4xl font-mono mb-8 sm:mb-10 lg:mb-12 text-right transition-all duration-300"
+>
+  Articles
+</h2>
+
+<!-- Loading State -->
+@if (isLoading()) {
+<div
+  class="flex justify-center items-center py-12"
+  role="status"
+  aria-label="Loading articles"
+>
+  <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+  <span class="sr-only">Loading articles...</span>
 </div>
+}
+
+<!-- Article Navigation -->
+@if (!isLoading() && pageNumbers().length > 1) {
+<nav
+  [class]="navigationClasses()"
+  role="navigation"
+  aria-label="Article pagination"
+>
+  @for (page of pageNumbers(); track trackByIndex($index)) {
+  <button
+    (click)="setArticlePage(page)"
+    (keydown.enter)="setArticlePage(page)"
+    (keydown.space)="setArticlePage(page)"
+    [class]="
+      buttonClasses() +
+      ' rounded-full border border-gray-700 flex items-center justify-center transition-all duration-200 hover:text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50'
+    "
+    [class.text-white]="currentArticlePage() === page"
+    [class.text-gray-500]="currentArticlePage() !== page"
+    [class.bg-gray-800]="currentArticlePage() === page"
+    [class.scale-110]="currentArticlePage() === page"
+    [attr.aria-current]="currentArticlePage() === page ? 'page' : null"
+    [attr.aria-label]="'Go to page ' + page"
+    tabindex="0"
+  >
+    {{ page }}
+  </button>
+  }
+</nav>
+}
 
 <!-- Articles Grid -->
-<div class="grid grid-cols-2 gap-6">
-	@for (article of visibleArticles; track article) {
-	<div class="bg-[#111111] rounded-3xl p-8 flex flex-col transform transition-all duration-300 hover:scale-105">
-		<h3 class="text-xl font-mono mb-4">{{ article.title }}</h3>
-		<p class="text-gray-400 mb-2 flex-grow">EXAMPLE DESCRIPTION TEMPORARY</p>
-		@if (article.categories.length) {
-		<div class="article-list">
-			@for (tag of article.categories; track $index) {
-			<span class="article-tag">
-				{{ tag }}
-			</span>
-			}
-		</div>
-		}
-		<div class="flex items-center justify-end">
-			<button
-				(click)="openExternalLink(article.link)"
-				class="text-white bg-transparent hover:bg-gray-800 transition-colors px-6 py-2 rounded-full border border-gray-700"
-			>
-				Read more →
-			</button>
-		</div>
-	</div>
-	}
+@if (!isLoading()) {
+<div [class]="gridClasses()" role="list" aria-label="Articles list">
+  @for (article of visibleArticles(); track trackByArticle($index, article)) {
+  <article
+    class="bg-[#111111] rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 flex flex-col transform transition-all duration-300 hover:scale-105 hover:bg-[#1a1a1a] focus-within:ring-2 focus-within:ring-white focus-within:ring-opacity-50 animate-fadeIn"
+    role="listitem"
+    [style.animation-delay]="$index * 100 + 'ms'"
+  >
+    <!-- Article Title -->
+    <h3
+      class="text-lg sm:text-xl font-mono mb-3 sm:mb-4 line-clamp-3 hover:text-gray-300 transition-colors"
+    >
+      {{ article.title }}
+    </h3>
+
+    <!-- Article Categories -->
+    @if (article.categories && article.categories.length) {
+    <div class="article-list mb-4">
+      @for (tag of article.categories.slice(0, isMobile() ? 2 : 3); track
+      $index) {
+      <span class="article-tag transition-all duration-200 hover:bg-slate-600">
+        {{ tag }}
+      </span>
+      } @if (article.categories.length > (isMobile() ? 2 : 3)) {
+      <span class="article-tag bg-gray-700 text-gray-300">
+        +{{ article.categories.length - (isMobile() ? 2 : 3) }}
+      </span>
+      }
+    </div>
+    }
+
+    <!-- Article Actions -->
+    <div
+      class="flex items-center"
+      [class.justify-center]="isMobile()"
+      [class.justify-end]="!isMobile()"
+    >
+      <button
+        (click)="openExternalLink(article.link)"
+        (keydown.enter)="openExternalLink(article.link)"
+        class="text-white bg-transparent hover:bg-gray-800 active:bg-gray-700 transition-all duration-200 px-4 sm:px-6 py-2 rounded-full border border-gray-700 hover:border-gray-600 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 text-sm sm:text-base font-medium group"
+        [attr.aria-label]="'Read article: ' + article.title"
+      >
+        <span class="flex items-center gap-2">
+          Read more
+          <span
+            class="transform transition-transform group-hover:translate-x-1"
+            aria-hidden="true"
+            >→</span
+          >
+        </span>
+      </button>
+    </div>
+  </article>
+  }
 </div>
+}
+
+<!-- Empty State -->
+@if (!isLoading() && articles().length === 0) {
+<div class="text-center py-12" role="status">
+  <div class="text-gray-400 text-lg mb-4">No articles available</div>
+  <p class="text-gray-500 text-sm">Check back later for new content.</p>
+</div>
+}

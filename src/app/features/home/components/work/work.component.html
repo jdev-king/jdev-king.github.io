@@ -1,78 +1,143 @@
 <div class="relative">
-	<h2 class="text-4xl font-mono mb-8">Work</h2>
-	<div class="space-y-4">
+	<!-- Responsive header -->
+	<h2 class="text-2xl sm:text-3xl lg:text-4xl font-mono mb-6 sm:mb-8">Work</h2>
+	
+	<!-- Work experience list with responsive spacing -->
+	<div class="space-y-3 sm:space-y-4">
 		@for (work of workExperience; track $index) {
 		<div
-			class="grid grid-cols-[0.5fr_1fr_1fr] gap-4 border-b border-gray-800 pb-4 rounded-lg hover:bg-gray-200 hover:text-gray-900 transition-colors group"
+			[class]="gridClasses() + ' border-b border-gray-800 pb-3 sm:pb-4 rounded-lg hover:bg-gray-200 hover:text-gray-900 transition-colors group cursor-pointer'"
 			(click)="openSidebar(work)"
+			role="button"
+			tabindex="0"
+			(keydown.enter)="openSidebar(work)"
+			(keydown.space)="openSidebar(work)"
 		>
-			<div>
-				<div class="text-gray-400 group-hover:text-gray-900 pl-2">
+			<!-- Date and duration column -->
+			<div class="flex flex-col space-y-1">
+				<div class="text-gray-400 group-hover:text-gray-900 text-sm sm:text-base font-medium">
 					{{ work.startDate | date : 'YYYY' }} -
 					{{ work.endDate.getUTCDay() == currentDate.getUTCDay() ? 'Currently' : (work.endDate | date : 'YYYY') }}
 				</div>
-				<p class="text-sm text-gray-500 group-hover:text-gray-900 pl-2">
+				<p class="text-xs sm:text-sm text-gray-500 group-hover:text-gray-900">
 					{{ calculateDuration(work.startDate, work.endDate) }}
 				</p>
 			</div>
-			<div>
-				<a href="{{ work.companyUrl }}" target="_blank" class="hover:text-blue-900"
-					>{{ work.company }}<i class="fa-regular fa-share-from-square ml-2"></i
-				></a>
+			
+			<!-- Company column -->
+			<div class="flex flex-col space-y-1">
+				<a 
+					href="{{ work.companyUrl }}" 
+					target="_blank" 
+					class="hover:text-blue-900 font-semibold text-sm sm:text-base transition-colors"
+					(click)="$event.stopPropagation()"
+				>
+					{{ work.company }}
+					<i class="fa-regular fa-share-from-square ml-1 sm:ml-2 text-xs"></i>
+				</a>
+				
+				<!-- Mobile: Show position under company -->
+				@if (isMobile()) {
+				<div class="text-sm text-gray-600 group-hover:text-gray-800">
+					{{ work.position }}
+				</div>
+				<div class="flex flex-wrap gap-1 mt-1">
+					@for (tech of work.tech.slice(0, 3); track tech) {
+					<span class="px-2 py-1 bg-gray-700 text-white text-xs rounded-md group-hover:bg-gray-600">
+						{{ tech }}
+					</span>
+					}
+					@if (work.tech.length > 3) {
+					<span class="px-2 py-1 bg-gray-600 text-white text-xs rounded-md">
+						+{{ work.tech.length - 3 }}
+					</span>
+					}
+				</div>
+				}
 			</div>
-			<div>{{ work.position }} | {{ work.tech.join(', ') }}</div>
+			
+			<!-- Desktop/Tablet: Position and tech column -->
+			@if (!isMobile()) {
+			<div class="flex flex-col space-y-1">
+				<div class="font-medium text-sm sm:text-base">{{ work.position }}</div>
+				<div class="text-xs sm:text-sm text-gray-500 group-hover:text-gray-700">
+					{{ work.tech.join(', ') }}
+				</div>
+			</div>
+			}
 		</div>
 		}
 	</div>
 
-	<!-- Sidebar -->
+	<!-- Responsive Sidebar -->
 	<div
-		class="fixed top-0 right-0 h-full w-full md:w-[60dvw] lg:w-[40dvw] bg-gray-900 transform transition-transform duration-300 ease-in-out z-50 overflow-y-auto"
+		[class]="'fixed top-0 right-0 h-full bg-gray-900 transform transition-transform duration-300 ease-in-out z-50 overflow-y-auto ' + sidebarClasses()"
 		[class.translate-x-0]="sidebarVisible()"
 		[class.translate-x-full]="!sidebarVisible()"
+		role="dialog"
+		aria-modal="true"
+		[attr.aria-label]="'Work details for ' + selectedWork()?.company"
 	>
 		@if (selectedWork()) {
-		<div class="p-6">
-			<div class="flex justify-between items-center mb-6">
-				<h3 class="text-2xl font-mono">{{ selectedWork()?.company }}</h3>
-				<button class="text-gray-400 hover:text-white" (click)="closeSidebar()">✕</button>
+		<div class="p-4 sm:p-6">
+			<!-- Responsive header -->
+			<div class="flex justify-between items-start mb-4 sm:mb-6">
+				<div class="flex-1 pr-4">
+					<h3 class="text-xl sm:text-2xl font-mono text-white mb-2">{{ selectedWork()?.company }}</h3>
+					<p class="text-sm sm:text-base text-gray-300">{{ selectedWork()?.position }}</p>
+				</div>
+				<button 
+					class="text-gray-400 hover:text-white text-xl sm:text-2xl p-2 -m-2 transition-colors" 
+					(click)="closeSidebar()"
+					aria-label="Close sidebar"
+				>
+					✕
+				</button>
 			</div>
 
-			<div class="space-y-4">
-				<div>
-					<h4 class="text-gray-400 pb-1">Position</h4>
-					<p class="text-white">{{ selectedWork()?.position }}</p>
+			<!-- Responsive content sections -->
+			<div class="space-y-4 sm:space-y-6">
+				<!-- Duration Section -->
+				<div class="bg-gray-800 rounded-lg p-3 sm:p-4">
+					<h4 class="text-gray-400 text-sm sm:text-base font-semibold mb-2">Duration</h4>
+					<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+						<p class="text-white text-sm sm:text-base">
+							{{ selectedWork()?.startDate | date : 'MMM YYYY' }} -
+							{{ selectedWork()?.endDate ? (selectedWork()?.endDate | date : 'MMM YYYY') : 'Present' }}
+						</p>
+						<span class="text-gray-300 text-xs sm:text-sm mt-1 sm:mt-0">
+							{{ calculateDuration(selectedWork()!.startDate, selectedWork()!.endDate) }}
+						</span>
+					</div>
 				</div>
 
+				<!-- Technologies Section -->
 				<div>
-					<h4 class="text-gray-400 pb-1">Duration</h4>
-					<p class="text-white">
-						{{ selectedWork()?.startDate | date : 'MMM YYYY' }} -
-						{{ selectedWork()?.endDate ? (selectedWork()?.endDate | date : 'MMM YYYY') : 'Present' }}
-					</p>
-				</div>
-
-				<div>
-					<h4 class="text-gray-400 pb-1">Technologies</h4>
-					<div class="flex flex-wrap gap-2 mt-2">
+					<h4 class="text-gray-400 text-sm sm:text-base font-semibold mb-3">Technologies</h4>
+					<div class="flex flex-wrap gap-2">
 						@for (tech of selectedWork()?.tech; track tech) {
-						<span class="px-2 py-1 bg-gray-800 rounded-md text-sm">
+						<span class="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 rounded-md text-xs sm:text-sm text-white transition-colors">
 							{{ tech }}
 						</span>
 						}
 					</div>
 				</div>
 
+				<!-- Description Section -->
 				<div>
-					<h4 class="text-gray-400 pb-1">Description</h4>
-					<p class="text-white">{{ selectedWork()?.description }}</p>
+					<h4 class="text-gray-400 text-sm sm:text-base font-semibold mb-3">Description</h4>
+					<p class="text-white text-sm sm:text-base leading-relaxed">{{ selectedWork()?.description }}</p>
 				</div>
 
+				<!-- Key Responsibilities Section -->
 				<div>
-					<h4 class="text-gray-400 pb-1">Key Responsibilities</h4>
-					<ul class="list-disc list-inside text-white space-y-2">
+					<h4 class="text-gray-400 text-sm sm:text-base font-semibold mb-3">Key Responsibilities</h4>
+					<ul class="space-y-3">
 						@for (responsibility of selectedWork()?.responsibilities; track responsibility) {
-						<li>{{ responsibility }}</li>
+						<li class="flex items-start">
+							<span class="text-blue-400 mr-3 mt-1 flex-shrink-0">•</span>
+							<span class="text-white text-sm sm:text-base leading-relaxed">{{ responsibility }}</span>
+						</li>
 						}
 					</ul>
 				</div>
