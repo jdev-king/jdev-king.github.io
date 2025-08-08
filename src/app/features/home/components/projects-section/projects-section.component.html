@@ -1,107 +1,235 @@
-<div class="flex justify-between items-center mb-8">
-	<h2 class="text-4xl font-mono">Projects</h2>
-	@if (!isGridView) {
-	<button
-		(click)="toggleView()"
-		class="text-white border border-gray-700 px-4 py-2 rounded-full hover:bg-gray-800 transition-colors"
-	>
-		Show More <i class="fa-solid fa-plus"></i>
-	</button>
-	} @else {
-	<div class="flex space-x-4">
-		<button
-			[disabled]="currentProjectIndex === 0"
-			(click)="navigateProjects('prev')"
-			class="p-2 rounded-full border border-gray-700 hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-		>
-			←
-		</button>
-		<button
-			[disabled]="currentProjectIndex >= gitHubRepos.length - projectsToShow"
-			(click)="navigateProjects('next')"
-			class="p-2 rounded-full border border-gray-700 hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-		>
-			→
-		</button>
-	</div>
-	}
-</div>
-@if (!isGridView) {
+<!-- Header Section with Responsive Title and Controls -->
 <div
-	class="w-full inline-flex flex-nowrap overflow-hidden p-[0.5rem] [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-200px),transparent_100%)]"
+  class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 md:mb-8 gap-4"
 >
-	<div class="flex whitespace-nowrap animate-marquee hover:pause">
-		<!-- First set of projects -->
-		<div class="flex shrink-0">
-			@for (project of gitHubRepos; track project) {
-			<div class="w-[400px] mx-4">
-				<div class="bg-gray-900 rounded-lg p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl">
-					<img [src]="project.readmeImageUrl" [alt]="project.name" class="rounded-lg mb-4 w-full h-48 object-contain" />
-					<h3 class="text-xl mb-2">{{ project.name }}</h3>
-					<p class="text-gray-400 mb-4 text-wrap">{{ project.description }}</p>
-					<button
-						class="text-white border border-gray-700 px-4 py-2 rounded-full hover:bg-gray-800 transition-colors"
-						(click)="openExternalLink(project.html_url)"
-					>
-						Read more →
-					</button>
-				</div>
-			</div>
-			}
-		</div>
-		<!-- Duplicate set for seamless loop -->
-		<div class="flex shrink-0" aria-hidden="true">
-			@for (project of gitHubRepos; track project) {
-			<div class="w-[400px] mx-4">
-				<div class="bg-gray-900 rounded-lg p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl">
-					<img [src]="project.readmeImageUrl" [alt]="project.name" class="rounded-lg mb-4 w-full h-48 object-contain" />
-					<h3 class="text-xl mb-2">{{ project.name }}</h3>
-					<p class="text-gray-400 mb-4 text-wrap">{{ project.description }}</p>
-					<button
-						class="text-white border border-gray-700 px-4 py-2 rounded-full hover:bg-gray-800 transition-colors"
-						(click)="openExternalLink(project.html_url)"
-					>
-						Read more →
-					</button>
-				</div>
-			</div>
-			}
-		</div>
-	</div>
-	@if (!gitHubRepos.length) {
-	<div class="flex justify-center items-center h-48">
-		<p class="text-gray-400">Loading projects...</p>
-	</div>
-	}
+  <h2 class="text-2xl sm:text-3xl md:text-4xl font-mono text-white">
+    Projects @if (isLoading()) {
+    <span class="ml-2 text-sm text-gray-400 animate-pulse">(Loading...)</span>
+    } @else {
+    <span class="ml-2 text-sm text-gray-400">({{ gitHubRepos().length }})</span>
+    }
+  </h2>
+
+  <!-- View Toggle and Navigation Controls -->
+  <div class="flex items-center gap-3">
+    @if (!isGridView()) {
+    <button
+      (click)="toggleView()"
+      class="text-white border border-gray-700 px-3 md:px-4 py-2 rounded-full hover:bg-gray-800 transition-colors text-sm md:text-base"
+    >
+      <span class="hidden sm:inline">Show More</span>
+      <span class="sm:hidden">Grid</span>
+      <i class="fa-solid fa-plus ml-1"></i>
+    </button>
+    } @else {
+    <div class="flex items-center space-x-2 md:space-x-4">
+      <!-- Navigation Buttons -->
+      <button
+        [disabled]="!canNavigatePrev()"
+        (click)="navigateProjects('prev')"
+        class="p-2 rounded-full border border-gray-700 hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+
+      <!-- Page Indicator -->
+      <span class="text-xs md:text-sm text-gray-400 px-2">
+        {{ currentProjectIndex() + 1 }}-{{
+          Math.min(
+            currentProjectIndex() + currentViewConfig().projectsToShow,
+            gitHubRepos().length
+          )
+        }}
+        of {{ gitHubRepos().length }}
+      </span>
+
+      <button
+        [disabled]="!canNavigateNext()"
+        (click)="navigateProjects('next')"
+        class="p-2 rounded-full border border-gray-700 hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
+    }
+  </div>
 </div>
-} @if (isGridView) {
-<div class="mb-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-	@for (project of visibleProjects; track project) {
-	<div class="w-full">
-		<div class="bg-gray-900 rounded-lg p-4 md:p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl">
-			<img
-				[src]="project.readmeImageUrl"
-				[alt]="project.name"
-				class="rounded-lg mb-3 md:mb-4 w-full h-36 sm:h-48 object-contain"
-			/>
-			<h3 class="text-lg md:text-xl mb-2">{{ project.name }}</h3>
-			<p class="text-gray-400 text-sm md:text-base mb-3 md:mb-4">{{ project.description }}</p>
-			<button
-				class="w-full sm:w-auto text-white border border-gray-700 px-3 md:px-4 py-2 rounded-full hover:bg-gray-800 transition-colors text-sm md:text-base"
-				(click)="openExternalLink(project.html_url)"
-			>
-				Read more →
-			</button>
-		</div>
-	</div>
-	}
+<!-- Marquee View for Continuous Scrolling -->
+@if (!isGridView()) { @if (isLoading()) {
+<div class="flex justify-center items-center h-48 md:h-64">
+  <div class="flex items-center space-x-3">
+    <div
+      class="animate-spin rounded-full h-8 w-8 border-b-2 border-white"
+    ></div>
+    <p class="text-gray-400">Loading projects...</p>
+  </div>
 </div>
-<div class="flex justify-center mb-8">
-	<button
-		(click)="toggleView()"
-		class="text-white border border-gray-700 px-6 py-3 rounded-full hover:bg-gray-800 transition-colors"
-	>
-		Show Less <i class="fa-solid fa-chevron-up"></i>
-	</button>
+} @else if (gitHubRepos().length === 0) {
+<div class="flex justify-center items-center h-48 md:h-64">
+  <p class="text-gray-400">No projects found.</p>
+</div>
+} @else {
+<div
+  class="w-full inline-flex flex-nowrap overflow-hidden p-2 md:p-[0.5rem] [mask-image:_linear-gradient(to_right,transparent_0,_black_64px,_black_calc(100%-64px),transparent_100%)] md:[mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-200px),transparent_100%)]"
+>
+  <div class="flex whitespace-nowrap animate-marquee hover:pause">
+    <!-- First set of projects -->
+    <div class="flex shrink-0">
+      @for (project of visibleProjects(); track trackByProject($index, project))
+      {
+      <div class="w-[280px] sm:w-[320px] md:w-[400px] mx-2 md:mx-4">
+        <div
+          class="bg-gray-900 rounded-lg p-4 md:p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl"
+        >
+          <img
+            [src]="project.readmeImageUrl"
+            [alt]="project.name"
+            class="rounded-lg mb-3 md:mb-4 w-full h-32 sm:h-40 md:h-48 object-contain bg-gray-800"
+            loading="lazy"
+          />
+          <h3
+            class="text-lg md:text-xl mb-2 text-white font-semibold line-clamp-1"
+          >
+            {{ project.name }}
+          </h3>
+          <p
+            class="text-gray-400 text-sm md:text-base mb-3 md:mb-4 line-clamp-2"
+          >
+            {{ project.description || "No description available" }}
+          </p>
+          <button
+            class="w-full sm:w-auto text-white border border-gray-700 px-3 md:px-4 py-2 rounded-full hover:bg-gray-800 transition-colors text-sm md:text-base"
+            (click)="openExternalLink(project.html_url)"
+          >
+            Read more →
+          </button>
+        </div>
+      </div>
+      }
+    </div>
+    <!-- Duplicate set for seamless loop -->
+    <div class="flex shrink-0" aria-hidden="true">
+      @for (project of visibleProjects(); track trackByProject($index, project))
+      {
+      <div class="w-[280px] sm:w-[320px] md:w-[400px] mx-2 md:mx-4">
+        <div
+          class="bg-gray-900 rounded-lg p-4 md:p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl"
+        >
+          <img
+            [src]="project.readmeImageUrl"
+            [alt]="project.name"
+            class="rounded-lg mb-3 md:mb-4 w-full h-32 sm:h-40 md:h-48 object-contain bg-gray-800"
+            loading="lazy"
+          />
+          <h3
+            class="text-lg md:text-xl mb-2 text-white font-semibold line-clamp-1"
+          >
+            {{ project.name }}
+          </h3>
+          <p
+            class="text-gray-400 text-sm md:text-base mb-3 md:mb-4 line-clamp-2"
+          >
+            {{ project.description || "No description available" }}
+          </p>
+          <button
+            class="w-full sm:w-auto text-white border border-gray-700 px-3 md:px-4 py-2 rounded-full hover:bg-gray-800 transition-colors text-sm md:text-base"
+            (click)="openExternalLink(project.html_url)"
+          >
+            Read more →
+          </button>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
 </div>
 }
+<!-- Grid View for Organized Display -->
+} @else { @if (isLoading()) {
+<div class="flex justify-center items-center h-48 md:h-64">
+  <div class="flex items-center space-x-3">
+    <div
+      class="animate-spin rounded-full h-8 w-8 border-b-2 border-white"
+    ></div>
+    <p class="text-gray-400">Loading projects...</p>
+  </div>
+</div>
+} @else if (gitHubRepos().length === 0) {
+<div class="flex justify-center items-center h-48 md:h-64">
+  <p class="text-gray-400">No projects found.</p>
+</div>
+} @else {
+<!-- Dynamic Grid Layout -->
+<div [class]="gridCssClasses()">
+  @for (project of visibleProjects(); track trackByProject($index, project)) {
+  <div class="w-full group">
+    <div
+      class="bg-gray-900 rounded-lg p-4 md:p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl group-hover:bg-gray-800"
+    >
+      <div class="relative overflow-hidden rounded-lg mb-3 md:mb-4">
+        <img
+          [src]="project.readmeImageUrl"
+          [alt]="project.name"
+          class="w-full h-36 sm:h-40 md:h-48 object-contain bg-gray-800 transition-transform duration-300 group-hover:scale-110"
+          loading="lazy"
+        />
+      </div>
+
+      <div class="space-y-2 md:space-y-3">
+        <h3
+          class="text-lg md:text-xl font-semibold text-white line-clamp-1 group-hover:text-blue-400 transition-colors"
+        >
+          {{ project.name }}
+        </h3>
+
+        <p
+          class="text-gray-400 text-sm md:text-base line-clamp-2 leading-relaxed"
+        >
+          {{ project.description || "No description available" }}
+        </p>
+
+        <!-- Project Stats/Info -->
+        @if (project.language || project.stargazers_count) {
+        <div class="flex items-center justify-between text-xs text-gray-500">
+          @if (project.language) {
+          <span class="flex items-center">
+            <span class="w-2 h-2 rounded-full bg-blue-500 mr-1"></span>
+            {{ project.language }}
+          </span>
+          } @if (project.stargazers_count !== undefined &&
+          project.stargazers_count > 0) {
+          <span class="flex items-center">
+            <i class="fa-solid fa-star mr-1"></i>
+            {{ project.stargazers_count }}
+          </span>
+          }
+        </div>
+        }
+
+        <button
+          class="w-full text-white border border-gray-700 px-3 md:px-4 py-2 rounded-full hover:bg-gray-800 hover:border-gray-600 transition-all duration-300 text-sm md:text-base font-medium group-hover:bg-blue-600 group-hover:border-blue-600"
+          (click)="openExternalLink(project.html_url)"
+        >
+          <span class="flex items-center justify-center">
+            View Project
+            <i class="fa-solid fa-external-link ml-2 text-xs"></i>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+  }
+</div>
+
+<!-- Back to Marquee View Button -->
+<div class="flex justify-center mt-6 md:mt-8">
+  <button
+    (click)="toggleView()"
+    class="text-white border border-gray-700 px-4 md:px-6 py-2 md:py-3 rounded-full hover:bg-gray-800 transition-colors text-sm md:text-base"
+  >
+    <span class="hidden sm:inline">Show Less</span>
+    <span class="sm:hidden">Marquee</span>
+    <i class="fa-solid fa-chevron-up ml-1"></i>
+  </button>
+</div>
+} }
