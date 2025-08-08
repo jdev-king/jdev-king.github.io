@@ -1,0 +1,116 @@
+// Hero Section Responsive Styles
+:host {
+  display: block;
+  padding: 1rem;
+
+  @media (min-width: 640px) {
+    padding: 2rem;
+  }
+
+  @media (min-width: 1024px) {
+    padding: 3rem;
+  }
+}
+
+// Custom animations for hero elements
+.hero-title {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.hero-description {
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.hero-social {
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.hero-image {
+  animation: fadeInRight 0.8s ease-out 0.3s both;
+}
+
+// Keyframe animations
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Enhanced hover effects for social links
+.social-link {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: currentColor;
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
+}
+
+// Responsive typography adjustments
+@media (max-width: 639px) {
+  .hero-title {
+    line-height: 1.1;
+  }
+}
+
+// Enhanced mobile experience
+@media (max-width: 1023px) {
+  .hero-image-container {
+    margin-bottom: 1rem;
+  }
+}
+
+// Large screen optimizations
+@media (min-width: 1280px) {
+  :host {
+    padding: 4rem;
+  }
+}
+
+// Accessibility improvements
+@media (prefers-reduced-motion: reduce) {
+  .hero-title,
+  .hero-description,
+  .hero-social,
+  .hero-image {
+    animation: none;
+  }
+
+  .social-link {
+    transition: none;
+  }
+}
+
+// Focus states for better accessibility
+.social-link:focus {
+  outline: 2px solid #ffffff;
+  outline-offset: 4px;
+  border-radius: 4px;
+}

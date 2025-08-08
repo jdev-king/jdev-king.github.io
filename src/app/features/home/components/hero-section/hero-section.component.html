@@ -1,32 +1,40 @@
-<div class="flex sm:flex-row sm:justify-between flex-col justify-center">
-	<div>
-		<h1 class="text-6xl font-mono mb-4">AI<br />Developer</h1>
-		<p class="text-gray-400 max-w-lg">
-			I design and implement end-to-end AI solutions that optimize system performance, automate complex workflows, and
-			drive efficiency.
+<div class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-8 lg:gap-12 min-h-[80vh] lg:min-h-[70vh]">
+	<!-- Content Section -->
+	<div class="flex-1 flex flex-col justify-center order-2 lg:order-1">
+		<h1 class="hero-title text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-mono mb-4 lg:mb-6 leading-tight">
+			{{ heroContent.title.split(' ')[0] }}<br />{{ heroContent.title.split(' ')[1] }}
+		</h1>
+		<p class="hero-description text-gray-400 text-base sm:text-lg lg:text-xl max-w-lg lg:max-w-xl leading-relaxed mb-6 lg:mb-8">
+			{{ heroContent.description }}
 		</p>
 
 		<!-- Social Links -->
-		<div class="flex mt-6 items-center" [style]="{ gap: '1rem' }">
-			<a href="https://github.com/jdev-king" target="_blank" class="text-gray-400 hover:text-white">
-				<i class="fa-brands fa-github fa-xl"></i>
-			</a>
-			<a href="https://www.linkedin.com/in/jesusdiezp/" target="_blank" class="text-gray-400 hover:text-white">
-				<i class="fa-brands fa-linkedin fa-xl"></i>
-			</a>
-			<a href="https://www.instagram.com/jdev_king/" target="_blank" class="text-gray-400 hover:text-white">
-				<i class="fa-brands fa-instagram fa-xl"></i>
-			</a>
-			<a href="https://jdev-king.medium.com" target="_blank" class="text-gray-400 hover:text-white">
-				<i class="fa-brands fa-medium fa-xl"></i>
+		<div class="hero-social flex items-center gap-4 sm:gap-6">
+			<a 
+				*ngFor="let link of socialLinks; trackBy: trackBySocialLink"
+				[href]="link.href" 
+				target="_blank" 
+				rel="noopener noreferrer"
+				class="social-link text-gray-400 hover:text-white transition-colors duration-300 transform hover:scale-110"
+				[attr.aria-label]="link.label"
+				[title]="link.name"
+			>
+				<i [class]="link.icon + ' text-xl sm:text-2xl'"></i>
 			</a>
 		</div>
 	</div>
-	<div class="flex">
-		<img
-			src="imgs/black_background.jpg"
-			alt="Hero background"
-			class="sm:w-[50dvw] w-[100dvw] h-90 rounded-lg object-cover sm:[mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_100%)] sm:mt-0 mt-8"
-		/>
+	
+	<!-- Image Section -->
+	<div class="flex-1 flex justify-center lg:justify-end order-1 lg:order-2">
+		<div class="hero-image relative w-full max-w-md sm:max-w-lg lg:max-w-xl xl:max-w-2xl">
+			<img
+				[src]="heroContent.image.src"
+				[alt]="heroContent.image.alt"
+				class="w-full h-64 sm:h-80 lg:h-96 xl:h-[28rem] rounded-lg object-cover shadow-2xl lg:[mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_100%)] transition-transform duration-300 hover:scale-105"
+				loading="eager"
+			/>
+			<!-- Decorative gradient overlay for mobile -->
+			<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg lg:hidden"></div>
+		</div>
 	</div>
 </div>
