@@ -9,7 +9,7 @@ const productionEnvironment = {
 	},
 	github: {
 		// In production, the token is injected at build time via GitHub Actions
-		token: (globalThis as any)?.['NG_APP_GITHUB_TOKEN'] || process?.env?.['NG_APP_GITHUB_TOKEN'] || '',
+		token: (globalThis as any)?.['NG_APP_GITHUB_TOKEN'] || '',
 		apiUrl: 'https://api.github.com'
 	}
 };
