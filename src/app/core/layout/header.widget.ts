@@ -14,7 +14,7 @@ interface ProfileInfo {
 
 /**
  * Responsive Header Widget Component
- * 
+ *
  * Features:
  * - Mobile-first responsive design with hamburger menu
  * - Smooth animations and transitions
@@ -26,7 +26,9 @@ interface ProfileInfo {
   selector: 'app-header-widget',
   imports: [CommonModule],
   template: `
-    <header class="sticky top-0 z-50 bg-black/90 backdrop-blur-sm border-b border-gray-800 mb-8 lg:mb-12">
+    <header
+      class="sticky top-0 z-50 bg-black/90 backdrop-blur-sm border-b border-gray-800 mb-8 lg:mb-12"
+    >
       <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16 lg:h-20">
           <!-- Logo/Brand Section -->
@@ -40,8 +42,12 @@ interface ProfileInfo {
           </div>
 
           <!-- Desktop Navigation -->
-          <nav class="hidden lg:flex items-center space-x-8" role="navigation" aria-label="Main navigation">
-            <a 
+          <nav
+            class="hidden lg:flex items-center gap-3"
+            role="navigation"
+            aria-label="Main navigation"
+          >
+            <a
               *ngFor="let item of navigationItems; trackBy: trackByNavItem"
               [href]="item.href"
               [target]="item.isExternal ? '_blank' : '_self'"
@@ -50,7 +56,9 @@ interface ProfileInfo {
               [attr.aria-label]="item.label"
             >
               {{ item.label }}
-              <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
+              <span
+                class="absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"
+              ></span>
             </a>
           </nav>
 
@@ -62,19 +70,24 @@ interface ProfileInfo {
             aria-label="Toggle navigation menu"
             (click)="toggleMobileMenu()"
           >
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path 
-                *ngIf="!isMobileMenuOpen()" 
-                stroke-linecap="round" 
-                stroke-linejoin="round" 
-                stroke-width="2" 
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                *ngIf="!isMobileMenuOpen()"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
                 d="M4 6h16M4 12h16M4 18h16"
               ></path>
-              <path 
-                *ngIf="isMobileMenuOpen()" 
-                stroke-linecap="round" 
-                stroke-linejoin="round" 
-                stroke-width="2" 
+              <path
+                *ngIf="isMobileMenuOpen()"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
                 d="M6 18L18 6M6 6l12 12"
               ></path>
             </svg>
@@ -82,14 +95,23 @@ interface ProfileInfo {
         </div>
 
         <!-- Mobile Navigation Menu -->
-        <div 
+        <div
           id="mobile-menu"
           class="lg:hidden transition-all duration-300 ease-in-out"
-          [class]="'lg:hidden transition-all duration-300 ease-in-out ' + (isMobileMenuOpen() ? 'max-h-screen opacity-100 visible' : 'max-h-0 opacity-0 invisible overflow-hidden')"
+          [class]="
+            'lg:hidden transition-all duration-300 ease-in-out ' +
+            (isMobileMenuOpen()
+              ? 'max-h-screen opacity-100 visible'
+              : 'max-h-0 opacity-0 invisible overflow-hidden')
+          "
           [attr.aria-hidden]="!isMobileMenuOpen()"
         >
-          <nav class="py-4 space-y-2" role="navigation" aria-label="Mobile navigation">
-            <a 
+          <nav
+            class="py-4 space-y-2"
+            role="navigation"
+            aria-label="Mobile navigation"
+          >
+            <a
               *ngFor="let item of navigationItems; trackBy: trackByNavItem"
               [href]="item.href"
               [target]="item.isExternal ? '_blank' : '_self'"
@@ -157,7 +179,7 @@ interface ProfileInfo {
           background-color: rgba(0, 0, 0, 0.95);
         }
       }
-    `
+    `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
@@ -168,7 +190,7 @@ export class HeaderWidgetComponent {
    */
   readonly profileInfo: ProfileInfo = {
     name: 'Jesus Diez',
-    handle: '@jdev-king'
+    handle: '@jdev-king',
   };
 
   /**
@@ -179,7 +201,7 @@ export class HeaderWidgetComponent {
     { href: '#projects', label: 'Projects' },
     { href: '#skills', label: 'Expertise' },
     { href: '#articles', label: 'Articles' },
-    { href: '/contact', label: 'Contact' }
+    { href: '/contact', label: 'Contact' },
   ];
 
   /**
@@ -191,7 +213,7 @@ export class HeaderWidgetComponent {
    * Toggle mobile menu visibility
    */
   toggleMobileMenu(): void {
-    this.isMobileMenuOpen.update(current => !current);
+    this.isMobileMenuOpen.update((current) => !current);
   }
 
   /**
