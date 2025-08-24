@@ -62,31 +62,30 @@ export class WorkComponent {
   }
   workExperience: WorkExperience[] = [
     {
-      startDate: new Date('2024-01-02'),
+      startDate: new Date('2024-01-01'),
       endDate: new Date(),
       company: 'Sintad',
       companyUrl: 'https://www.sintad.pe/',
       position: 'AI Engineer | Full Stack Developer',
       tech: ['FastAPI', 'Vertex AI', 'RAG', 'Angular', 'Prompt Engineering'],
       description:
-        'Leading the design, development, and implementation of AI-driven solutions to optimize business processes and enhance system efficiency. Spearheading the integration of machine learning models, automation tools, and AI-assisted development workflows to improve performance, reduce manual effort, and drive innovation across multiple ERP modules.',
+        'AI Engineer with strong experience in building production-ready, end-to-end AI systems and intelligent web applications. Skilled in designing conversational agents, applying prompt engineering strategies, and deploying scalable machine learning services in cloud environments. Expert in LangChain, GPT-4, and cloud-native architecture with a background in full-stack development.',
       responsibilities: [
         'Automated Document Processing: Led the design and deployment of an OCR system using Google Cloud Document AI and FastAPI, reducing invoice processing time by 70% and saving ~200+ hours/month.',
         'Conversational AI Deployment: Architected and implemented a GPT-4-powered agent that automated 30% of customer support, improving resolution time and increasing CSAT by 15%.',
         'Team Enablement via Prompt Engineering: Mentored junior developers on prompt engineering and AI tooling, which enhanced team delivery speed and reduced planning overhead in estimation sessions.',
         'AI-Driven Workflow: I designed, implemented, and trained development teams to use AI prompts throughout the development workflow, from creating user stories, generating unit tests, and developing features.',
-        'Web Platform Redesign: Spearheaded a comprehensive redesign of the company website',
       ],
     },
     {
-      startDate: new Date('2024-04'),
-      endDate: new Date('2024-10'),
+      startDate: new Date('2024-04-01'),
+      endDate: new Date('2024-10-31'),
       company: 'Hebrax IMS',
       companyUrl: 'https://hebrax-ims.com/',
-      position: 'Co-Founder & CTO',
-      tech: ['FastAPI', 'LLM´s', 'Angular', 'Firebase'],
+      position: 'Co-Founder | AI Engineer',
+      tech: ['FastAPI', 'LangChain', 'Angular', 'Firebase'],
       description:
-        'Driving the development of AI-powered solutions and scalable web architectures to enhance automation, system performance, and user experience. Leading the design and deployment of GPT-4 conversational agents, optimizing customer interactions through seamless integration. Architecting high-performance web platforms with modern frameworks, ensuring efficiency and accelerated delivery. Enhancing UI/UX processes with prototyping tools to streamline development and improve client satisfaction. Establishing robust code quality standards to increase maintainability and reduce defects across development workflows.',
+        'Co-founded and led the technical development of AI-powered healthcare solutions. Spearheaded the architecture, design, and development of intelligent systems for medical applications, focusing on dermatology consultation support and patient triage automation.',
       responsibilities: [
         'End-to-End AI Chatbot Development: Spearheaded the architecture, design, and development of a dermatology-focused AI chatbot, delivering an intelligent assistant for patient triage and consultation support.',
         'Prompt Engineering & LLM Integration: Applied advanced prompt engineering techniques such as few-shot prompting to optimize ChatGPT responses for medical use cases, ensuring safety and relevance.',
@@ -96,33 +95,20 @@ export class WorkComponent {
       ],
     },
     {
-      startDate: new Date('2022-12'),
-      endDate: new Date('2024-06'),
+      startDate: new Date('2022-01-01'),
+      endDate: new Date('2024-01-01'),
       company: 'Sintad',
       companyUrl: 'https://www.sintad.pe/',
       position: 'Full Stack Developer',
-      tech: ['Angular', 'Kotlin', 'SpringBoot'],
+      tech: ['Angular', 'Kotlin', 'SpringBoot', 'Flowise', 'Pinecone', 'LangChain'],
       description:
-        'Leading the development and optimization of backend and frontend functionalities to enhance system performance and user experience. Implementing robust testing strategies with Mockito and Jest, achieving 90% code coverage and reducing production bugs. Driving codebase refactoring efforts to minimize technical debt and improve maintainability. Designing and developing mobile applications with Kotlin, streamlining operational workflows and increasing efficiency.',
+        'Leading the development and optimization of backend and frontend functionalities to enhance system performance and user experience. Implementing robust testing strategies with Mockito and Jest, achieving 90% code coverage and reducing production bugs. Driving codebase refactoring efforts to minimize technical debt and improve maintainability.',
       responsibilities: [
         'ERP Modernization: Led the migration to Angular 17 for a core ERP system, reducing frontend load times and cutting technical debt by 30%.',
         'AI-Assisted Development: Integrated Aider Chat for AI pair programming across ERP modules, accelerating development and improving code consistency.',
         'Process Automation: Developed internal automation tools using Flowise, Pinecone, and LangChain, reducing manual workflow effort by up to 60%.',
         'Cloud Integration: Migrated legacy desktop apps to cloud infrastructure, enabling remote access and enhancing system availability.',
         'Cross-Functional Collaboration: Worked across teams to redesign merchandise tracking features, improving UI/UX and operational monitoring.',
-      ],
-    },
-    {
-      startDate: new Date('2021-12'),
-      endDate: new Date('2022-03'),
-      company: 'Sintad',
-      companyUrl: 'https://www.sintad.pe/',
-      position: 'Full Stack Developer',
-      tech: ['Angular', 'SpringBoot'],
-      description:
-        'Development and optimization of backend and frontend functionalities to enhance system performance and user experience',
-      responsibilities: [
-        'Developed key functionalities, including trip tracking, trip incident management, and the creation and editing of transport orders, improving operational efficiency by 15%.',
       ],
     },
   ];
