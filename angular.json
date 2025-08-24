@@ -20,9 +20,7 @@
             "outputPath": "dist/",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -85,10 +83,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -97,9 +92,7 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "styles": ["src/styles.scss"],
             "scripts": []
           }
         },
@@ -108,9 +101,9 @@
           "options": {
             "buildTarget": "jdev-king.github.io:build:production",
             "project": "jdev-king.github.io",
-            "baseHref": "https://jdev-king.github.io/",
             "branch": "gh-pages",
-            "dir": "dist/browser"
+            "dir": "dist/browser",
+            "cname": "jdev-king.com"
           }
         }
       }
