@@ -9,7 +9,7 @@
     "build:github": "ng build --configuration=production --base-href=/jdev-king.github.io/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "deploy:github": "ng build --configuration=production --base-href=/jdev-king.github.io/ && npx angular-cli-ghpages --dir=dist/jdev-king.github.io/browser"
+    "deploy:github": "ng build --configuration=production --base-href=/jdev-king.github.io/ && npx angular-cli-ghpages --dir=dist/browser"
   },
   "private": true,
   "dependencies": {
