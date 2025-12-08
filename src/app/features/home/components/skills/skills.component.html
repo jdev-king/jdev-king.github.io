@@ -1,40 +1,31 @@
 <div class="skills-section">
 	<div class="section-header">
-		<h2 class="title">Skills & Expertise</h2>
-		<p class="subtitle">Specialized in AI, Cloud Computing, and Full-Stack Development</p>
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-mono mb-6 sm:mb-8">Skills & Expertise</h2>
+        <p class="subtitle text-muted">Specialized in AI, Cloud Computing, and Full-Stack Development</p>
 	</div>
 
 	<div class="skills-grid">
-		<div
-			*ngFor="let category of skillsData"
-			class="skill-card transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
-		>
+        <div *ngFor="let category of skillsData" class="skill-card">
 			<div class="card-content">
 				<div class="card-header">
-					<i [class]="category.icon"></i>
-					<h3>{{ category.title }}</h3>
+                    <h3>{{ category.title }}</h3>
 				</div>
 
 				<div class="skills-list">
 					@for (skill of category.skills; track $index) {
-					<div lass="skill-item">
-						<div class="skill-header">
-							<span class="skill-name">{{ skill.name }}</span>
-							<span class="skill-level">{{ skill.level }}</span>
-						</div>
-
-						<div class="progress-bar">
-							<div class="progress-fill" [style.width.%]="skill.proficiency"></div>
-						</div>
+                    <div class="skill-item">
+                        <div class="skill-header">
+                            <span class="skill-name">{{ skill.name }}</span>
+                        </div>
 
 						@if (skill.tools.length) {
-						<div class="tools-list">
-							@for (tool of skill.tools; track $index) {
-							<span class="tool-tag">
-								{{ tool }}
-							</span>
-							}
-						</div>
+                        <div class="tools-list">
+                            @for (tool of skill.tools; track $index) {
+                            <span class="tool-tag">
+                                {{ tool }}
+                            </span>
+                            }
+                        </div>
 						}
 					</div>
 					}

@@ -20,23 +20,22 @@
 
 // Article tags with enhanced styling
 .article-tag {
-	background-color: #1e293b;
-	color: #94a3b8;
-	font-size: 0.75rem;
-	padding: 0.25rem 0.5rem;
-	border-radius: 9999px;
-	transition: all 0.2s ease-in-out;
-	font-weight: 500;
-	white-space: nowrap;
-	border: 1px solid transparent;
+    background-color: var(--color-surface);
+    color: var(--color-muted);
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    transition: all 250ms ease-in-out;
+    font-weight: 500;
+    white-space: nowrap;
+    border: 1px solid var(--color-border);
 
 	// Hover effects
-	&:hover {
-		background-color: #334155;
-		color: #cbd5e1;
-		border-color: #475569;
-		transform: translateY(-1px);
-	}
+    &:hover {
+        transform: translateY(-1px);
+        color: var(--color-text);
+        border-color: var(--color-accent);
+    }
 
 	// Mobile responsive sizing
 	@media (max-width: 768px) {
@@ -58,8 +57,8 @@
 }
 
 .animate-fadeIn {
-	animation: fadeIn 0.6s ease-out forwards;
-	opacity: 0;
+    animation: fadeIn 0.6s ease-out forwards;
+    opacity: 0;
 }
 
 // Line clamp utilities
@@ -104,10 +103,10 @@ article {
 	}
 
 	// Focus states for accessibility
-	&:focus-within {
-		outline: none;
-		box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
-	}
+    &:focus-within {
+        outline: 2px solid var(--color-text);
+        outline-offset: 2px;
+    }
 
 	// Mobile touch feedback
 	@media (max-width: 768px) {
@@ -121,10 +120,10 @@ article {
 // Button enhancements
 button {
 	// Improved focus states
-	&:focus-visible {
-		outline: 2px solid #ffffff;
-		outline-offset: 2px;
-	}
+    &:focus-visible {
+        outline: 2px solid var(--color-text);
+        outline-offset: 2px;
+    }
 
 	// Active state feedback
 	&:active {
@@ -141,7 +140,7 @@ button {
 
 // Loading spinner enhancement
 .animate-spin {
-	animation: spin 1s linear infinite;
+    animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
@@ -218,4 +217,19 @@ button {
 		box-shadow: none;
 		border: 1px solid #000;
 	}
+}
+button.link-accent {
+    transition: color 250ms ease-in-out, background-color 250ms ease-in-out, border-color 250ms ease-in-out, transform 250ms ease-in-out;
+    will-change: transform;
+}
+
+button.link-accent:hover {
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+    border-color: var(--color-accent);
+    transform: translateY(-1px);
+}
+
+button.link-accent:active {
+    transform: translateY(0);
 }

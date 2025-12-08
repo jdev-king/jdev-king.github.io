@@ -20,20 +20,19 @@
 
 /* Enhanced work item hover effects */
 .work-item {
-	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-	border-radius: 0.5rem;
-	padding: 0.75rem;
-	margin: -0.75rem;
-	
-	&:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-	}
-	
-	&:focus-visible {
-		outline: 2px solid #3b82f6;
-		outline-offset: 2px;
-	}
+    transition: transform 250ms ease-in-out, border-color 250ms ease-in-out;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    margin: -0.75rem;
+    
+    &:hover {
+        transform: translateY(-2px);
+    }
+    
+    &:focus-visible {
+        outline: 2px solid var(--color-text);
+        outline-offset: 2px;
+    }
 	
 	@media (max-width: 767px) {
 		padding: 0.5rem;
@@ -74,25 +73,25 @@
 		width: 6px;
 	}
 	
-	&::-webkit-scrollbar-track {
-		background: rgba(55, 65, 81, 0.3);
-	}
-	
-	&::-webkit-scrollbar-thumb {
-		background: rgba(156, 163, 175, 0.5);
-		border-radius: 3px;
-		
-		&:hover {
-			background: rgba(156, 163, 175, 0.7);
-		}
-	}
+    &::-webkit-scrollbar-track {
+        background: var(--color-surface);
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background: var(--color-muted);
+        border-radius: 3px;
+        
+        &:hover {
+            background: var(--color-accent);
+        }
+    }
 }
 
 /* Enhanced overlay */
 .overlay {
-	z-index: 40;
-	backdrop-filter: blur(4px);
-	transition: backdrop-filter 0.3s ease;
+    z-index: 40;
+    backdrop-filter: blur(4px);
+    transition: backdrop-filter 250ms ease-in-out;
 	
 	@media (max-width: 767px) {
 		/* Stronger blur on mobile */
@@ -102,12 +101,11 @@
 
 /* Tech badge animations */
 .tech-badge {
-	transition: all 0.2s ease;
-	
-	&:hover {
-		transform: translateY(-1px);
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-	}
+    transition: transform 250ms ease-in-out;
+    
+    &:hover {
+        transform: translateY(-1px);
+    }
 }
 
 /* Responsive typography scaling */
@@ -146,7 +144,7 @@
 }
 
 .work-item {
-	animation: fadeIn 0.3s ease-out;
+    animation: fadeIn 0.25s ease-out;
 }
 
 /* Accessibility improvements */
@@ -191,4 +189,12 @@
 		break-inside: avoid;
 		page-break-inside: avoid;
 	}
+}
+.sidebar button {
+    transition: color 250ms ease-in-out, transform 250ms ease-in-out;
+}
+
+.sidebar button:hover {
+    color: var(--color-accent);
+    transform: translateY(-1px);
 }

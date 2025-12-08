@@ -2,57 +2,13 @@
 <div
   class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 md:mb-8 gap-4"
 >
-  <h2 class="text-2xl sm:text-3xl md:text-4xl font-mono text-white">
+  <h2 class="text-2xl sm:text-3xl md:text-4xl font-mono">
     Projects @if (isLoading()) {
-    <span class="ml-2 text-sm text-gray-400 animate-pulse">(Loading...)</span>
+    <span class="ml-2 text-sm text-muted animate-pulse">(Loading...)</span>
     } @else {
-    <span class="ml-2 text-sm text-gray-400">({{ gitHubRepos().length }})</span>
+    <span class="ml-2 text-sm text-muted">({{ gitHubRepos().length }})</span>
     }
   </h2>
-
-  <!-- View Toggle and Navigation Controls -->
-  <div class="flex items-center gap-3">
-    @if (!isGridView()) {
-    <button
-      (click)="toggleView()"
-      class="text-white border border-gray-700 px-3 md:px-4 py-2 rounded-full hover:bg-gray-800 transition-colors text-sm md:text-base"
-    >
-      <span class="hidden sm:inline">Show More</span>
-      <span class="sm:hidden">Grid</span>
-      <i class="fa-solid fa-plus ml-1"></i>
-    </button>
-    } @else {
-    <div class="flex items-center space-x-2 md:space-x-4">
-      <!-- Navigation Buttons -->
-      <button
-        [disabled]="!canNavigatePrev()"
-        (click)="navigateProjects('prev')"
-        class="p-2 rounded-full border border-gray-700 hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        <i class="fa-solid fa-chevron-left"></i>
-      </button>
-
-      <!-- Page Indicator -->
-      <span class="text-xs md:text-sm text-gray-400 px-2">
-        {{ currentProjectIndex() + 1 }}-{{
-          Math.min(
-            currentProjectIndex() + currentViewConfig().projectsToShow,
-            gitHubRepos().length
-          )
-        }}
-        of {{ gitHubRepos().length }}
-      </span>
-
-      <button
-        [disabled]="!canNavigateNext()"
-        (click)="navigateProjects('next')"
-        class="p-2 rounded-full border border-gray-700 hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        <i class="fa-solid fa-chevron-right"></i>
-      </button>
-    </div>
-    }
-  </div>
 </div>
 <!-- Marquee View for Continuous Scrolling -->
 @if (!isGridView()) { @if (isLoading()) {
@@ -78,27 +34,23 @@
       @for (project of visibleProjects(); track trackByProject($index, project))
       {
       <div class="w-[280px] sm:w-[320px] md:w-[400px] mx-2 md:mx-4">
-        <div
-          class="bg-gray-900 rounded-lg p-4 md:p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl"
-        >
+        <div class="bg-surface rounded-lg p-4 md:p-6">
           <img
             [src]="project.readmeImageUrl"
             [alt]="project.name"
-            class="rounded-lg mb-3 md:mb-4 w-full h-32 sm:h-40 md:h-48 object-contain bg-gray-800"
+            class="rounded-lg mb-3 md:mb-4 w-full h-32 sm:h-40 md:h-48 object-contain"
             loading="lazy"
           />
-          <h3
-            class="text-lg md:text-xl mb-2 text-white font-semibold line-clamp-1"
-          >
+          <h3 class="text-lg md:text-xl mb-2 font-semibold line-clamp-1">
             {{ project.name }}
           </h3>
           <p
-            class="text-gray-400 text-sm md:text-base mb-3 md:mb-4 line-clamp-2"
+            class="text-muted text-sm md:text-base mb-3 md:mb-4 line-clamp-2"
           >
             {{ project.description || "No description available" }}
           </p>
           <button
-            class="w-full sm:w-auto text-white border border-gray-700 px-3 md:px-4 py-2 rounded-full hover:bg-gray-800 transition-colors text-sm md:text-base"
+            class="w-full sm:w-auto border border-contrast px-3 md:px-4 py-2 rounded-full text-sm md:text-base link-accent"
             (click)="openExternalLink(project.html_url)"
           >
             Read more →
@@ -112,27 +64,23 @@
       @for (project of visibleProjects(); track trackByProject($index, project))
       {
       <div class="w-[280px] sm:w-[320px] md:w-[400px] mx-2 md:mx-4">
-        <div
-          class="bg-gray-900 rounded-lg p-4 md:p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl"
-        >
+        <div class="bg-surface rounded-lg p-4 md:p-6">
           <img
             [src]="project.readmeImageUrl"
             [alt]="project.name"
-            class="rounded-lg mb-3 md:mb-4 w-full h-32 sm:h-40 md:h-48 object-contain bg-gray-800"
+            class="rounded-lg mb-3 md:mb-4 w-full h-32 sm:h-40 md:h-48 object-contain"
             loading="lazy"
           />
-          <h3
-            class="text-lg md:text-xl mb-2 text-white font-semibold line-clamp-1"
-          >
+          <h3 class="text-lg md:text-xl mb-2 font-semibold line-clamp-1">
             {{ project.name }}
           </h3>
           <p
-            class="text-gray-400 text-sm md:text-base mb-3 md:mb-4 line-clamp-2"
+            class="text-muted text-sm md:text-base mb-3 md:mb-4 line-clamp-2"
           >
             {{ project.description || "No description available" }}
           </p>
           <button
-            class="w-full sm:w-auto text-white border border-gray-700 px-3 md:px-4 py-2 rounded-full hover:bg-gray-800 transition-colors text-sm md:text-base"
+            class="w-full sm:w-auto border border-contrast px-3 md:px-4 py-2 rounded-full text-sm md:text-base link-accent"
             (click)="openExternalLink(project.html_url)"
           >
             Read more →
@@ -163,34 +111,23 @@
 <div [class]="gridCssClasses()">
   @for (project of visibleProjects(); track trackByProject($index, project)) {
   <div class="w-full group">
-    <div
-      class="bg-gray-900 rounded-lg p-4 md:p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl group-hover:bg-gray-800"
-    >
+    <div class="bg-surface rounded-lg p-4 md:p-6">
       <div class="relative overflow-hidden rounded-lg mb-3 md:mb-4">
-        <img
-          [src]="project.readmeImageUrl"
-          [alt]="project.name"
-          class="w-full h-36 sm:h-40 md:h-48 object-contain bg-gray-800 transition-transform duration-300 group-hover:scale-110"
-          loading="lazy"
-        />
+        <img [src]="project.readmeImageUrl" [alt]="project.name" class="w-full h-36 sm:h-40 md:h-48 object-contain" loading="lazy" />
       </div>
 
       <div class="space-y-2 md:space-y-3">
-        <h3
-          class="text-lg md:text-xl font-semibold text-white line-clamp-1 group-hover:text-blue-400 transition-colors"
-        >
+        <h3 class="text-lg md:text-xl font-semibold line-clamp-1">
           {{ project.name }}
         </h3>
 
-        <p
-          class="text-gray-400 text-sm md:text-base line-clamp-2 leading-relaxed"
-        >
+        <p class="text-muted text-sm md:text-base line-clamp-2 leading-relaxed">
           {{ project.description || "No description available" }}
         </p>
 
         <!-- Project Stats/Info -->
         @if (project.language || project.stargazers_count) {
-        <div class="flex items-center justify-between text-xs text-gray-500">
+        <div class="flex items-center justify-between text-xs text-muted">
           @if (project.language) {
           <span class="flex items-center">
             <span class="w-2 h-2 rounded-full bg-blue-500 mr-1"></span>
@@ -206,30 +143,12 @@
         </div>
         }
 
-        <button
-          class="w-full text-white border border-gray-700 px-3 md:px-4 py-2 rounded-full hover:bg-gray-800 hover:border-gray-600 transition-all duration-300 text-sm md:text-base font-medium group-hover:bg-blue-600 group-hover:border-blue-600"
-          (click)="openExternalLink(project.html_url)"
-        >
-          <span class="flex items-center justify-center">
-            View Project
-            <i class="fa-solid fa-external-link ml-2 text-xs"></i>
-          </span>
-        </button>
+        <button class="w-full border border-contrast px-3 md:px-4 py-2 rounded-full text-sm md:text-base link-accent" (click)="openExternalLink(project.html_url)">View Project</button>
       </div>
     </div>
   </div>
   }
 </div>
 
-<!-- Back to Marquee View Button -->
-<div class="flex justify-center mt-6 md:mt-8">
-  <button
-    (click)="toggleView()"
-    class="text-white border border-gray-700 px-4 md:px-6 py-2 md:py-3 rounded-full hover:bg-gray-800 transition-colors text-sm md:text-base"
-  >
-    <span class="hidden sm:inline">Show Less</span>
-    <span class="sm:hidden">Marquee</span>
-    <i class="fa-solid fa-chevron-up ml-1"></i>
-  </button>
-</div>
+<!-- Back to Marquee View Button removed for minimalist design -->
 } }

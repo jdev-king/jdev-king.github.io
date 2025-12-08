@@ -27,6 +27,8 @@
 
 .hero-image {
   animation: fadeInRight 0.8s ease-out 0.3s both;
+  transition: transform 250ms ease-in-out;
+  will-change: transform;
 }
 
 // Keyframe animations
@@ -55,6 +57,12 @@
 // Enhanced hover effects for social links
 .social-link {
   position: relative;
+  transition: color 250ms ease-in-out, transform 250ms ease-in-out;
+  will-change: transform;
+
+  &:hover {
+    color: var(--color-accent);
+  }
 
   &::after {
     content: "";
@@ -110,7 +118,7 @@
 
 // Focus states for better accessibility
 .social-link:focus {
-  outline: 2px solid #ffffff;
+  outline: 2px solid var(--color-text);
   outline-offset: 4px;
   border-radius: 4px;
 }

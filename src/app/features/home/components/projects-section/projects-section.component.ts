@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal, computed, ChangeDetectionStrategy, HostListener } from '@angular/core';
 import { map } from 'rxjs';
 import { GitHubService } from '../../services/github.service';
+import { AnalyticsService } from '../../../../shared/services/analytics.service';
 import { RepoWithImage } from '../../../../shared/domain/GitHubRepo';
 
 interface ViewConfig {
@@ -23,7 +24,8 @@ interface ResponsiveBreakpoint {
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectsComponent implements OnInit {
-	private gitHubService = inject(GitHubService);
+    private gitHubService = inject(GitHubService);
+    private analytics = new AnalyticsService();
 
 	// Responsive breakpoints configuration
 	private readonly responsiveBreakpoints: ResponsiveBreakpoint[] = [
@@ -35,7 +37,7 @@ export class ProjectsComponent implements OnInit {
 	];
 
 	// Signals for reactive state management
-	readonly isGridView = signal<boolean>(false);
+    readonly isGridView = signal<boolean>(true);
 	readonly currentProjectIndex = signal<number>(0);
 	readonly screenWidth = signal<number>(typeof window !== 'undefined' ? window.innerWidth : 1024);
 	readonly gitHubRepos = signal<RepoWithImage[]>([]);
@@ -119,11 +121,7 @@ export class ProjectsComponent implements OnInit {
 			});
 	}
 
-	toggleView(): void {
-		this.isGridView.update(current => !current);
-		// Reset navigation when switching views
-		this.currentProjectIndex.set(0);
-	}
+    toggleView(): void {}
 
 	// Projects navigation methods
 
@@ -150,7 +148,8 @@ export class ProjectsComponent implements OnInit {
 	// Utility functions for template
 	readonly Math = Math;
 
-	openExternalLink(url: string): void {
-		window.open(url, '_blank');
-	}
+    openExternalLink(url: string): void {
+        this.analytics.track('project_click', { url });
+        window.open(url, '_blank');
+    }
 }
