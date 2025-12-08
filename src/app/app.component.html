@@ -1,6 +1,9 @@
 <!-- Header -->
-<div class="min-h-screen bg-black text-white p-8">
-	<app-header-widget />
-	<router-outlet />
-	<app-footer-widget />
+<div class="min-h-screen p-8">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:underline">Skip to content</a>
+    <app-header-widget />
+    <main id="main-content">
+        <router-outlet />
+    </main>
+    <app-footer-widget />
 </div>
