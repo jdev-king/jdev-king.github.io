@@ -9,7 +9,8 @@
     "build:github": "ng build --configuration=production --base-href=/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "deploy:github": "ng build --configuration=production --base-href=/jdev-king.github.io/ && npx angular-cli-ghpages --dir=dist/browser"
+    "deploy:github": "ng build --configuration=production --base-href=/jdev-king.github.io/ && npx angular-cli-ghpages --dir=dist/browser",
+    "perf:report": "npx lighthouse http://localhost:4200 --quiet --preset=desktop --chrome-flags=\"--headless\""
   },
   "private": true,
   "dependencies": {
@@ -30,7 +31,8 @@
     "rxjs": "~7.8.0",
     "tailwindcss": "^4.0.5",
     "tslib": "^2.3.0",
-    "zone.js": "~0.15.0"
+    "zone.js": "~0.15.0",
+    "mermaid": "^10.9.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^19.1.6",
