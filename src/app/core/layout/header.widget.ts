@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 interface NavigationItem {
@@ -27,16 +28,16 @@ interface ProfileInfo {
   imports: [CommonModule],
   template: `
     <header
-      class="sticky top-0 z-50 bg-black/90 backdrop-blur-sm border-b border-gray-800 mb-8 lg:mb-12"
+      class="sticky top-0 z-50 bg-surface backdrop-blur-sm border-b border-contrast mb-8 lg:mb-12"
     >
       <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16 lg:h-20">
           <!-- Logo/Brand Section -->
           <div class="flex-shrink-0">
-            <h1 class="text-xl sm:text-2xl font-mono font-bold text-white">
+            <h1 class="text-xl sm:text-2xl font-mono font-bold">
               {{ profileInfo.name }}
             </h1>
-            <h2 class="text-sm sm:text-base font-mono text-gray-400 -mt-1">
+            <h2 class="text-sm sm:text-base font-mono text-muted -mt-1">
               {{ profileInfo.handle }}
             </h2>
           </div>
@@ -47,24 +48,39 @@ interface ProfileInfo {
             role="navigation"
             aria-label="Main navigation"
           >
+            
             <a
               *ngFor="let item of navigationItems; trackBy: trackByNavItem"
               [href]="item.href"
               [target]="item.isExternal ? '_blank' : '_self'"
               [rel]="item.isExternal ? 'noopener noreferrer' : null"
-              class="nav-link text-white hover:text-gray-300 transition-colors duration-300 font-medium relative group"
+              class="nav-link transition-colors duration-300 font-medium relative group"
               [attr.aria-label]="item.label"
+              [attr.aria-current]="item.href.startsWith('#') && activeHref() === item.href ? 'page' : null"
             >
               {{ item.label }}
               <span
-                class="absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"
+                class="absolute -bottom-1 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full"
+                [style.backgroundColor]="'var(--color-accent)'"
               ></span>
             </a>
+            <button
+              class="px-3 py-2 rounded-full border border-contrast"
+              (click)="toggleTheme()"
+              [attr.aria-pressed]="theme() === 'light'"
+              aria-label="Toggle theme"
+            >
+              @if (theme() === 'light') {
+                <i class="fa-solid fa-sun"></i>
+              } @else {
+                <i class="fa-solid fa-moon"></i>
+              }
+            </button>
           </nav>
 
           <!-- Mobile Menu Button -->
           <button
-            class="lg:hidden p-2 rounded-md text-white hover:text-gray-300 hover:bg-gray-800 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black"
+            class="lg:hidden p-2 rounded-md transition-colors duration-300 focus:outline-none"
             [attr.aria-expanded]="isMobileMenuOpen()"
             aria-controls="mobile-menu"
             aria-label="Toggle navigation menu"
@@ -111,14 +127,23 @@ interface ProfileInfo {
             role="navigation"
             aria-label="Mobile navigation"
           >
+            <button
+              class="block px-4 py-3 rounded-md border border-contrast"
+              (click)="toggleTheme()"
+              [attr.aria-pressed]="theme() === 'light'"
+              aria-label="Toggle theme"
+            >
+              Theme
+            </button>
             <a
               *ngFor="let item of navigationItems; trackBy: trackByNavItem"
               [href]="item.href"
               [target]="item.isExternal ? '_blank' : '_self'"
               [rel]="item.isExternal ? 'noopener noreferrer' : null"
-              class="block px-4 py-3 text-white hover:text-gray-300 hover:bg-gray-800 transition-colors duration-300 font-medium rounded-md"
+              class="block px-4 py-3 transition-colors duration-300 font-medium rounded-md"
               [attr.aria-label]="item.label"
               (click)="closeMobileMenu()"
+              [attr.aria-current]="item.href.startsWith('#') && activeHref() === item.href ? 'page' : null"
             >
               {{ item.label }}
             </a>
@@ -160,7 +185,7 @@ interface ProfileInfo {
 
       /* Focus styles for better accessibility */
       .nav-link:focus {
-        outline: 2px solid #ffffff;
+        outline: 2px solid var(--color-text);
         outline-offset: 4px;
         border-radius: 4px;
       }
@@ -176,7 +201,7 @@ interface ProfileInfo {
       /* Backdrop blur fallback */
       @supports not (backdrop-filter: blur(12px)) {
         header {
-          background-color: rgba(0, 0, 0, 0.95);
+          background-color: var(--color-bg);
         }
       }
     `,
@@ -184,7 +209,7 @@ interface ProfileInfo {
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
 })
-export class HeaderWidgetComponent {
+export class HeaderWidgetComponent implements OnInit, OnDestroy {
   /**
    * Profile information configuration
    */
@@ -197,10 +222,9 @@ export class HeaderWidgetComponent {
    * Navigation items configuration
    */
   readonly navigationItems: NavigationItem[] = [
-    { href: '/', label: 'Home' },
+    { href: '#work', label: 'Work' },
     { href: '#projects', label: 'Projects' },
-    { href: '#skills', label: 'Expertise' },
-    { href: '#articles', label: 'Articles' },
+    { href: '/architectures', label: 'Architectures' },
     { href: '/contact', label: 'Contact' },
   ];
 
@@ -208,6 +232,12 @@ export class HeaderWidgetComponent {
    * Mobile menu open state using Angular signals for reactive state management
    */
   readonly isMobileMenuOpen = signal(false);
+
+  readonly activeHref = signal<string>('');
+
+  private observer?: IntersectionObserver;
+
+  readonly theme = signal<'dark' | 'light'>('dark');
 
   /**
    * Toggle mobile menu visibility
@@ -231,5 +261,39 @@ export class HeaderWidgetComponent {
    */
   trackByNavItem(index: number, item: NavigationItem): string {
     return item.href;
+  }
+
+  ngOnInit(): void {
+    const initial = localStorage.getItem('theme') as 'dark' | 'light' | null;
+    if (initial) this.theme.set(initial);
+    document.documentElement.setAttribute('data-theme', this.theme());
+    const ids = ['work', 'projects'];
+    this.observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => (a.boundingClientRect.top > b.boundingClientRect.top ? 1 : -1));
+        if (visible.length) {
+          const id = visible[0].target.id;
+          this.activeHref.set(`#${id}`);
+        }
+      },
+      { rootMargin: '-20% 0px -60% 0px', threshold: [0, 0.25, 0.5, 0.75, 1] }
+    );
+    ids.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) this.observer!.observe(el);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.observer?.disconnect();
+  }
+
+  toggleTheme(): void {
+    const next = this.theme() === 'dark' ? 'light' : 'dark';
+    this.theme.set(next);
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
   }
 }
