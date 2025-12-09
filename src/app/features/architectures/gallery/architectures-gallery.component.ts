@@ -20,38 +20,35 @@ interface ArchitectureCard {
   selector: 'app-architectures-gallery',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  template: `
+  styleUrl: './architectures-gallery.component.scss',
+  template: ` 
     <section class="container mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-2xl sm:text-3xl md:text-4xl font-mono mb-6">
-        Designed Solutions Architecture
-      </h2>
-      <p class="text-sm md:text-base mb-8">
-        Gallery of cloud and software architectures.
-      </p>
+      <header class="gallery-header">
+        <h2 class="gallery-title">Designed Solutions Architecture</h2>
+        <p class="gallery-subtitle">Gallery of cloud and software architectures.</p>
+      </header>
       @if (loading()) {
-        <div class="flex justify-center items-center">
-          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        <div class="gallery-loading" role="status" aria-live="polite">
+          <div class="spinner" aria-label="Loading"></div>
         </div>
       } @else {
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">  
-        @for (item of architectures; track item.id) {
-        <a
-          [routerLink]="['/architectures', item.id]"
-          class="rounded-lg p-4 border"
-          (click)="track(item)"
-        >
-          <h3 class="text-lg md:text-xl font-semibold mb-2">
-            {{ item.title }}
-          </h3>
-          <p class="text-sm md:text-base line-clamp-3">
-            {{ item.description }}
-          </p>
-          <div class="tags">
-            <span *ngFor="let tag of item.tags" class="badge">{{ tag }}</span>
-          </div>
-        </a>
-        }
-      </div>
+        <div class="gallery-grid">
+          @for (item of architectures; track item.id) {
+            <a
+              [routerLink]="['/architectures', item.id]"
+              class="arch-card"
+              (click)="track(item)"
+            >
+              <div class="arch-card-body">
+                <h3 class="arch-title">{{ item.title }}</h3>
+                <p class="arch-summary">{{ item.description }}</p>
+                <div class="arch-tags">
+                  <span *ngFor="let tag of item.tags" class="badge">{{ tag }}</span>
+                </div>
+              </div>
+            </a>
+          }
+        </div>
       }
     </section>
   `,
