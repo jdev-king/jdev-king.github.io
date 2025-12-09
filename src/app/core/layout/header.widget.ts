@@ -230,8 +230,10 @@ export class HeaderWidgetComponent implements OnInit, OnDestroy {
    * Navigation items configuration
    */
   readonly navigationItems: NavigationItem[] = [
+    { href: '/', label: 'Home' },
     { href: '#work', label: 'Work' },
     { href: '#projects', label: 'Projects' },
+    { href: '/mastering-stack', label: 'Mastering Stack' },
     { href: '/architectures', label: 'Architectures' },
     { href: '/contact', label: 'Contact' },
   ];

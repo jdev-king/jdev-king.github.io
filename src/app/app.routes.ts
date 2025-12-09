@@ -28,10 +28,10 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'case-studies',
+    path: 'mastering-stack',
     loadComponent: () =>
-      import('./features/case-studies/case-studies.component').then(
-        (m) => m.CaseStudiesComponent
+      import('./features/mastering-stack/mastering-stack.component').then(
+        (m) => m.MasteringStackComponent
       ),
   },
   {

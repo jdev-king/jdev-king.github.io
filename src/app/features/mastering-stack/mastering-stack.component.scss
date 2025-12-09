@@ -1,0 +1,147 @@
+:host {
+  display: block;
+}
+
+.mastering-section {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: 1rem 1.5rem;
+}
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.mastering-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .mastering-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .mastering-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.mastering-card {
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  transition: background-color 250ms ease, border-color 250ms ease;
+  padding: 1rem;
+}
+
+.mastering-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.mastering-title {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.mastering-version {
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+.badge-outdated {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  background-color: #facc15; /* light yellow */
+  color: #3f3f46; /* dark text */
+}
+
+.mastering-item-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  place-items: center;
+}
+
+@media (min-width: 768px) {
+  .mastering-item-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.mastering-item-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.mastering-icon {
+  color: var(--accent-color, var(--color-accent));
+}
+
+.mastering-progress {
+  width: 100%;
+}
+
+.progress-bar {
+  height: 6px;
+  background-color: var(--color-border);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 300ms ease-out;
+  background-color: var(--accent-color, var(--color-gray-300));
+}
+
+.progress-label {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+.mastering-tools {
+  width: 100%;
+}
+
+.mastering-tools-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 0.25rem;
+}
+
+.mastering-tools-list {
+  list-style: disc;
+  padding-left: 1.25rem;
+  color: var(--color-muted);
+}
+
+.mastering-tool-item {
+  font-size: 0.875rem;
+}
+
+/* Category accents using CSS variables */
+.accent-backend { --accent-color: #2563eb; }  /* blue-600 */
+.accent-frontend { --accent-color: #ef4444; } /* red-500 */
+.accent-database { --accent-color: #8b5cf6; } /* purple-500 */
+.accent-cloud { --accent-color: #06b6d4; }    /* cyan-500 */
+.accent-ai { --accent-color: #f59e0b; }       /* amber-500 */
+
