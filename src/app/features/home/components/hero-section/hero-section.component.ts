@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faGithub, faLinkedin, faInstagram, faMedium } from '@fortawesome/free-brands-svg-icons';
 
 /**
  * Hero Section Component
@@ -12,8 +14,8 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
  * - Accessibility improvements
  */
 @Component({
-	selector: 'app-hero-section',
-	imports: [CommonModule],
+  selector: 'app-hero-section',
+  imports: [CommonModule, FontAwesomeModule],
 	templateUrl: './hero-section.component.html',
 	styleUrl: './hero-section.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush
@@ -22,32 +24,32 @@ export class HeroSectionComponent {
 	/**
 	 * Social media links configuration
 	 */
-	readonly socialLinks = [
-		{
-			href: 'https://github.com/jdev-king',
-			icon: 'fa-brands fa-github',
-			label: 'GitHub Profile',
-			name: 'GitHub'
-		},
-		{
-			href: 'https://www.linkedin.com/in/jesusdiezp/',
-			icon: 'fa-brands fa-linkedin',
-			label: 'LinkedIn Profile',
-			name: 'LinkedIn'
-		},
-		{
-			href: 'https://www.instagram.com/jdev_king/',
-			icon: 'fa-brands fa-instagram',
-			label: 'Instagram Profile',
-			name: 'Instagram'
-		},
-		{
-			href: 'https://jdev-king.medium.com',
-			icon: 'fa-brands fa-medium',
-			label: 'Medium Profile',
-			name: 'Medium'
-		}
-	] as const;
+  readonly socialLinks = [
+    {
+      href: 'https://github.com/jdev-king',
+      icon: faGithub,
+      label: 'GitHub Profile',
+      name: 'GitHub'
+    },
+    {
+      href: 'https://www.linkedin.com/in/jesusdiezp/',
+      icon: faLinkedin,
+      label: 'LinkedIn Profile',
+      name: 'LinkedIn'
+    },
+    {
+      href: 'https://www.instagram.com/jdev_king/',
+      icon: faInstagram,
+      label: 'Instagram Profile',
+      name: 'Instagram'
+    },
+    {
+      href: 'https://jdev-king.medium.com',
+      icon: faMedium,
+      label: 'Medium Profile',
+      name: 'Medium'
+    }
+  ] as const;
 
 	/**
 	 * Hero content configuration

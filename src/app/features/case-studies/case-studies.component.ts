@@ -12,9 +12,8 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
         <h3 class="text-xl font-semibold mb-2">Flagship Project</h3>
         <p class="text-sm md:text-base mb-4">Summary of the project, goals, and outcomes.</p>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-          <img src="/imgs/black_background.jpg" alt="Screenshot" class="rounded" loading="lazy" />
-          <img src="/imgs/normal pic.jpg" alt="Screenshot" class="rounded" loading="lazy" />
-          <img src="/icons/langchain.svg" alt="Diagram" class="rounded" loading="lazy" />
+          <img src="/imgs/black_background.jpg" alt="Screenshot" class="rounded" loading="lazy" decoding="async" />
+          <img src="/imgs/normal pic.jpg" alt="Screenshot" class="rounded" loading="lazy" decoding="async" />
         </div>
       </article>
     </section>

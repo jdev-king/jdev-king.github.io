@@ -5,20 +5,50 @@
 	</section>
 
 	<!-- Projects Carousel -->
-	<section id="projects" class="mb-16">
+	<!-- <section id="projects" class="mb-16">
 		<app-projects />
-	</section>
+	</section> -->
 
-	<!-- Skills Section -->
-	<section id="skills" class="mb-16">
-		<app-skills />
-	</section>
-	<!-- Work Experience -->
-    <section id="work" class="mb-16">
-      <app-work />
-    </section>
-	<!-- Articles Section -->
-	<section id="articles" class="mt-16">
-		<app-articles />
-	</section>
+    <!-- Skills Section (deferred) -->
+    @defer (on viewport) {
+      <section id="skills" class="mb-16">
+        <app-skills />
+      </section>
+    } @placeholder {
+      <section class="mb-16">
+        <div class="rounded-lg border border-contrast bg-surface p-4 animate-pulse" aria-busy="true" aria-live="polite">
+          <div class="h-6 w-40 bg-gray-700 rounded mb-3"></div>
+          <div class="h-4 w-full bg-gray-800 rounded"></div>
+        </div>
+      </section>
+    }
+
+    <!-- Work Experience (deferred) -->
+    @defer (on viewport) {
+      <section id="work" class="mb-16">
+        <app-work />
+      </section>
+    } @placeholder {
+      <section class="mb-16">
+        <div class="rounded-lg border border-contrast bg-surface p-4 animate-pulse">
+          <div class="h-6 w-32 bg-gray-700 rounded mb-2"></div>
+          <div class="h-4 w-11/12 bg-gray-800 rounded"></div>
+        </div>
+      </section>
+    }
+
+    <!-- Articles Section (deferred) -->
+    @defer (on viewport) {
+      <section id="articles" class="mt-16">
+        <app-articles />
+      </section>
+    } @placeholder {
+      <section class="mt-16">
+        <div class="rounded-lg border border-contrast bg-surface p-4 animate-pulse">
+          <div class="h-6 w-36 bg-gray-700 rounded mb-3"></div>
+          <div class="h-4 w-full bg-gray-800 rounded"></div>
+          <div class="h-4 w-10/12 bg-gray-800 rounded mt-2"></div>
+        </div>
+      </section>
+    }
 </div>

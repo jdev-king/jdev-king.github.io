@@ -30,31 +30,28 @@
               }
             ],
             "styles": [
-              "src/styles.scss",
-              "node_modules/@fortawesome/fontawesome-free/css/all.css",
-              "node_modules/prismjs/themes/prism-okaidia.css"
+              "src/styles.scss"
             ],
-            "scripts": [
-              "node_modules/mermaid/dist/mermaid.min.js",
-              "node_modules/clipboard/dist/clipboard.min.js",
-              "node_modules/prismjs/prism.js",
-              "node_modules/prismjs/components/prism-csharp.min.js",
-              "node_modules/prismjs/components/prism-css.min.js",
-              "node_modules/emoji-toolkit/lib/js/joypixels.min.js"
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "300kB",
-                  "maximumError": "5Mb"
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
                 },
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "200kB",
-                  "maximumError": "5Mb"
+                  "maximumError": "500kB"
+                },
+                {
+                  "type": "bundle",
+                  "name": "styles",
+                  "maximumWarning": "200kB",
+                  "maximumError": "500kB"
                 }
               ],
               "outputHashing": "all",

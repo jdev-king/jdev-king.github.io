@@ -1,6 +1,8 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
 
 interface NavigationItem {
   readonly href: string;
@@ -25,7 +27,7 @@ interface ProfileInfo {
  */
 @Component({
   selector: 'app-header-widget',
-  imports: [CommonModule],
+  imports: [CommonModule, FontAwesomeModule],
   template: `
     <header
       class="sticky top-0 z-50 bg-surface backdrop-blur-sm border-b border-contrast mb-8 lg:mb-12"
@@ -71,9 +73,9 @@ interface ProfileInfo {
               aria-label="Toggle theme"
             >
               @if (theme() === 'light') {
-                <i class="fa-solid fa-sun"></i>
+                <fa-icon [icon]="faSun"></fa-icon>
               } @else {
-                <i class="fa-solid fa-moon"></i>
+                <fa-icon [icon]="faMoon"></fa-icon>
               }
             </button>
           </nav>
@@ -134,9 +136,9 @@ interface ProfileInfo {
               aria-label="Toggle theme"
             >
               @if (theme() === 'light') {
-                <i class="fa-solid fa-sun"></i>
+                <fa-icon [icon]="faSun"></fa-icon>
               } @else {
-                <i class="fa-solid fa-moon"></i>
+                <fa-icon [icon]="faMoon"></fa-icon>
               }
             </button>
             <a
@@ -214,6 +216,8 @@ interface ProfileInfo {
   standalone: true,
 })
 export class HeaderWidgetComponent implements OnInit, OnDestroy {
+  readonly faSun = faSun;
+  readonly faMoon = faMoon;
   /**
    * Profile information configuration
    */

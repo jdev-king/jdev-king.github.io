@@ -136,7 +136,7 @@
           } @if (project.stargazers_count !== undefined &&
           project.stargazers_count > 0) {
           <span class="flex items-center">
-            <i class="fa-solid fa-star mr-1"></i>
+            <fa-icon [icon]="faStar" class="mr-1"></fa-icon>
             {{ project.stargazers_count }}
           </span>
           }

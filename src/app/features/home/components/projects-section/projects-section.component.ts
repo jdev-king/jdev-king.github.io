@@ -1,4 +1,6 @@
 import { CommonModule } from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { Component, inject, OnInit, signal, computed, ChangeDetectionStrategy, HostListener } from '@angular/core';
 import { map } from 'rxjs';
 import { GitHubService } from '../../services/github.service';
@@ -17,8 +19,8 @@ interface ResponsiveBreakpoint {
 }
 
 @Component({
-	selector: 'app-projects',
-	imports: [CommonModule],
+  selector: 'app-projects',
+  imports: [CommonModule, FontAwesomeModule],
 	templateUrl: './projects-section.component.html',
 	styleUrl: './projects-section.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush
@@ -26,6 +28,7 @@ interface ResponsiveBreakpoint {
 export class ProjectsComponent implements OnInit {
     private gitHubService = inject(GitHubService);
     private analytics = new AnalyticsService();
+    readonly faStar = faStar;
 
 	// Responsive breakpoints configuration
 	private readonly responsiveBreakpoints: ResponsiveBreakpoint[] = [
