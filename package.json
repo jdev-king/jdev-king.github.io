@@ -27,12 +27,17 @@
     "ag-grid-angular": "^33.2.4",
     "ag-grid-community": "^33.2.4",
     "angular-cli-ghpages": "^2.0.3",
+    "clipboard": "^2.0.11",
+    "emoji-toolkit": "^9.0.1",
+    "marked": "^17.0.1",
+    "mermaid": "^10.9.1",
+    "ngx-markdown": "^21.0.1",
     "postcss": "^8.5.1",
+    "prismjs": "^1.30.0",
     "rxjs": "~7.8.0",
     "tailwindcss": "^4.0.5",
     "tslib": "^2.3.0",
-    "zone.js": "~0.15.0",
-    "mermaid": "^10.9.1"
+    "zone.js": "~0.15.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^19.1.6",

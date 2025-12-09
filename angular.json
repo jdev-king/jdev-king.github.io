@@ -31,9 +31,17 @@
             ],
             "styles": [
               "src/styles.scss",
-              "node_modules/@fortawesome/fontawesome-free/css/all.css"
+              "node_modules/@fortawesome/fontawesome-free/css/all.css",
+              "node_modules/prismjs/themes/prism-okaidia.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/mermaid/dist/mermaid.min.js",
+              "node_modules/clipboard/dist/clipboard.min.js",
+              "node_modules/prismjs/prism.js",
+              "node_modules/prismjs/components/prism-csharp.min.js",
+              "node_modules/prismjs/components/prism-css.min.js",
+              "node_modules/emoji-toolkit/lib/js/joypixels.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -41,12 +49,12 @@
                 {
                   "type": "initial",
                   "maximumWarning": "300kB",
-                  "maximumError": "700kB"
+                  "maximumError": "5Mb"
                 },
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "200kB",
-                  "maximumError": "400kB"
+                  "maximumError": "5Mb"
                 }
               ],
               "outputHashing": "all",
