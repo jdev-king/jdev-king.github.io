@@ -133,7 +133,11 @@ interface ProfileInfo {
               [attr.aria-pressed]="theme() === 'light'"
               aria-label="Toggle theme"
             >
-              Theme
+              @if (theme() === 'light') {
+                <i class="fa-solid fa-sun"></i>
+              } @else {
+                <i class="fa-solid fa-moon"></i>
+              }
             </button>
             <a
               *ngFor="let item of navigationItems; trackBy: trackByNavItem"
