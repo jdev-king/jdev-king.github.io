@@ -35,20 +35,6 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'prototype/architectures',
-    loadComponent: () =>
-      import('./features/architectures/gallery/architectures-gallery.component').then(
-        (m) => m.ArchitecturesGalleryComponent
-      ),
-  },
-  {
-    path: 'prototype/case-studies',
-    loadComponent: () =>
-      import('./features/case-studies/case-studies.component').then(
-        (m) => m.CaseStudiesComponent
-      ),
-  },
-  {
     path: '**',
     redirectTo: '',
   },

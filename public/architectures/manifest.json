@@ -1,0 +1,23 @@
+[
+  {
+    "id": "nexusflow-v1",
+    "title": "NexusFlow v1.0: Integración Híbrida ERP",
+    "description": "Plataforma de alta disponibilidad que conecta ERPs Legacy con la Nube (GCP) utilizando arquitectura orientada a eventos, CDC (Debezium) y patrones de ejecución en el borde (Edge).",
+    "tags": ["Event-Driven", "GCP", "CDC / Debezium", "Docker", "Microservices"],
+    "fileName": "nexusflow-v1.md"
+  },
+  {
+    "id": "sintad-ai-agent",
+    "title": "SINTAD AI Agent v3.1: IA & GraphRAG",
+    "description": "Arquitectura de IA conversacional optimizada en costos (<$1k/mes). Implementa RAG Híbrido (Grafos + Vectores), Caché Semántico con Redis y despliegue en Kubernetes.",
+    "tags": ["AI / LLM", "Kubernetes", "RAG", "Neo4j", "Redis", "Cost-Optimization"],
+    "fileName": "sintad-ai-v3.md"
+  },
+  {
+    "id": "analytics-bridge",
+    "title": "Unified Analytics Bridge: Pipeline de Datos",
+    "description": "Solución de Ingeniería de Datos para analítica en tiempo real. Transformación de datos Legacy a esquemas modernos (Star Schema) usando Cloud Dataflow y BigQuery.",
+    "tags": ["Data Engineering", "BigQuery", "Dataflow", "ETL", "Python", "Analytics"],
+    "fileName": "analytics-bridge.md"
+  }
+]

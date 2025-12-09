@@ -125,7 +125,7 @@ export class SkillsComponent {
           name: 'Backend',
           level: 'Intermediate',
           proficiency: 70,
-          tools: ['FastAPI', 'Spring Boot'],
+          tools: ['FastAPI', 'Node.js', 'Spring Boot'],
         },
       ],
     },
