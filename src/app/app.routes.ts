@@ -20,13 +20,31 @@ export const routes: Routes = [
         (m) => m.ArchitecturesGalleryComponent
       ),
   },
+  // Individual routes for Architecture Details
   {
-    path: 'architectures/:id',
+    path: 'architectures/analytics-bridge',
     loadComponent: () =>
-      import('./features/architectures/detail/architecture-detail.component').then(
-        (m) => m.ArchitectureDetailComponent
+      import('./features/architectures/details/analytics-bridge/analytics-bridge.component').then(
+        (m) => m.AnalyticsBridgeComponent
       ),
   },
+  {
+    path: 'architectures/nexusflow-v1',
+    loadComponent: () =>
+      import('./features/architectures/details/nexus-flow/nexus-flow.component').then(
+        (m) => m.NexusFlowComponent
+      ),
+  },
+  {
+    path: 'architectures/sintad-ai-agent',
+    loadComponent: () =>
+      import('./features/architectures/details/sintad-ai-agent/sintad-ai-agent.component').then(
+        (m) => m.SintadAiAgentComponent
+      ),
+  },
+  // Fallback for old route style or redirect?
+  // We can redirect the generic :id to the specific ones if needed, or just let them 404 if not matched.
+  // For now, I will remove the generic :id route since we want individual pages.
   {
     path: 'mastering-stack',
     loadComponent: () =>

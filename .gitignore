@@ -46,3 +46,8 @@ Thumbs.db
 .env
 .env.local
 .env.*.local
+
+.agents/
+.claude/
+.hermes/
+.qwen/

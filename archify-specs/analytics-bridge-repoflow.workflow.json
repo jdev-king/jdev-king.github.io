@@ -1,0 +1,79 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Unified Analytics Bridge - Multi-Repo CI/CD & Deployment Flow",
+    "subtitle": "Decoupled 4-repository architecture deploying across On-Premise, GCP, and AWS environments",
+    "output": "public/architectures/analytics-bridge_repoflow.html",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase"
+  },
+  "lanes": [
+    { "id": "agent_lane", "label": "On-Prem Agent (Java)" },
+    { "id": "pipeline_lane", "label": "Dataflow Pipeline (Python)" },
+    { "id": "api_lane", "label": "Metrics API (FastAPI)" },
+    { "id": "fe_lane", "label": "Frontend (Angular)" }
+  ],
+  "phases": [
+    { "id": "source_phase", "label": "1. Source Repos", "fromCol": 0, "toCol": 0 },
+    { "id": "ci_phase", "label": "2. CI/CD & Artifacts", "fromCol": 1, "toCol": 1, "variant": "emphasis" },
+    { "id": "deploy_phase", "label": "3. Production Targets", "fromCol": 2, "toCol": 2, "variant": "dashed" },
+    { "id": "live_phase", "label": "4. Unified System", "fromCol": 3, "toCol": 3, "variant": "emphasis" }
+  ],
+  "mainPath": ["repo_pipe", "ci_pipe", "deploy_pipe", "live_system"],
+  "nodes": [
+    { "id": "repo_agent", "lane": "agent_lane", "col": 0, "type": "backend", "label": "bridge-agent", "sublabel": "Java Debezium Repo", "width": 140 },
+    { "id": "ci_agent", "lane": "agent_lane", "col": 1, "type": "cloud", "label": "Artifact Registry", "sublabel": "Docker Container Image", "width": 140 },
+    { "id": "deploy_agent", "lane": "agent_lane", "col": 2, "type": "backend", "label": "Client On-Prem VM", "sublabel": "Docker Compose Host", "width": 140 },
+
+    { "id": "repo_pipe", "lane": "pipeline_lane", "col": 0, "type": "backend", "label": "bridge-pipeline", "sublabel": "Beam Python Repo", "width": 140 },
+    { "id": "ci_pipe", "lane": "pipeline_lane", "col": 1, "type": "cloud", "label": "GCS Flex Template", "sublabel": "Dataflow Job Template", "width": 140 },
+    { "id": "deploy_pipe", "lane": "pipeline_lane", "col": 2, "type": "cloud", "label": "Cloud Dataflow Job", "sublabel": "Auto-scaling Stream", "width": 140 },
+
+    { "id": "repo_api", "lane": "api_lane", "col": 0, "type": "backend", "label": "bridge-api", "sublabel": "FastAPI Repo", "width": 140 },
+    { "id": "ci_api", "lane": "api_lane", "col": 1, "type": "cloud", "label": "Artifact Registry", "sublabel": "Cloud Run Container", "width": 140 },
+    { "id": "deploy_api", "lane": "api_lane", "col": 2, "type": "backend", "label": "Cloud Run Service", "sublabel": "Serverless Endpoint", "width": 140 },
+
+    { "id": "repo_fe", "lane": "fe_lane", "col": 0, "type": "frontend", "label": "bridge-frontend", "sublabel": "Angular MFE Repo", "width": 140 },
+    { "id": "ci_fe", "lane": "fe_lane", "col": 1, "type": "cloud", "label": "AWS S3 / CloudFront", "sublabel": "Static Assets CDN", "width": 140 },
+    { "id": "deploy_fe", "lane": "fe_lane", "col": 2, "type": "frontend", "label": "SUMAX Web App", "sublabel": "Dashboard Host", "width": 140 },
+
+    { "id": "live_system", "lane": "pipeline_lane", "col": 3, "type": "database", "label": "BigQuery Data Platform", "sublabel": "Verified Star Schema", "width": 150 }
+  ],
+  "edges": [
+    { "id": "e-agent-ci", "from": "repo_agent", "to": "ci_agent", "label": "Build & Push", "variant": "default" },
+    { "id": "e-agent-deploy", "from": "ci_agent", "to": "deploy_agent", "label": "Pull & Run", "variant": "emphasis" },
+
+    { "id": "e-pipe-ci", "from": "repo_pipe", "to": "ci_pipe", "label": "Template Stage", "variant": "default" },
+    { "id": "e-pipe-deploy", "from": "ci_pipe", "to": "deploy_pipe", "label": "Launch Job", "variant": "emphasis" },
+
+    { "id": "e-api-ci", "from": "repo_api", "to": "ci_api", "label": "Build Container", "variant": "default" },
+    { "id": "e-api-deploy", "from": "ci_api", "to": "deploy_api", "label": "Deploy Revision", "variant": "emphasis" },
+
+    { "id": "e-fe-ci", "from": "repo_fe", "to": "ci_fe", "label": "Bundle & Sync", "variant": "default" },
+    { "id": "e-fe-deploy", "from": "ci_fe", "to": "deploy_fe", "label": "Invalidate CDN", "variant": "emphasis" },
+
+    { "id": "e-pipe-to-bq", "from": "deploy_pipe", "to": "live_system", "label": "Clean Rows", "variant": "emphasis" },
+    { "id": "e-api-to-bq", "from": "deploy_api", "to": "live_system", "label": "Read Metrics", "variant": "security" },
+    { "id": "e-fe-to-api", "from": "deploy_fe", "to": "deploy_api", "label": "Fetch Metrics", "variant": "default" }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Decoupled Repository Boundaries",
+      "items": [
+        "Each repository operates with independent CI/CD pipelines, test suites, and deployment cadences",
+        "Agent versioning is fully isolated from cloud Dataflow transformations"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Hybrid Cloud & On-Prem Deployment",
+      "items": [
+        "Artifact Registry serves secured Docker containers to client on-premise environments",
+        "AWS S3 + CloudFront serves the Angular microfrontend while GCP manages data ingestion and serverless APIs"
+      ]
+    }
+  ]
+}

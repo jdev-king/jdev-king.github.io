@@ -1,6 +1,6 @@
-import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
-import { OnInit, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
 
@@ -27,55 +27,64 @@ interface ProfileInfo {
  */
 @Component({
   selector: 'app-header-widget',
-  imports: [CommonModule, FontAwesomeModule],
+  imports: [CommonModule, RouterModule, FontAwesomeModule],
   template: `
     <header
-      class="sticky top-0 z-50 bg-surface backdrop-blur-sm border-b border-contrast mb-8 lg:mb-12"
+      class="sticky top-0 z-50 bg-surface/90 backdrop-blur-md border-b border-contrast mb-8 lg:mb-12 relative"
     >
+      <!-- Top Scroll Progress Bar -->
+      <div
+        class="absolute top-0 left-0 h-[3px] bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 z-50 transition-all duration-75 ease-out shadow-sm shadow-blue-500/50"
+        [style.width.%]="scrollPercent()"
+      ></div>
+
       <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16 lg:h-20">
           <!-- Logo/Brand Section -->
           <div class="flex-shrink-0">
-            <h1 class="text-xl sm:text-2xl font-mono font-bold">
-              {{ profileInfo.name }}
-            </h1>
-            <h2 class="text-sm sm:text-base font-mono text-muted -mt-1">
-              {{ profileInfo.handle }}
-            </h2>
+            <a routerLink="/" class="group flex flex-col">
+              <span class="text-xl sm:text-2xl font-mono font-bold tracking-tight group-hover:text-blue-400 transition-colors">
+                {{ profileInfo.name }}
+              </span>
+              <span class="text-xs sm:text-sm font-mono text-muted -mt-0.5">
+                {{ profileInfo.handle }}
+              </span>
+            </a>
           </div>
 
           <!-- Desktop Navigation -->
           <nav
-            class="hidden lg:flex items-center gap-3"
+            class="hidden lg:flex items-center gap-1.5"
             role="navigation"
             aria-label="Main navigation"
           >
-            
             <a
               *ngFor="let item of navigationItems; trackBy: trackByNavItem"
               [href]="item.href"
               [target]="item.isExternal ? '_blank' : '_self'"
               [rel]="item.isExternal ? 'noopener noreferrer' : null"
-              class="nav-link transition-colors duration-300 font-medium relative group"
+              class="nav-link px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-all duration-200"
+              [class.text-blue-400]="activeHref() === item.href"
+              [class.bg-blue-500_10]="activeHref() === item.href"
+              [class.text-muted]="activeHref() !== item.href"
               [attr.aria-label]="item.label"
-              [attr.aria-current]="item.href.startsWith('#') && activeHref() === item.href ? 'page' : null"
+              [attr.aria-current]="activeHref() === item.href ? 'page' : null"
             >
               {{ item.label }}
-              <span
-                class="absolute -bottom-1 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full"
-                [style.backgroundColor]="'var(--color-accent)'"
-              ></span>
             </a>
+            
+            <div class="w-px h-5 bg-contrast mx-2"></div>
+
             <button
-              class="px-3 py-2 rounded-full border border-contrast"
+              class="p-2 rounded-lg border border-contrast hover:border-blue-500/40 text-muted hover:text-white transition-all cursor-pointer"
               (click)="toggleTheme()"
               [attr.aria-pressed]="theme() === 'light'"
               aria-label="Toggle theme"
             >
               @if (theme() === 'light') {
-                <fa-icon [icon]="faSun"></fa-icon>
+                <fa-icon [icon]="faSun" class="text-amber-500"></fa-icon>
               } @else {
-                <fa-icon [icon]="faMoon"></fa-icon>
+                <fa-icon [icon]="faMoon" class="text-blue-400"></fa-icon>
               }
             </button>
           </nav>
@@ -231,23 +240,30 @@ export class HeaderWidgetComponent implements OnInit, OnDestroy {
    */
   readonly navigationItems: NavigationItem[] = [
     { href: '/', label: 'Home' },
-    { href: '#work', label: 'Work' },
+    { href: '#pipeline', label: 'Pipeline Scrubber' },
+    { href: '#work', label: 'Experience' },
+    { href: '#skills', label: 'Skills' },
     { href: '#projects', label: 'Projects' },
-    { href: '/mastering-stack', label: 'Mastering Stack' },
     { href: '/architectures', label: 'Architectures' },
     { href: '/contact', label: 'Contact' },
   ];
 
-  /**
-   * Mobile menu open state using Angular signals for reactive state management
-   */
   readonly isMobileMenuOpen = signal(false);
-
   readonly activeHref = signal<string>('');
+  readonly scrollPercent = signal<number>(0);
 
   private observer?: IntersectionObserver;
 
   readonly theme = signal<'dark' | 'light'>('dark');
+
+  @HostListener('window:scroll', [])
+  onScroll(): void {
+    if (typeof window === 'undefined') return;
+    const doc = document.documentElement;
+    const total = doc.scrollHeight - window.innerHeight;
+    const current = window.scrollY;
+    this.scrollPercent.set(total > 0 ? Math.min(Math.max((current / total) * 100, 0), 100) : 0);
+  }
 
   /**
    * Toggle mobile menu visibility
@@ -277,7 +293,8 @@ export class HeaderWidgetComponent implements OnInit, OnDestroy {
     const initial = localStorage.getItem('theme') as 'dark' | 'light' | null;
     if (initial) this.theme.set(initial);
     document.documentElement.setAttribute('data-theme', this.theme());
-    const ids = ['work', 'projects'];
+    this.onScroll();
+    const ids = ['hero-section', 'pipeline', 'work', 'skills', 'projects', 'articles'];
     this.observer = new IntersectionObserver(
       (entries) => {
         const visible = entries

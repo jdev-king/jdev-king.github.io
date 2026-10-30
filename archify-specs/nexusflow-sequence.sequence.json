@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "NexusFlow Outbound Event Processing Sequence",
+    "subtitle": "Change Data Capture, State Hydration, and Claim-Check pattern execution",
+    "output": "public/architectures/nexusflow_sequenceOutbound.html",
+    "viewBox": [1120, 740],
+    "column_fit": "spread",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase"
+  },
+  "participants": [
+    { "id": "mysql", "type": "database", "label": "MySQL SCE", "sublabel": "Legacy DB" },
+    { "id": "agent", "type": "backend", "label": "Nexus Agent", "sublabel": "Debezium CDC" },
+    { "id": "pubsub", "type": "messagebus", "label": "Pub/Sub", "sublabel": "Events Topic" },
+    { "id": "cloudrun", "type": "backend", "label": "Cloud Run", "sublabel": "Orchestrator" },
+    { "id": "firestore", "type": "database", "label": "Firestore", "sublabel": "State & Lock" },
+    { "id": "gcs", "type": "cloud", "label": "Cloud Storage", "sublabel": "Claim-Check" },
+    { "id": "crm", "type": "external", "label": "External CRM", "sublabel": "Partner ERP" },
+    { "id": "logging", "type": "security", "label": "Cloud Logging", "sublabel": "Audit Trace" }
+  ],
+  "segments": [
+    { "from": 150, "to": 270, "label": "1. Change Capture & Ingest" },
+    { "from": 280, "to": 450, "label": "2. State Hydration & Claim-Check" },
+    { "from": 460, "to": 620, "label": "3. Delivery & Observability" }
+  ],
+  "messages": [
+    { "id": "m-binlog", "from": "mysql", "to": "agent", "y": 165, "label": "Binlog Mutation Event", "variant": "emphasis" },
+    { "id": "m-ack-cdc", "from": "agent", "to": "mysql", "y": 200, "label": "Commit Offset", "variant": "return" },
+    { "id": "m-pub", "from": "agent", "to": "pubsub", "y": 232, "label": "Publish CDC Event", "variant": "emphasis" },
+    { "id": "m-trigger", "from": "pubsub", "to": "cloudrun", "y": 262, "label": "Trigger Event (Push)", "variant": "default" },
+    { "id": "m-state", "from": "cloudrun", "to": "firestore", "y": 300, "label": "Check Idempotency & Lock", "variant": "security" },
+    { "id": "m-state-ok", "from": "firestore", "to": "cloudrun", "y": 332, "label": "Lock Acquired", "variant": "return" },
+    { "id": "m-claim-check", "from": "cloudrun", "to": "gcs", "y": 370, "label": "Payload > 1MB Store Blob", "variant": "dashed" },
+    { "id": "m-claim-ref", "from": "gcs", "to": "cloudrun", "y": 405, "label": "Signed URI Ref", "variant": "return" },
+    { "id": "m-webhook", "from": "cloudrun", "to": "crm", "y": 445, "label": "POST /webhook (Enriched)", "variant": "emphasis" },
+    { "id": "m-crm-ack", "from": "crm", "to": "cloudrun", "y": 495, "label": "200 OK Accepted", "variant": "return" },
+    { "id": "m-update-state", "from": "cloudrun", "to": "firestore", "y": 535, "label": "Mark Completed", "variant": "security" },
+    { "id": "m-log", "from": "cloudrun", "to": "logging", "y": 575, "label": "Emit Structured Telemetry", "variant": "dashed" }
+  ],
+  "activations": [
+    { "participant": "mysql", "from": 160, "to": 205, "type": "database" },
+    { "participant": "agent", "from": 165, "to": 238, "type": "backend" },
+    { "participant": "pubsub", "from": 232, "to": 268, "type": "messagebus" },
+    { "participant": "cloudrun", "from": 262, "to": 585, "type": "backend" },
+    { "participant": "firestore", "from": 300, "to": 338, "type": "database" },
+    { "participant": "gcs", "from": 370, "to": 410, "type": "cloud" },
+    { "participant": "crm", "from": 445, "to": 500, "type": "external" },
+    { "participant": "logging", "from": 575, "to": 595, "type": "security" }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Idempotent Processing",
+      "items": [
+        "Cloud Run checks transaction ID against Firestore before triggering external systems",
+        "Prevents duplicate deliveries caused by network retries or replication restarts"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Large Payload Handling",
+      "items": [
+        "Payloads exceeding 1MB offload to Google Cloud Storage",
+        "CRM receives metadata reference with authenticated download link"
+      ]
+    }
+  ]
+}

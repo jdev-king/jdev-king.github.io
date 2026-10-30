@@ -1,14 +1,48 @@
 <!-- Header Section with Responsive Title and Controls -->
-<div
-  class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 md:mb-8 gap-4"
->
-  <h2 class="text-2xl sm:text-3xl md:text-4xl font-mono">
-    Projects @if (isLoading()) {
-    <span class="ml-2 text-sm text-muted animate-pulse">(Loading...)</span>
-    } @else {
-    <span class="ml-2 text-sm text-muted">({{ gitHubRepos().length }})</span>
-    }
-  </h2>
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 md:mb-8 gap-4 pb-4 border-b border-contrast">
+  <div>
+    <div class="flex items-center gap-2 mb-1.5 font-mono text-xs">
+      <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-semibold">
+        <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
+        OPEN SOURCE
+      </span>
+      <span class="text-muted">// REPOSITORIOS & PROYECTOS</span>
+    </div>
+    <h2 class="text-2xl sm:text-3xl md:text-4xl font-mono font-bold text-white">
+      Featured Projects
+      @if (isLoading()) {
+      <span class="ml-2 text-sm text-muted animate-pulse font-normal">(Cargando...)</span>
+      } @else {
+      <span class="ml-2 text-sm text-muted font-normal">({{ gitHubRepos().length }})</span>
+      }
+    </h2>
+  </div>
+
+  <!-- Navigation Arrows -->
+  <div class="flex items-center gap-2">
+    <button
+      type="button"
+      (click)="navigateProjects('prev')"
+      [disabled]="!canNavigatePrev()"
+      class="p-2 rounded-lg border border-contrast bg-surface text-gray-200 disabled:opacity-40 hover:enabled:border-blue-500/50 hover:enabled:text-blue-400 transition-all cursor-pointer"
+      aria-label="Proyectos anteriores"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+      </svg>
+    </button>
+    <button
+      type="button"
+      (click)="navigateProjects('next')"
+      [disabled]="!canNavigateNext()"
+      class="p-2 rounded-lg border border-contrast bg-surface text-gray-200 disabled:opacity-40 hover:enabled:border-blue-500/50 hover:enabled:text-blue-400 transition-all cursor-pointer"
+      aria-label="Siguientes proyectos"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+      </svg>
+    </button>
+  </div>
 </div>
 <!-- Marquee View for Continuous Scrolling -->
 @if (!isGridView()) { @if (isLoading()) {

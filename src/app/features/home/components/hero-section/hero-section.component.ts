@@ -1,29 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faGithub, faLinkedin, faInstagram, faMedium } from '@fortawesome/free-brands-svg-icons';
 
-/**
- * Hero Section Component
- * 
- * Displays the main hero section with responsive design featuring:
- * - Responsive typography and layout
- * - Social media links with enhanced hover effects
- * - Animated entrance effects
- * - Mobile-first responsive design
- * - Accessibility improvements
- */
 @Component({
   selector: 'app-hero-section',
-  imports: [CommonModule, FontAwesomeModule],
+  imports: [CommonModule, RouterModule, FontAwesomeModule],
 	templateUrl: './hero-section.component.html',
 	styleUrl: './hero-section.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeroSectionComponent {
-	/**
-	 * Social media links configuration
-	 */
   readonly socialLinks = [
     {
       href: 'https://github.com/jdev-king',
@@ -38,38 +26,40 @@ export class HeroSectionComponent {
       name: 'LinkedIn'
     },
     {
-      href: 'https://www.instagram.com/jdev_king/',
-      icon: faInstagram,
-      label: 'Instagram Profile',
-      name: 'Instagram'
-    },
-    {
       href: 'https://jdev-king.medium.com',
       icon: faMedium,
       label: 'Medium Profile',
       name: 'Medium'
+    },
+    {
+      href: 'https://www.instagram.com/jdev_king/',
+      icon: faInstagram,
+      label: 'Instagram Profile',
+      name: 'Instagram'
     }
   ] as const;
 
-	/**
-	 * Hero content configuration
-	 */
-	readonly heroContent = {
-		title: 'AI Developer',
-		description: 'I design and implement end-to-end AI solutions that optimize system performance, automate complex workflows, and drive efficiency.',
-		image: {
-			src: 'imgs/black_background.jpg',
-			alt: 'AI Developer Hero Image'
-		}
-	} as const;
+  readonly heroMetrics = [
+    { value: '-95%', label: 'Costo LLM', note: 'Gemini Flash-8B + Cache' },
+    { value: '<50ms', label: 'Latencia Cache', note: 'Redis Cognitive Firewall' },
+    { value: '33,000+', label: 'Consultas / Día', note: 'GraphRAG en GKE' },
+    { value: '$1.83/mo', label: 'TCO Cliente', note: 'Serverless Dataflow + BQ' }
+  ] as const;
 
-	/**
-	 * TrackBy function for social links to optimize *ngFor performance
-	 * @param index - The index of the item
-	 * @param item - The social link item
-	 * @returns The unique identifier for the item
-	 */
-	trackBySocialLink(index: number, item: typeof this.socialLinks[number]): string {
-		return item.name;
-	}
+  readonly heroContent = {
+    badge: 'Tech Lead & Full Stack AI Engineer • Cloud-Native & Distributed Systems',
+    headlinePrefix: 'Diseñando Soluciones de IA y',
+    headlineAccent: 'Arquitecturas Cloud',
+    description:
+      'Lidero el diseño e implementación de sistemas de IA de alta disponibilidad y plataformas de interoperabilidad empresarial para gigantes de comercio internacional (DHL, Maersk, Expeditors, Ripley). Especializado en GraphRAG, captura en tiempo real (CDC Debezium) y pipelines híbridos en GCP y AWS.',
+    image: {
+      src: 'imgs/black_background.jpg',
+      alt: 'Jesus Diez - Tech Lead & AI Engineer'
+    }
+  } as const;
+
+  trackBySocialLink(index: number, item: typeof this.socialLinks[number]): string {
+    return item.name;
+  }
 }
+

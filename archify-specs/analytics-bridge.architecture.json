@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Unified Analytics Bridge - Solution Architecture",
+    "subtitle": "Hybrid real-time ETL/ELT pipeline translating legacy ERP data into modern Star Schema on BigQuery",
+    "output": "public/architectures/analytics-bridge_diagram.html",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "mysql",
+      "type": "database",
+      "label": "MySQL DB - SCE",
+      "sublabel": "On-Premise ERP",
+      "tag": "Binlog Enabled",
+      "pos": [40, 200],
+      "size": [140, 64]
+    },
+    {
+      "id": "cdc_agent",
+      "type": "backend",
+      "label": "Docker CDC Agent",
+      "sublabel": "Embedded Debezium",
+      "tag": "Zero Impact",
+      "pos": [260, 200],
+      "size": [150, 64]
+    },
+    {
+      "id": "pubsub",
+      "type": "messagebus",
+      "label": "Google Pub/Sub",
+      "sublabel": "eventos-crudos topic",
+      "tag": "Decoupled Buffer",
+      "pos": [490, 200],
+      "size": [150, 64]
+    },
+    {
+      "id": "dataflow",
+      "type": "backend",
+      "label": "Cloud Dataflow",
+      "sublabel": "Apache Beam Python",
+      "tag": "Stateful Cleaning",
+      "pos": [720, 200],
+      "size": [160, 64]
+    },
+    {
+      "id": "bigquery",
+      "type": "database",
+      "label": "Google BigQuery",
+      "sublabel": "Star Schema DW",
+      "tag": "Columnar Facts & Dims",
+      "pos": [1010, 200],
+      "size": [160, 64]
+    },
+    {
+      "id": "fastapi",
+      "type": "backend",
+      "label": "FastAPI on Cloud Run",
+      "sublabel": "Serverless Metrics API",
+      "tag": "Scale-to-Zero",
+      "pos": [1010, 360],
+      "size": [160, 64]
+    },
+    {
+      "id": "sumax_fe",
+      "type": "frontend",
+      "label": "SUMAX Frontend",
+      "sublabel": "Angular Microfrontend",
+      "tag": "Real-Time Dashboard",
+      "pos": [720, 360],
+      "size": [160, 64]
+    },
+    {
+      "id": "end_user",
+      "type": "external",
+      "label": "Business End User",
+      "sublabel": "Operations & Analytics",
+      "pos": [490, 360],
+      "size": [150, 64]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "On-Premises Client Infrastructure",
+      "wraps": ["mysql", "cdc_agent"]
+    },
+    {
+      "kind": "region",
+      "label": "Google Cloud Platform (Analytics Pipeline)",
+      "wraps": ["pubsub", "dataflow", "bigquery", "fastapi"]
+    },
+    {
+      "kind": "region",
+      "label": "Amazon Web Services (SUMAX Platform)",
+      "wraps": ["sumax_fe"]
+    }
+  ],
+  "connections": [
+    {
+      "from": "mysql",
+      "id": "mysql-to-agent",
+      "label": "Binlog Stream",
+      "to": "cdc_agent",
+      "variant": "emphasis"
+    },
+    {
+      "from": "cdc_agent",
+      "id": "agent-to-pubsub",
+      "label": "Raw Event JSON",
+      "to": "pubsub",
+      "variant": "emphasis"
+    },
+    {
+      "from": "pubsub",
+      "id": "pubsub-to-dataflow",
+      "label": "Stream Trigger",
+      "to": "dataflow",
+      "variant": "default"
+    },
+    {
+      "from": "dataflow",
+      "id": "dataflow-to-bigquery",
+      "label": "Clean Star Schema",
+      "to": "bigquery",
+      "variant": "emphasis"
+    },
+    {
+      "from": "fastapi",
+      "fromSide": "top",
+      "id": "fastapi-to-bigquery",
+      "label": "SQL Query",
+      "to": "bigquery",
+      "toSide": "bottom",
+      "variant": "security"
+    },
+    {
+      "from": "sumax_fe",
+      "id": "fe-to-fastapi",
+      "label": "REST API Call",
+      "to": "fastapi",
+      "variant": "emphasis"
+    },
+    {
+      "from": "end_user",
+      "id": "user-to-fe",
+      "label": "View Dashboard",
+      "to": "sumax_fe",
+      "variant": "default"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Universal Translation Engine",
+      "items": [
+        "Apache Beam streaming pipeline transforms disordered legacy tables into structured Star Schema facts and dimensions",
+        "Preserves zero-impact guarantees on client on-premise transactional database"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Low TCO Serverless Architecture",
+      "items": [
+        "Cloud Run scales to zero when dashboards are idle",
+        "BigQuery on-demand queries achieve operating costs between $1.83 - $4.33 USD/month per client"
+      ]
+    }
+  ]
+}

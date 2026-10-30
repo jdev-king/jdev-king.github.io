@@ -1,75 +1,93 @@
 <div class="relative">
-  <!-- Responsive header -->
-  <h2 class="text-2xl sm:text-3xl lg:text-4xl font-mono mb-6 sm:mb-8">Work</h2>
+  <!-- Section header with badge -->
+  <div class="flex items-center justify-between mb-8 pb-4 border-b border-contrast">
+    <div>
+      <div class="flex items-center gap-2 mb-1.5 font-mono text-xs">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-semibold">
+          <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
+          TRACK RECORD
+        </span>
+        <span class="text-muted">// EXPERIENCIA PROFESIONAL</span>
+      </div>
+      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-mono font-bold text-white">
+        Engineering Journey
+      </h2>
+    </div>
+  </div>
 
-  <!-- Work experience list with responsive spacing -->
-  <div class="space-y-3 sm:space-y-4">
+  <!-- Work experience list with timeline look -->
+  <div class="relative border-l-2 border-contrast/70 ml-3 sm:ml-4 pl-6 sm:pl-8 space-y-8">
     @for (work of workExperience; track $index) {
     <div
-      class="work-item"
-      [class]="gridClasses() + ' border-b border-contrast pb-3 sm:pb-4 rounded-lg cursor-pointer'"
+      class="work-card relative group p-5 sm:p-6 rounded-xl border border-contrast bg-surface hover:border-blue-500/50 transition-all duration-200 cursor-pointer shadow-lg hover:shadow-blue-500/5 hover:-translate-y-1"
       (click)="openSidebar(work)"
       role="button"
       tabindex="0"
       (keydown.enter)="openSidebar(work)"
       (keydown.space)="openSidebar(work)"
     >
-      <!-- Date and duration column -->
-      <div class="flex flex-col space-y-1">
-        <div class="text-muted text-sm sm:text-base font-medium">
-          {{ work.startDate | date : "YYYY" }} -
-          {{
-            work.endDate.getUTCDay() == currentDate.getUTCDay()
-              ? "Currently"
-              : (work.endDate | date : "YYYY")
-          }}
+      <!-- Timeline Node Marker -->
+      <div
+        class="absolute -left-[31px] sm:-left-[39px] top-6 w-3.5 h-3.5 rounded-full border-2 border-surface transition-all duration-200 group-hover:scale-125"
+        [class.bg-emerald-400]="work.endDate >= currentDate"
+        [class.bg-blue-500]="work.endDate < currentDate"
+        [class.shadow-emerald]="work.endDate >= currentDate"
+      ></div>
+
+      <!-- Card Top: Dates & Role Status -->
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <div class="flex items-center gap-2 font-mono text-xs">
+          <span class="px-2.5 py-0.5 rounded bg-blue-500/10 text-blue-400 font-semibold border border-blue-500/20">
+            {{ work.startDate | date : "yyyy" }} — {{ work.endDate >= currentDate ? 'Presente' : (work.endDate | date : "yyyy") }}
+          </span>
+          <span class="text-muted font-medium">
+            ({{ calculateDuration(work.startDate, work.endDate) }})
+          </span>
         </div>
-        <p class="text-xs sm:text-sm text-muted">
-          {{ calculateDuration(work.startDate, work.endDate) }}
-        </p>
+
+        <span class="text-xs font-mono text-muted group-hover:text-blue-400 transition-colors flex items-center gap-1">
+          <span>Detalles</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </span>
       </div>
 
-      <!-- Company column -->
-      <div class="flex flex-col space-y-1">
-        <a href="{{ work.companyUrl }}" target="_blank" class="font-semibold text-sm sm:text-base link-accent" style="width: fit-content" (click)="$event.stopPropagation()">
-          {{ work.company }}
-        </a>
-
-        <!-- Mobile: Show position under company -->
-        @if (isMobile()) {
-        <div class="text-sm text-muted">
+      <!-- Company & Position -->
+      <div class="mb-3">
+        <h3 class="text-lg sm:text-xl font-mono font-bold text-white group-hover:text-blue-400 transition-colors">
           {{ work.position }}
+        </h3>
+        <div class="text-sm font-semibold text-blue-400/90 mt-0.5">
+          {{ work.company }}
         </div>
-        <div class="flex flex-wrap gap-1 mt-1">
-          @for (tech of work.tech.slice(0, 3); track tech) {
-          <span
-            class="px-2 py-1 bg-surface text-xs rounded-md"
-          >
-            {{ tech }}
-          </span>
-          } @if (work.tech.length > 3) {
-          <span class="px-2 py-1 bg-surface text-xs rounded-md">
-            +{{ work.tech.length - 3 }}
-          </span>
-          }
-        </div>
+      </div>
+
+      <!-- Summary Description -->
+      <p class="text-sm text-gray-300 leading-relaxed mb-4 line-clamp-2">
+        {{ work.description }}
+      </p>
+
+      <!-- Tech Stack Badges -->
+      <div class="flex flex-wrap gap-1.5">
+        @for (tech of work.tech.slice(0, 6); track tech) {
+        <span class="px-2.5 py-0.5 rounded bg-gray-800/80 text-[11px] font-mono text-gray-300 border border-gray-700/50">
+          {{ tech }}
+        </span>
+        }
+        @if (work.tech.length > 6) {
+        <span class="px-2 py-0.5 rounded bg-gray-800/40 text-[11px] font-mono text-muted">
+          +{{ work.tech.length - 6 }} más
+        </span>
         }
       </div>
-
-      <!-- Desktop/Tablet: Position and tech column -->
-      @if (!isMobile()) {
-      <div class="flex flex-col space-y-1">
-        <div class="font-medium text-sm sm:text-base">{{ work.position }}</div>
-        <div class="text-xs sm:text-sm text-muted">{{ work.tech.join(", ") }}</div>
-      </div>
-      }
     </div>
     }
   </div>
 
-  <!-- Responsive Sidebar -->
+  <!-- Responsive Sidebar / Drawer -->
   <div
-    [class]="'fixed top-0 right-0 h-full bg-surface transform transition-transform duration-300 ease-in-out z-50 overflow-y-auto ' + sidebarClasses()"
+    [class]="'fixed top-0 right-0 h-full bg-[#0d1117] border-l border-contrast shadow-2xl transform transition-transform duration-300 ease-out z-50 overflow-y-auto ' + sidebarClasses()"
     [class.translate-x-0]="sidebarVisible()"
     [class.translate-x-full]="!sidebarVisible()"
     role="dialog"
@@ -77,93 +95,72 @@
     [attr.aria-label]="'Work details for ' + selectedWork()?.company"
   >
     @if (selectedWork()) {
-    <div class="p-4 sm:p-6">
-      <!-- Responsive header -->
-      <div class="flex justify-between items-start mb-4 sm:mb-6">
+    <div class="p-6 sm:p-8">
+      <!-- Header -->
+      <div class="flex justify-between items-start mb-6 pb-4 border-b border-contrast">
         <div class="flex-1 pr-4">
-          <h3 class="text-xl sm:text-2xl font-mono mb-2">
+          <div class="text-xs font-mono text-blue-400 font-semibold mb-1">
             {{ selectedWork()?.company }}
-          </h3>
-          <p class="text-sm sm:text-base text-muted">
+          </div>
+          <h3 class="text-xl sm:text-2xl font-mono font-bold text-white">
             {{ selectedWork()?.position }}
+          </h3>
+          <p class="text-xs font-mono text-muted mt-1">
+            {{ selectedWork()?.startDate | date : "MMM YYYY" }} —
+            {{ selectedWork()?.endDate ? (selectedWork()?.endDate | date : "MMM YYYY") : "Presente" }}
+            • {{ calculateDuration(selectedWork()!.startDate, selectedWork()!.endDate) }}
           </p>
         </div>
-        <button class="text-xl sm:text-2xl p-2 -m-2" (click)="closeSidebar()" aria-label="Close sidebar">
-          ✕
+        <button
+          class="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-colors cursor-pointer"
+          (click)="closeSidebar()"
+          aria-label="Cerrar panel"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
         </button>
       </div>
 
-      <!-- Responsive content sections -->
-      <div class="space-y-4 sm:space-y-6">
-        <!-- Duration Section -->
-        <div class="bg-surface rounded-lg p-3 sm:p-4">
-          <h4 class="text-gray-400 text-sm sm:text-base font-semibold mb-2">
-            Duration
-          </h4>
-          <div
-            class="flex flex-col sm:flex-row sm:items-center sm:justify-between"
-          >
-            <p class="text-sm sm:text-base">
-              {{ selectedWork()?.startDate | date : "MMM YYYY" }} -
-              {{
-                selectedWork()?.endDate
-                  ? (selectedWork()?.endDate | date : "MMM YYYY")
-                  : "Present"
-              }}
-            </p>
-            <span class="text-muted text-xs sm:text-sm mt-1 sm:mt-0">
-              {{
-                calculateDuration(
-                  selectedWork()!.startDate,
-                  selectedWork()!.endDate
-                )
-              }}
-            </span>
-          </div>
-        </div>
-
-        <!-- Technologies Section -->
+      <!-- Content -->
+      <div class="space-y-6">
+        <!-- Overview -->
         <div>
-          <h4 class="text-gray-400 text-sm sm:text-base font-semibold mb-3">
-            Technologies
+          <h4 class="text-xs font-mono uppercase tracking-wider text-muted font-bold mb-2">
+            Resumen de Impacto
           </h4>
-          <div class="flex flex-wrap gap-2">
-            @for (tech of selectedWork()?.tech; track tech) {
-            <span
-              class="px-3 py-1.5 bg-surface rounded-md text-xs sm:text-sm"
-            >
-              {{ tech }}
-            </span>
-            }
-          </div>
-        </div>
-
-        <!-- Description Section -->
-        <div>
-          <h4 class="text-muted text-sm sm:text-base font-semibold mb-3">
-            Description
-          </h4>
-          <p class="text-sm sm:text-base leading-relaxed">
+          <p class="text-sm text-gray-200 leading-relaxed bg-surface p-4 rounded-xl border border-contrast">
             {{ selectedWork()?.description }}
           </p>
         </div>
 
-        <!-- Key Responsibilities Section -->
+        <!-- Responsibilities -->
         <div>
-          <h4 class="text-muted text-sm sm:text-base font-semibold mb-3">
-            Key Responsibilities
+          <h4 class="text-xs font-mono uppercase tracking-wider text-muted font-bold mb-3">
+            Responsabilidades & Logros Clave
           </h4>
           <ul class="space-y-3">
-            @for (responsibility of selectedWork()?.responsibilities; track
-            responsibility) {
-            <li class="flex items-start">
-              <span class="mr-3 mt-1 flex-shrink-0">•</span>
-              <span class="text-sm sm:text-base leading-relaxed">{{
-                responsibility
-              }}</span>
+            @for (resp of selectedWork()?.responsibilities; track resp) {
+            <li class="flex items-start gap-3 text-sm text-gray-300 leading-relaxed">
+              <span class="w-1.5 h-1.5 rounded-full bg-blue-400 mt-2 flex-shrink-0"></span>
+              <span>{{ resp }}</span>
             </li>
             }
           </ul>
+        </div>
+
+        <!-- Technologies -->
+        <div>
+          <h4 class="text-xs font-mono uppercase tracking-wider text-muted font-bold mb-3">
+            Stack Tecnológico Utilizado
+          </h4>
+          <div class="flex flex-wrap gap-2">
+            @for (tech of selectedWork()?.tech; track tech) {
+            <span class="px-3 py-1 rounded-lg bg-surface border border-contrast text-xs font-mono text-gray-200">
+              {{ tech }}
+            </span>
+            }
+          </div>
         </div>
       </div>
     </div>
@@ -173,7 +170,7 @@
   <!-- Overlay -->
   @if (sidebarVisible()) {
   <div
-    class="fixed inset-0 backdrop-blur-sm bg-black/30 transition-opacity z-40"
+    class="fixed inset-0 backdrop-blur-sm bg-black/60 transition-opacity duration-300 z-40"
     (click)="closeSidebar()"
   ></div>
   }

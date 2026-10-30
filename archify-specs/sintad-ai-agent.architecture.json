@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "SINTAD AI Knowledge Agent - Fortress Lite v3.1",
+    "subtitle": "High-throughput GraphRAG (33k+ queries/day) with Redis Cognitive Firewall and <$1k/mo TCO",
+    "output": "public/architectures/sintad-ai-agent_diagram.html",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "users",
+      "type": "external",
+      "label": "Users & ERP Clients",
+      "sublabel": "Aduanas, Carga, Conta",
+      "tag": "33k queries/day",
+      "pos": [40, 240],
+      "size": [140, 64]
+    },
+    {
+      "id": "ingress",
+      "type": "cloud",
+      "label": "GKE Ingress",
+      "sublabel": "TLS 1.3 / Rate Limiter",
+      "tag": "300 RPM Peak",
+      "pos": [260, 240],
+      "size": [130, 64]
+    },
+    {
+      "id": "redis",
+      "type": "database",
+      "label": "Redis Cache",
+      "sublabel": "Cognitive Firewall",
+      "tag": "Hit <50ms (40%)",
+      "pos": [480, 100],
+      "size": [150, 64]
+    },
+    {
+      "id": "flowise",
+      "type": "backend",
+      "label": "Flowise Orchestrator",
+      "sublabel": "Agentic Tool Router",
+      "tag": "LangChain Runtime",
+      "pos": [480, 240],
+      "size": [150, 64]
+    },
+    {
+      "id": "llm",
+      "type": "cloud",
+      "label": "Vertex AI Gemini",
+      "sublabel": "1.5 Flash-8B Engine",
+      "tag": "$0.10 / 1M tokens",
+      "pos": [480, 390],
+      "size": [150, 64]
+    },
+    {
+      "id": "rag_aduanas",
+      "type": "backend",
+      "label": "LightRAG: Aduanas",
+      "sublabel": "Customs Regulation",
+      "pos": [720, 130],
+      "size": [140, 56]
+    },
+    {
+      "id": "rag_carga",
+      "type": "backend",
+      "label": "LightRAG: Carga",
+      "sublabel": "Logistics & Freight",
+      "pos": [720, 230],
+      "size": [140, 56]
+    },
+    {
+      "id": "rag_conta",
+      "type": "backend",
+      "label": "LightRAG: Conta",
+      "sublabel": "Financial Rules",
+      "pos": [720, 330],
+      "size": [140, 56]
+    },
+    {
+      "id": "neo4j",
+      "type": "database",
+      "label": "Neo4j Graph DB",
+      "sublabel": "Knowledge Graph",
+      "tag": "100x Faster Traversal",
+      "pos": [960, 160],
+      "size": [150, 64]
+    },
+    {
+      "id": "cnpg",
+      "type": "database",
+      "label": "CloudNativePG",
+      "sublabel": "PostgreSQL + pgvector",
+      "tag": "HA Vector Cluster",
+      "pos": [960, 290],
+      "size": [150, 64]
+    },
+    {
+      "id": "clickhouse",
+      "type": "database",
+      "label": "ClickHouse OLAP",
+      "sublabel": "Query Analytics & Audit",
+      "pos": [720, 440],
+      "size": [140, 56]
+    },
+    {
+      "id": "langfuse",
+      "type": "security",
+      "label": "Langfuse Tracing",
+      "sublabel": "LLM Observability",
+      "tag": "Telemetry & Evals",
+      "pos": [960, 440],
+      "size": [150, 56]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "GKE Cluster: sintad-ai (us-central1)",
+      "wraps": ["ingress", "flowise", "rag_aduanas", "rag_carga", "rag_conta", "clickhouse", "langfuse"]
+    },
+    {
+      "kind": "security-group",
+      "label": "Data Fortress: Hybrid GraphRAG",
+      "wraps": ["redis", "neo4j", "cnpg"]
+    }
+  ],
+  "connections": [
+    {
+      "from": "users",
+      "id": "users-to-ingress",
+      "label": "HTTPS Request",
+      "to": "ingress",
+      "variant": "emphasis"
+    },
+    {
+      "from": "ingress",
+      "fromSide": "top",
+      "id": "ingress-to-redis",
+      "label": "Hash Check",
+      "to": "redis",
+      "toSide": "left",
+      "variant": "security"
+    },
+    {
+      "from": "ingress",
+      "id": "ingress-to-flowise",
+      "label": "Miss (60%)",
+      "to": "flowise",
+      "variant": "emphasis"
+    },
+    {
+      "from": "flowise",
+      "fromSide": "bottom",
+      "id": "flowise-to-llm",
+      "label": "Prompt & Tools",
+      "to": "llm",
+      "toSide": "top",
+      "variant": "emphasis"
+    },
+    {
+      "from": "flowise",
+      "fromSide": "top",
+      "id": "flowise-to-aduanas",
+      "label": "Route",
+      "to": "rag_aduanas",
+      "toSide": "left",
+      "variant": "default"
+    },
+    {
+      "from": "flowise",
+      "id": "flowise-to-carga",
+      "label": "Route",
+      "to": "rag_carga",
+      "toSide": "left",
+      "variant": "default"
+    },
+    {
+      "from": "flowise",
+      "id": "flowise-to-conta",
+      "label": "Route",
+      "to": "rag_conta",
+      "variant": "default"
+    },
+    {
+      "from": "rag_aduanas",
+      "id": "aduanas-to-neo4j",
+      "label": "Graph Traversal",
+      "to": "neo4j",
+      "variant": "emphasis"
+    },
+    {
+      "from": "rag_carga",
+      "id": "carga-to-neo4j",
+      "to": "neo4j",
+      "variant": "default"
+    },
+    {
+      "from": "rag_conta",
+      "id": "conta-to-cnpg",
+      "label": "Vector Search",
+      "to": "cnpg",
+      "variant": "security"
+    },
+    {
+      "from": "rag_carga",
+      "id": "carga-to-cnpg",
+      "to": "cnpg",
+      "variant": "security"
+    },
+    {
+      "from": "flowise",
+      "id": "flowise-to-clickhouse",
+      "label": "Audit Logs",
+      "to": "clickhouse",
+      "variant": "dashed"
+    },
+    {
+      "from": "clickhouse",
+      "id": "clickhouse-to-langfuse",
+      "label": "Telemetry",
+      "to": "langfuse",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Cognitive Firewall",
+      "items": [
+        "Redis Semantic Cache intercepts 40% of queries in <50ms without LLM latency",
+        "Deterministic semantic hashing for recurring customs tariffs and FAQs"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Hybrid GraphRAG",
+      "items": [
+        "Neo4j handles high-complexity entity relationships and legal cross-references",
+        "CloudNativePG HA cluster provides pgvector similarity matching for unstructured text"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Disruptive Cost Model",
+      "items": [
+        "Inference shifted to Gemini 1.5 Flash-8B ($0.10/1M tokens) cutting costs by 95%",
+        "Total operational cost remains under $800.00 USD/month at 33,000+ daily requests"
+      ]
+    }
+  ]
+}

@@ -62,19 +62,38 @@ export class WorkComponent {
   }
   workExperience: WorkExperience[] = [
     {
-      startDate: new Date('2024-01-01'),
+      startDate: new Date('2026-01-01'),
       endDate: new Date(),
+      company: 'ASESORIA INFORMATICA & COMERCIO S.A.C.',
+      companyUrl: '',
+      position: 'Tech Lead & Full Stack AI Engineer',
+      tech: ['FastAPI', 'Spring Boot', 'PySpark', 'Terraform', 'GitLab CI/CD', 'SAP B1', 'CargoWise'],
+      description:
+        'Delivering mission-critical interoperability solutions for global trade leaders (DHL, Maersk, Expeditors, Ripley). Architecting integration layers between legacy enterprise systems and modern real-time data platforms on GCP and AWS, while promoting AI-first workflows.',
+      responsibilities: [
+        'Enterprise Interoperability: Delivered solutions for global trade leaders (DHL, Maersk, Expeditors, Ripley), architecting integration layers between SAP B1, CargoWise, Sintad SCE, and modern microservices.',
+        'Real-Time Systems: Engineered real-time APIs and dashboards using FastAPI, Spring Boot, and PySpark on hybrid cloud environments.',
+        'DevOps & Automation: Established DevOps best practices using Terraform, GitLab CI/CD, TDD, and BDD methodologies.',
+        'AI-First Transformation: Promoted AI-first workflows across teams, transforming manual processes into automated, AI-assisted pipelines.',
+      ],
+    },
+    {
+      startDate: new Date('2024-01-01'),
+      endDate: new Date('2025-12-31'),
       company: 'Sintad',
       companyUrl: 'https://www.sintad.pe/',
-      position: 'AI Engineer | Full Stack Developer',
-      tech: ['FastAPI', 'Vertex AI', 'RAG', 'Angular', 'Prompt Engineering'],
+      position: 'Full Stack AI Engineer',
+      tech: ['FastAPI', 'Vertex AI', 'RAG', 'Angular', 'Prompt Engineering', 'Redis', 'Neo4j', 'GCP', 'AWS'],
       description:
-        'AI Engineer with strong experience in building production-ready, end-to-end AI systems and intelligent web applications. Skilled in designing conversational agents, applying prompt engineering strategies, and deploying scalable machine learning services in cloud environments. Expert in LangChain, GPT-4, and cloud-native architecture with a background in full-stack development.',
+        'Architected hybrid GraphRAG systems and reduced LLM operational costs by 95%. Designed scalable cloud-native architectures on GCP and AWS while leading engineering teams in delivering production-grade AI solutions.',
       responsibilities: [
-        'Automated Document Processing: Led the design and deployment of an OCR system using Google Cloud Document AI and FastAPI, reducing invoice processing time by 70% and saving ~200+ hours/month.',
-        'Conversational AI Deployment: Architected and implemented a GPT-4-powered agent that automated 30% of customer support, improving resolution time and increasing CSAT by 15%.',
-        'Team Enablement via Prompt Engineering: Mentored junior developers on prompt engineering and AI tooling, which enhanced team delivery speed and reduced planning overhead in estimation sessions.',
-        'AI-Driven Workflow: I designed, implemented, and trained development teams to use AI prompts throughout the development workflow, from creating user stories, generating unit tests, and developing features.',
+        'GraphRAG System: Architected "Fortress Lite", a hybrid GraphRAG system deployed on GKE, processing 33,000+ daily queries.',
+        'Cost Optimization: Reduced LLM operational costs by 95% by migrating inference to Gemini 2.5 Flash-lite and implementing Redis semantic caching.',
+        'High Performance & Security: Achieved sub-50ms latency for 40% of traffic while maintaining Zero Trust security and regulatory compliance via Neo4j.',
+        'Cloud Architecture: Designed scalable cloud-native architectures on GCP and AWS, optimizing infrastructure costs and application performance.',
+        'Team Leadership: Led and mentored engineering teams, translating complex business requirements into production-grade solutions.',
+        'AI Pipeline: Built an AI-driven Problem-to-Code pipeline that auto-generates architecture documents, security analyses, ClickUp tasks, user stories, and unit tests.',
+        'OCR Automation: Led OCR automation using Google Cloud Document AI and FastAPI, reducing document processing time by 70% and saving 200+ hours/month.',
       ],
     },
     {
@@ -87,28 +106,25 @@ export class WorkComponent {
       description:
         'Co-founded and led the technical development of AI-powered healthcare solutions. Spearheaded the architecture, design, and development of intelligent systems for medical applications, focusing on dermatology consultation support and patient triage automation.',
       responsibilities: [
-        'End-to-End AI Chatbot Development: Spearheaded the architecture, design, and development of a dermatology-focused AI chatbot, delivering an intelligent assistant for patient triage and consultation support.',
-        'Prompt Engineering & LLM Integration: Applied advanced prompt engineering techniques such as few-shot prompting to optimize ChatGPT responses for medical use cases, ensuring safety and relevance.',
-        'LangChain Framework Expertise: Built the conversational system using the LangChain framework for modularity, context management, and scalable integration with APIs and knowledge sources.',
-        'Full-Stack Product Delivery: Designed and implemented the entire web application from scratch using FastAPI and Angular, ensuring a responsive and secure user experience.',
-        'Cross-Functional Ownership: Managed product lifecycle from ideation to deployment, validating the solution with early users and iterating based on feedback to improve usability and accuracy.',
+        'AI Chatbot Development: Designed and delivered an AI-powered dermatology chatbot for patient triage and consultation support.',
+        'Prompt Engineering: Applied advanced prompt engineering (few-shot, role-based prompting) for safe medical LLM use.',
+        'Full-Stack Delivery: Built the full-stack product using FastAPI and Angular, managing the entire lifecycle from ideation to deployment.',
       ],
     },
     {
       startDate: new Date('2022-01-01'),
-      endDate: new Date('2024-01-01'),
+      endDate: new Date('2023-01-01'),
       company: 'Sintad',
       companyUrl: 'https://www.sintad.pe/',
       position: 'Full Stack Developer',
       tech: ['Angular', 'Kotlin', 'SpringBoot', 'Flowise', 'Pinecone', 'LangChain'],
       description:
-        'Leading the development and optimization of backend and frontend functionalities to enhance system performance and user experience. Implementing robust testing strategies with Mockito and Jest, achieving 90% code coverage and reducing production bugs. Driving codebase refactoring efforts to minimize technical debt and improve maintainability.',
+        'Led ERP modernization initiatives, migrating legacy systems to Angular 17, reducing technical debt by 30%. Integrated AI-assisted development tools and developed internal automation tools.',
       responsibilities: [
         'ERP Modernization: Led the migration to Angular 17 for a core ERP system, reducing frontend load times and cutting technical debt by 30%.',
-        'AI-Assisted Development: Integrated Aider Chat for AI pair programming across ERP modules, accelerating development and improving code consistency.',
-        'Process Automation: Developed internal automation tools using Flowise, Pinecone, and LangChain, reducing manual workflow effort by up to 60%.',
-        'Cloud Integration: Migrated legacy desktop apps to cloud infrastructure, enabling remote access and enhancing system availability.',
-        'Cross-Functional Collaboration: Worked across teams to redesign merchandise tracking features, improving UI/UX and operational monitoring.',
+        'AI-Assisted Development: Integrated AI-assisted development tools (Aider Chat) to accelerate delivery and improve code consistency.',
+        'Process Automation: Developed internal automation tools using LangChain, Flowise, and Pinecone, reducing manual effort by 60%.',
+        'Cloud Integration: Migrated legacy desktop applications to cloud-native architectures, improving availability and scalability.',
       ],
     },
   ];

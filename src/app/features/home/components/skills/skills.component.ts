@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 
 interface Skill {
   name: string;
@@ -16,74 +16,33 @@ interface SkillCategory {
 
 @Component({
   selector: 'app-skills',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './skills.component.html',
   styleUrl: './skills.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SkillsComponent {
-  // TrackBy function for better performance
-  trackByCategory(index: number, category: SkillCategory): string {
-    return category.title;
-  }
+  readonly selectedCategory = signal<string>('All');
 
-  skillsData: SkillCategory[] = [
+  readonly categories = ['All', 'AI & Machine Learning', 'Cloud & DevOps', 'Languages & Frameworks', 'Testing & Quality'];
+
+  readonly skillsData: SkillCategory[] = [
     {
       title: 'AI & Machine Learning',
       icon: 'fas fa-brain',
       skills: [
         {
-          name: 'LLMs & NLP',
-          level: 'Intermediate',
-          proficiency: 55,
-          tools: ['LangChain', 'LangGraph', 'LangSmith', 'Flowise'],
+          name: 'Generative AI & LLMs',
+          level: 'Advanced',
+          proficiency: 95,
+          tools: ['Gemini 1.5/2.5 Flash', 'Claude 3.5 Sonnet', 'GPT-4o', 'Prompt Engineering', 'LangChain', 'Flowise', 'LightRAG'],
         },
         {
-          name: 'AI APIs',
-          level: 'Advance',
-          proficiency: 85,
-          tools: ['Google Vertex AI', 'OpenAI', 'Anthropic', 'Hugging Face'],
-        },
-        {
-          name: 'Deep Learning',
-          level: 'Begginer',
-          proficiency: 25,
-          tools: ['TensorFlow'],
-        },
-      ],
-    },
-    {
-      title: 'Database & Storage',
-      icon: 'fas fa-database',
-      skills: [
-        {
-          name: 'Vector & Graph Databases',
-          level: 'Intermediate',
-          proficiency: 60,
-          tools: ['Vertex Rag Engine', 'PG-vector', 'Pinecone', 'Neo4j'],
-        },
-        {
-          name: 'Relational Databases',
-          level: 'Intermediate',
-          proficiency: 70,
-          tools: ['PostgreSQL'],
-        },
-        {
-          name: 'NoSQL Databases',
-          level: 'Intermediate',
-          proficiency: 55,
-          tools: ['Firestore', 'MongoDB'],
-        },
-      ],
-    },
-    {
-      title: 'Automation',
-      icon: 'fas fa-bolt',
-      skills: [
-        {
-          name: 'Workflow',
-          level: 'Intermediate',
-          proficiency: 40,
-          tools: ['N8N', 'Make'],
+          name: 'Knowledge Graphs & Vectors',
+          level: 'Advanced',
+          proficiency: 92,
+          tools: ['Neo4j Cypher', 'CloudNativePG pgvector', 'Pinecone', 'Redis Semantic Cache', 'Vertex AI RAG Engine'],
         },
       ],
     },
@@ -93,41 +52,61 @@ export class SkillsComponent {
       skills: [
         {
           name: 'Cloud Platforms',
-          level: 'Intermediate',
-          proficiency: 60,
-          tools: ['Google Cloud', 'AWS'],
+          level: 'Advanced',
+          proficiency: 90,
+          tools: ['Google Cloud (GCP)', 'Amazon Web Services (AWS)', 'Cloud Run', 'BigQuery', 'Pub/Sub', 'Dataflow'],
+        },
+        {
+          name: 'DevOps & Orchestration',
+          level: 'Advanced',
+          proficiency: 88,
+          tools: ['Kubernetes (GKE)', 'Docker Compose', 'Terraform IaC', 'GitLab CI/CD', 'GitHub Actions', 'MCP Servers'],
         },
       ],
     },
     {
-      title: 'Programming',
+      title: 'Languages & Frameworks',
       icon: 'fas fa-code',
       skills: [
         {
-          name: 'Languages',
-          level: 'Advance',
-          proficiency: 80,
-          tools: ['Python', 'TypeScript', 'Java'],
+          name: 'Backend & Data Streaming',
+          level: 'Advanced',
+          proficiency: 92,
+          tools: ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Apache Beam', 'Debezium CDC', 'PostgreSQL', 'MySQL'],
+        },
+        {
+          name: 'Frontend & UI Engineering',
+          level: 'Advanced',
+          proficiency: 88,
+          tools: ['TypeScript', 'Angular 19', 'Tailwind CSS', 'Microfrontends', 'Responsive UX', 'Archify'],
         },
       ],
     },
     {
-      title: 'Web Development',
-      icon: 'fas fa-laptop-code',
+      title: 'Testing & Quality',
+      icon: 'fas fa-vial',
       skills: [
         {
-          name: 'Frontend',
+          name: 'Testing & Verification',
           level: 'Advanced',
-          proficiency: 90,
-          tools: ['Angular', 'PrimeNG', 'TailwindCSS'],
-        },
-        {
-          name: 'Backend',
-          level: 'Intermediate',
-          proficiency: 70,
-          tools: ['FastAPI', 'Node.js', 'Spring Boot'],
+          proficiency: 85,
+          tools: ['Pytest', 'Jest', 'Jasmine / Karma', 'TDD / BDD', 'Integration Testing'],
         },
       ],
     },
   ];
+
+  readonly visibleCategories = computed(() => {
+    const selected = this.selectedCategory();
+    if (selected === 'All') return this.skillsData;
+    return this.skillsData.filter((c) => c.title === selected);
+  });
+
+  setCategory(cat: string): void {
+    this.selectedCategory.set(cat);
+  }
+
+  trackByCategory(index: number, category: SkillCategory): string {
+    return category.title;
+  }
 }

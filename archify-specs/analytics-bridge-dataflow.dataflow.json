@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "Unified Analytics Bridge - Real-Time Data Pipeline",
+    "subtitle": "Change Data Capture (Debezium), Beam stream transformation, and Star Schema analytical queries",
+    "output": "public/architectures/analytics-bridge_dataflow.html",
+    "viewBox": [1080, 540],
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase"
+  },
+  "stages": [
+    { "label": "1. Sources" },
+    { "label": "2. Ingest" },
+    { "label": "3. Transform" },
+    { "label": "4. Store" },
+    { "label": "5. Consume" }
+  ],
+  "nodes": [
+    { "id": "mysql", "type": "database", "label": "MySQL DB", "sublabel": "On-Premise SCE", "stage": 0, "row": 1, "tag": "binlog" },
+    { "id": "agent", "type": "backend", "label": "Docker Agent", "sublabel": "Debezium CDC", "stage": 1, "row": 0, "tag": "capture" },
+    { "id": "pubsub", "type": "messagebus", "label": "Pub/Sub", "sublabel": "eventos-crudos", "stage": 1, "row": 2, "tag": "buffer" },
+    { "id": "dataflow", "type": "backend", "label": "Cloud Dataflow", "sublabel": "Beam Python Engine", "stage": 2, "row": 1, "tag": "star schema map" },
+    { "id": "facts", "type": "database", "label": "Fact Tables", "sublabel": "Orders & Shipments", "stage": 3, "row": 0, "tag": "partitioned" },
+    { "id": "dims", "type": "database", "label": "Dimension Tables", "sublabel": "Clients & Products", "stage": 3, "row": 2, "tag": "denormalized" },
+    { "id": "api", "type": "backend", "label": "Cloud Run API", "sublabel": "FastAPI REST", "stage": 4, "row": 0, "tag": "metrics" },
+    { "id": "dashboard", "type": "frontend", "label": "SUMAX UI", "sublabel": "Angular Dashboard", "stage": 4, "row": 2, "tag": "real-time" }
+  ],
+  "flows": [
+    { "id": "f-cdc", "from": "mysql", "to": "agent", "label": "1. Binlog Event", "classification": "CDC replication", "variant": "emphasis" },
+    { "id": "f-pub", "from": "agent", "to": "pubsub", "label": "2. Raw JSON", "classification": "message queue", "variant": "default", "labelAt": [315, 215] },
+    { "id": "f-stream", "from": "pubsub", "to": "dataflow", "label": "3. Stream Window", "classification": "streaming ingress", "variant": "emphasis" },
+    { "id": "f-fact-write", "from": "dataflow", "to": "facts", "label": "4. Populate Facts", "classification": "analytical fact", "variant": "emphasis" },
+    { "id": "f-dim-write", "from": "dataflow", "to": "dims", "label": "5. Upsert Dims", "classification": "dimension enrichment", "variant": "default" },
+    { "id": "f-query", "from": "api", "to": "facts", "label": "6. Analytical SQL", "classification": "BigQuery query", "variant": "security" },
+    { "id": "f-fetch", "from": "dashboard", "to": "api", "label": "7. GET /metrics", "classification": "REST API", "variant": "emphasis", "labelAt": [960, 320] }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Sub-Second Ingestion",
+      "items": [
+        "Debezium CDC monitors the MySQL transaction log with zero read load on the transactional system",
+        "Pub/Sub decouples client infrastructure from cloud processing peaks"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Universal Model Translation",
+      "items": [
+        "Cloud Dataflow normalizes 15+ legacy relational tables into high-performance Star Schema in BigQuery",
+        "FastAPI on Cloud Run queries pre-aggregated tables in under 120ms"
+      ]
+    }
+  ]
+}

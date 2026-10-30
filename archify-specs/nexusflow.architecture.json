@@ -1,0 +1,232 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "NexusFlow v1.0 - Hybrid Enterprise ERP Integration",
+    "subtitle": "Cloud-Driven, Edge-Executed platform connecting legacy ERP (MySQL/VB6) with modern cloud ecosystems",
+    "output": "public/architectures/nexusflow_diagram.html",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "legacy_db",
+      "type": "database",
+      "label": "MySQL 5.7 SCE",
+      "sublabel": "Legacy ERP Database",
+      "tag": "Binlog Enabled",
+      "pos": [40, 160],
+      "size": [140, 64]
+    },
+    {
+      "id": "nexus_guard",
+      "type": "backend",
+      "label": "Nexus Guard Agent",
+      "sublabel": "Embedded Debezium CDC",
+      "tag": "Zero-Trust Agent",
+      "pos": [260, 160],
+      "size": [160, 64]
+    },
+    {
+      "id": "agent_cache",
+      "type": "database",
+      "label": "In-Memory Cache",
+      "sublabel": "Backpressure Buffer",
+      "pos": [260, 290],
+      "size": [160, 56]
+    },
+    {
+      "id": "watchtower",
+      "type": "security",
+      "label": "Watchtower Sidecar",
+      "sublabel": "Auto-Updater & Hardening",
+      "pos": [40, 290],
+      "size": [140, 56]
+    },
+    {
+      "id": "pubsub_res",
+      "type": "messagebus",
+      "label": "Pub/Sub Events",
+      "sublabel": "Egress Event Stream",
+      "tag": "Real-time CDC",
+      "pos": [510, 110],
+      "size": [150, 64]
+    },
+    {
+      "id": "pubsub_cmd",
+      "type": "messagebus",
+      "label": "Pub/Sub Commands",
+      "sublabel": "Inbound Ingress Queue",
+      "tag": "Decoupled IO",
+      "pos": [510, 230],
+      "size": [150, 64]
+    },
+    {
+      "id": "cloud_run",
+      "type": "backend",
+      "label": "Cloud Run Orchestrator",
+      "sublabel": "Serverless Event Engine",
+      "tag": "Scale-to-Zero",
+      "pos": [740, 170],
+      "size": [160, 64]
+    },
+    {
+      "id": "firestore",
+      "type": "database",
+      "label": "Cloud Firestore",
+      "sublabel": "State & Idempotency Store",
+      "tag": "Sub-collections Isolation",
+      "pos": [740, 310],
+      "size": [160, 64]
+    },
+    {
+      "id": "cloud_storage",
+      "type": "cloud",
+      "label": "Cloud Storage",
+      "sublabel": "Claim-Check Payloads",
+      "tag": "> 1MB Blobs",
+      "pos": [980, 100],
+      "size": [150, 64]
+    },
+    {
+      "id": "observability",
+      "type": "security",
+      "label": "Cloud Logging",
+      "sublabel": "Heartbeat & Remote Audit",
+      "pos": [510, 360],
+      "size": [150, 56]
+    },
+    {
+      "id": "external_crm",
+      "type": "external",
+      "label": "External CRM / ERP",
+      "sublabel": "Modern Cloud Consumers",
+      "tag": "REST & Webhooks",
+      "pos": [980, 240],
+      "size": [150, 64]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Client Infrastructure (On-Premises Linux Micro-VM)",
+      "wraps": ["legacy_db", "nexus_guard", "agent_cache", "watchtower"]
+    },
+    {
+      "kind": "region",
+      "label": "Google Cloud Platform (Nexus Hub)",
+      "wraps": ["pubsub_res", "pubsub_cmd", "cloud_run", "firestore", "cloud_storage", "observability"]
+    }
+  ],
+  "connections": [
+    {
+      "from": "legacy_db",
+      "id": "db-to-agent",
+      "label": "Binlog CDC",
+      "to": "nexus_guard",
+      "variant": "emphasis"
+    },
+    {
+      "from": "nexus_guard",
+      "id": "agent-to-cache",
+      "to": "agent_cache",
+      "variant": "default"
+    },
+    {
+      "from": "watchtower",
+      "id": "watchtower-to-agent",
+      "to": "nexus_guard",
+      "variant": "dashed"
+    },
+    {
+      "from": "nexus_guard",
+      "id": "agent-to-events",
+      "label": "CDC Events",
+      "to": "pubsub_res",
+      "variant": "emphasis"
+    },
+    {
+      "from": "pubsub_cmd",
+      "id": "cmd-to-agent",
+      "label": "Poll / Pull",
+      "to": "nexus_guard",
+      "variant": "security"
+    },
+    {
+      "from": "pubsub_res",
+      "id": "events-to-cloudrun",
+      "label": "Push Trigger",
+      "to": "cloud_run",
+      "variant": "emphasis"
+    },
+    {
+      "from": "cloud_run",
+      "id": "cloudrun-to-cmd",
+      "label": "Enqueue Order",
+      "to": "pubsub_cmd",
+      "variant": "default"
+    },
+    {
+      "from": "cloud_run",
+      "id": "cloudrun-to-firestore",
+      "label": "State & TTL",
+      "to": "firestore",
+      "variant": "security"
+    },
+    {
+      "from": "cloud_run",
+      "id": "cloudrun-to-storage",
+      "label": "Claim-Check",
+      "to": "cloud_storage",
+      "variant": "dashed"
+    },
+    {
+      "from": "cloud_run",
+      "id": "cloudrun-to-crm",
+      "label": "Webhook Push",
+      "to": "external_crm",
+      "variant": "emphasis"
+    },
+    {
+      "from": "external_crm",
+      "id": "crm-to-cloudrun",
+      "label": "Order API",
+      "to": "cloud_run",
+      "variant": "default"
+    },
+    {
+      "from": "nexus_guard",
+      "id": "agent-to-logs",
+      "label": "Heartbeat",
+      "to": "observability",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Cloud-Driven, Edge-Executed",
+      "items": [
+        "Orchestration, hydration, and routing reside in GCP Cloud Run",
+        "Deterministic local execution on client Micro-VM ensures data privacy without exposing inbound firewall ports"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Embedded Debezium CDC",
+      "items": [
+        "Monitors MySQL 5.7 binary logs with sub-second event capture",
+        "Eliminates database polling and prevents operational strain on the legacy ERP"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Claim-Check Pattern",
+      "items": [
+        "Payloads exceeding 1MB automatically offload to Google Cloud Storage",
+        "Pub/Sub message contains signed metadata pointers, preserving high queue throughput"
+      ]
+    }
+  ]
+}
