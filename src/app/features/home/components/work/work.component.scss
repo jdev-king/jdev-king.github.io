@@ -1,200 +1,57 @@
 :host {
-	display: block;
-	width: 100%;
+  display: block;
+  width: 100%;
 }
 
-/* Responsive grid improvements */
-.work-grid {
-	@media (max-width: 767px) {
-		gap: 0.75rem;
-	}
-	
-	@media (min-width: 768px) and (max-width: 1023px) {
-		gap: 1rem;
-	}
-	
-	@media (min-width: 1024px) {
-		gap: 1rem;
-	}
+.ledger-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--color-border-strong);
 }
 
-/* Enhanced work item hover effects */
-.work-item {
-    transition: transform 250ms ease-in-out, border-color 250ms ease-in-out;
-    border-radius: 0.5rem;
-    padding: 0.75rem;
-    margin: -0.75rem;
-    
-    &:hover {
-        transform: translateY(-2px);
-    }
-    
-    &:focus-visible {
-        outline: 2px solid var(--color-text);
-        outline-offset: 2px;
-    }
-	
-	@media (max-width: 767px) {
-		padding: 0.5rem;
-		margin: -0.5rem;
-		
-		&:hover {
-			transform: none;
-			box-shadow: none;
-		}
-	}
+.ledger-entry {
+  padding: 1.75rem 0;
+  border-bottom: 1px solid var(--color-border);
 }
 
-/* Responsive sidebar animations */
-.sidebar {
-	z-index: 2000;
-	backdrop-filter: blur(8px);
-	scroll-behavior: smooth;
-	
-	@media (max-width: 767px) {
-		/* Full screen on mobile */
-		width: 100vw !important;
-		height: 100vh;
-		height: 100dvh; /* Dynamic viewport height */
-	}
-	
-	@media (min-width: 768px) and (max-width: 1023px) {
-		/* 70% width on tablet */
-		width: 70vw !important;
-	}
-	
-	@media (min-width: 1024px) {
-		/* 40% width on desktop */
-		width: 40vw !important;
-	}
-	
-	/* Custom scrollbar */
-	&::-webkit-scrollbar {
-		width: 6px;
-	}
-	
-    &::-webkit-scrollbar-track {
-        background: var(--color-surface);
-    }
-    
-    &::-webkit-scrollbar-thumb {
-        background: var(--color-muted);
-        border-radius: 3px;
-        
-        &:hover {
-            background: var(--color-accent);
-        }
-    }
+.date-badge {
+  padding: 0.2rem 0.55rem;
+  border-radius: 0.25rem;
+  background-color: var(--color-surface-2);
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text);
+  font-weight: 600;
 }
 
-/* Enhanced overlay */
-.overlay {
-    z-index: 40;
-    backdrop-filter: blur(4px);
-    transition: backdrop-filter 250ms ease-in-out;
-	
-	@media (max-width: 767px) {
-		/* Stronger blur on mobile */
-		backdrop-filter: blur(8px);
-	}
+.date-badge.is-current {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
 }
 
-/* Tech badge animations */
-.tech-badge {
-    transition: transform 250ms ease-in-out;
-    
-    &:hover {
-        transform: translateY(-1px);
-    }
+/* Slide-Over Detail Drawer (Selective elevation shadow per R-12; no extra glass blur per R-10) */
+.work-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100dvh;
+  z-index: 200;
+  overflow-y: auto;
+  background-color: var(--color-surface);
+  border-left: 1px solid var(--color-border-strong);
+  box-shadow: var(--shadow-elevated);
+  transform: translateX(100%);
+  transition: transform 320ms var(--ease-drawer);
+  will-change: transform;
 }
 
-/* Responsive typography scaling */
-@media (max-width: 640px) {
-	.work-title {
-		font-size: 1.5rem;
-		line-height: 2rem;
-	}
-	
-	.work-company {
-		font-size: 0.875rem;
-		line-height: 1.25rem;
-	}
-	
-	.work-position {
-		font-size: 0.875rem;
-		line-height: 1.25rem;
-	}
-	
-	.work-duration {
-		font-size: 0.75rem;
-		line-height: 1rem;
-	}
+.work-drawer.is-open {
+  transform: translateX(0);
 }
 
-/* Loading states and animations */
-@keyframes fadeIn {
-	from {
-		opacity: 0;
-		transform: translateY(10px);
-	}
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
+.drawer-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 190;
+  background: rgba(12, 12, 11, 0.72);
 }
 
-.work-item {
-    animation: fadeIn 0.25s ease-out;
-}
-
-/* Accessibility improvements */
-@media (prefers-reduced-motion: reduce) {
-	* {
-		animation-duration: 0.01ms !important;
-		animation-iteration-count: 1 !important;
-		transition-duration: 0.01ms !important;
-	}
-}
-
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-	.work-item {
-		border: 2px solid;
-		
-		&:hover {
-			border-color: currentColor;
-		}
-	}
-	
-	.tech-badge {
-		border: 1px solid currentColor;
-	}
-}
-
-/* Focus management */
-.sidebar-content {
-	focus-within:ring-2 {
-		ring-color: #3b82f6;
-	}
-}
-
-/* Print styles */
-@media print {
-	.sidebar,
-	.overlay {
-		display: none !important;
-	}
-	
-	.work-item {
-		break-inside: avoid;
-		page-break-inside: avoid;
-	}
-}
-.sidebar button {
-    transition: color 250ms ease-in-out, transform 250ms ease-in-out;
-}
-
-.sidebar button:hover {
-    color: var(--color-accent);
-    transform: translateY(-1px);
-}

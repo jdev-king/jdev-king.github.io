@@ -138,10 +138,12 @@
   font-size: 0.875rem;
 }
 
-/* Category accents using CSS variables */
-.accent-backend { --accent-color: #2563eb; }  /* blue-600 */
-.accent-frontend { --accent-color: #ef4444; } /* red-500 */
-.accent-database { --accent-color: #8b5cf6; } /* purple-500 */
-.accent-cloud { --accent-color: #06b6d4; }    /* cyan-500 */
-.accent-ai { --accent-color: #f59e0b; }       /* amber-500 */
+/* Category accents unified to single deliberate accent per R-29 */
+.accent-backend,
+.accent-frontend,
+.accent-database,
+.accent-cloud,
+.accent-ai {
+  --accent-color: var(--color-accent);
+}
 

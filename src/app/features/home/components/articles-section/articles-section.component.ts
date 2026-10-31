@@ -22,6 +22,7 @@ export class ArticlesComponent implements OnInit {
 	currentArticlePage = signal(1);
 	articles = signal<MediumPost[]>([]);
 	isLoading = signal(true);
+	hasError = signal(false);
 	screenWidth = signal(typeof window !== 'undefined' ? window.innerWidth : 1024);
 
 	// Computed properties for responsive behavior
@@ -58,9 +59,21 @@ export class ArticlesComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.mediumService.getUserPosts(environment.mediumUser).subscribe((posts) => {
-			this.articles.set(posts);
-			this.isLoading.set(false);
+		this.loadArticles();
+	}
+
+	loadArticles(): void {
+		this.isLoading.set(true);
+		this.hasError.set(false);
+		this.mediumService.getUserPosts(environment.mediumUser).subscribe({
+			next: (posts) => {
+				this.articles.set(posts);
+				this.isLoading.set(false);
+			},
+			error: () => {
+				this.hasError.set(true);
+				this.isLoading.set(false);
+			}
 		});
 	}
 

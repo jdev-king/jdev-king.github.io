@@ -45,6 +45,7 @@ export class ProjectsComponent implements OnInit {
 	readonly screenWidth = signal<number>(typeof window !== 'undefined' ? window.innerWidth : 1024);
 	readonly gitHubRepos = signal<RepoWithImage[]>([]);
 	readonly isLoading = signal<boolean>(true);
+	readonly hasError = signal<boolean>(false);
 
 	// Computed properties
 	readonly currentViewConfig = computed<ViewConfig>(() => {
@@ -108,6 +109,12 @@ export class ProjectsComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+		this.loadRepos();
+	}
+
+	loadRepos(): void {
+		this.isLoading.set(true);
+		this.hasError.set(false);
 		this.gitHubService
 			.getUserReposWithReadmeImage('jdev-king')
 			.pipe(map((repos) => repos.filter((repo) => !repo.fork)))
@@ -115,10 +122,9 @@ export class ProjectsComponent implements OnInit {
 				next: (repos) => {
 					this.gitHubRepos.set(repos);
 					this.isLoading.set(false);
-					console.log('Loaded projects:', repos.length);
 				},
-				error: (error) => {
-					console.error('Error loading projects:', error);
+				error: () => {
+					this.hasError.set(true);
 					this.isLoading.set(false);
 				}
 			});

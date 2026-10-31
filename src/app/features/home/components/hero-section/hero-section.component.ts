@@ -6,10 +6,11 @@ import { faGithub, faLinkedin, faInstagram, faMedium } from '@fortawesome/free-b
 
 @Component({
   selector: 'app-hero-section',
+  standalone: true,
   imports: [CommonModule, RouterModule, FontAwesomeModule],
-	templateUrl: './hero-section.component.html',
-	styleUrl: './hero-section.component.scss',
-	changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: './hero-section.component.html',
+  styleUrl: './hero-section.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeroSectionComponent {
   readonly socialLinks = [
@@ -39,27 +40,50 @@ export class HeroSectionComponent {
     }
   ] as const;
 
-  readonly heroMetrics = [
-    { value: '-95%', label: 'Costo LLM', note: 'Gemini Flash-8B + Cache' },
-    { value: '<50ms', label: 'Latencia Cache', note: 'Redis Cognitive Firewall' },
-    { value: '33,000+', label: 'Consultas / Día', note: 'GraphRAG en GKE' },
-    { value: '$1.83/mo', label: 'TCO Cliente', note: 'Serverless Dataflow + BQ' }
+  readonly rfcIndex = [
+    {
+      id: 'sintad-ai-agent',
+      code: 'RFC-AI-301',
+      title: 'SINTAD AI Knowledge Agent v3.1',
+      spec: 'GKE · Redis Semantic Cache (<50ms) · Neo4j GraphRAG',
+    },
+    {
+      id: 'nexusflow-v1',
+      code: 'RFC-ERP-101',
+      title: 'NexusFlow Hybrid ERP Integration v1.0',
+      spec: 'Debezium Binlog CDC (0.0% Locks) · Firestore · Claim-Check',
+    },
+    {
+      id: 'analytics-bridge',
+      code: 'RFC-DATA-201',
+      title: 'Unified Analytics Bridge v2.0',
+      spec: 'Apache Beam Dataflow · BigQuery Star Schema ($1.83 a $4.33/mes)',
+    },
   ] as const;
 
   readonly heroContent = {
-    badge: 'Tech Lead & Full Stack AI Engineer • Cloud-Native & Distributed Systems',
-    headlinePrefix: 'Diseñando Soluciones de IA y',
-    headlineAccent: 'Arquitecturas Cloud',
+    roleLine: 'Jesus Sebastian Diez Plasencia (@jdev-king) · Tech Lead & Arquitecto de Sistemas IA en AICSAC / SINTAD',
+    headline: 'Arquitectura de Sistemas IA, GraphRAG Híbrido e Interoperabilidad Cloud.',
     description:
-      'Lidero el diseño e implementación de sistemas de IA de alta disponibilidad y plataformas de interoperabilidad empresarial para gigantes de comercio internacional (DHL, Maersk, Expeditors, Ripley). Especializado en GraphRAG, captura en tiempo real (CDC Debezium) y pipelines híbridos en GCP y AWS.',
+      'Diseño y dirijo la implementación de sistemas distribuidos e inteligencia artificial en producción que conectan ERPs transaccionales con Google Cloud y AWS. Autor de las arquitecturas Fortress Lite (GraphRAG sobre Kubernetes), NexusFlow (captura de datos Debezium CDC sin bloqueos) y Unified Analytics Bridge (streaming en Apache Beam hacia BigQuery).',
     image: {
       src: 'imgs/black_background.jpg',
-      alt: 'Jesus Diez - Tech Lead & AI Engineer'
+      alt: 'Retrato de Jesus Sebastian Diez Plasencia, Tech Lead y Arquitecto de Sistemas IA'
     }
   } as const;
 
-  trackBySocialLink(index: number, item: typeof this.socialLinks[number]): string {
+  trackBySocialLink(_index: number, item: typeof this.socialLinks[number]): string {
     return item.name;
   }
+
+  scrollToSection(event: Event, id: string): void {
+    event.preventDefault();
+    const el = document.getElementById(id);
+    if (el && typeof window !== 'undefined') {
+      const y = el.getBoundingClientRect().top + window.scrollY - 84;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  }
 }
+
 

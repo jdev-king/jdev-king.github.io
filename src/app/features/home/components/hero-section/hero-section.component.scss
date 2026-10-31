@@ -1,124 +1,126 @@
-// Hero Section Responsive Styles
 :host {
   display: block;
-  padding: 1rem;
-
-  @media (min-width: 640px) {
-    padding: 2rem;
-  }
-
-  @media (min-width: 1024px) {
-    padding: 3rem;
-  }
 }
 
-// Custom animations for hero elements
-.hero-title {
-  animation: fadeInUp 0.8s ease-out;
+.hero-shell {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
-.hero-description {
-  animation: fadeInUp 0.8s ease-out 0.2s both;
+.hero-display {
+  font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  font-size: clamp(2.1rem, 4.2vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: var(--color-text);
+  margin: 0 0 1rem 0;
 }
 
-.hero-social {
-  animation: fadeInUp 0.8s ease-out 0.4s both;
+.hero-accent {
+  color: var(--color-accent);
 }
 
-.hero-image {
-  animation: fadeInRight 0.8s ease-out 0.3s both;
-  transition: transform 250ms ease-in-out;
-  will-change: transform;
+.hero-role {
+  color: var(--color-muted);
 }
 
-// Keyframe animations
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.hero-lead {
+  font-size: clamp(0.975rem, 1.15vw, 1.1rem);
+  line-height: 1.75;
+  color: var(--color-text-secondary);
+  max-width: 42rem;
+  margin: 0 0 1.25rem 0;
 }
 
-@keyframes fadeInRight {
-  from {
-    opacity: 0;
-    transform: translateX(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+.social-btn {
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0;
+  border-radius: 0.375rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text-secondary);
 }
 
-// Enhanced hover effects for social links
-.social-link {
-  position: relative;
-  transition: color 250ms ease-in-out, transform 250ms ease-in-out;
-  will-change: transform;
-
-  &:hover {
+@media (hover: hover) and (pointer: fine) {
+  .social-btn:hover {
     color: var(--color-accent);
-  }
-
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: -4px;
-    left: 50%;
-    width: 0;
-    height: 2px;
-    background: currentColor;
-    transition: all 0.3s ease;
-    transform: translateX(-50%);
-  }
-
-  &:hover::after {
-    width: 100%;
+    border-color: var(--color-accent);
+    background-color: var(--color-surface-2);
   }
 }
 
-// Responsive typography adjustments
-@media (max-width: 639px) {
-  .hero-title {
-    line-height: 1.1;
+/* Right Column Monograph Dossier */
+.hero-dossier {
+  border: 1px solid var(--color-border-strong);
+}
+
+.portrait-frame {
+  position: relative;
+  height: 240px;
+  overflow: hidden;
+  background-color: #0c0c0b;
+}
+
+@media (min-width: 640px) {
+  .portrait-frame {
+    height: 270px;
   }
 }
 
-// Enhanced mobile experience
-@media (max-width: 1023px) {
-  .hero-image-container {
-    margin-bottom: 1rem;
-  }
+.portrait-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 52%;
 }
 
-// Large screen optimizations
-@media (min-width: 1280px) {
-  :host {
-    padding: 4rem;
-  }
+.portrait-caption {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.65rem 1rem;
+  background-color: rgba(12, 12, 11, 0.92);
+  border-top: 1px solid #2a2926;
 }
 
-// Accessibility improvements
-@media (prefers-reduced-motion: reduce) {
-  .hero-title,
-  .hero-description,
-  .hero-social,
-  .hero-image {
-    animation: none;
-  }
-
-  .social-link {
-    transition: none;
-  }
+.dossier-ledger {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-surface);
 }
 
-// Focus states for better accessibility
-.social-link:focus {
-  outline: 2px solid var(--color-text);
-  outline-offset: 4px;
-  border-radius: 4px;
+.dossier-ledger-header {
+  padding: 0.65rem 1rem;
+  background-color: var(--color-bg-elevated);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  font-weight: 600;
+}
+
+.dossier-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 3.5rem;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.dossier-row:last-child {
+  border-bottom: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dossier-row:hover {
+    background-color: var(--color-surface-2);
+  }
 }

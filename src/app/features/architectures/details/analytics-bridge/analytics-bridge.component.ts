@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ArchifyViewerComponent } from '../../../../shared/components/archify-viewer/archify-viewer.component';
 
@@ -7,122 +7,343 @@ import { ArchifyViewerComponent } from '../../../../shared/components/archify-vi
   selector: 'app-analytics-bridge',
   standalone: true,
   imports: [CommonModule, RouterModule, ArchifyViewerComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <section class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <a routerLink="/architectures" class="inline-block mb-6 text-primary hover:underline">← Back to gallery</a>
-      
-      <article class="prose lg:prose-xl mx-auto dark:prose-invert">
-        <h1>Unified Analytics Bridge</h1>
-        
-        <h2>1. Resumen Ejecutivo</h2>
-        <p>
-          El objetivo es dotar a los clientes del ERP legacy SCE de un dashboard de analítica operativa en tiempo real, superando el reto de sus infraestructuras on-premise y un modelo de datos deficiente. La solución establece un pipeline de datos robusto y escalable en Google Cloud Platform (GCP). Se desplegará un agente de Change Data Capture (CDC) en los servidores de los clientes con Docker para transmitir los cambios de la base de datos MySQL de forma segura a GCP.
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Top Architecture Switcher Bar -->
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-8 pb-4 border-b border-contrast">
+        <a routerLink="/architectures" class="btn-tactile btn-secondary-eng text-xs">
+          <span>Volver a Galería de Arquitecturas</span>
+        </a>
+
+        <nav class="flex flex-wrap items-center gap-2" aria-label="Cambiar especificación RFC">
+          <a routerLink="/architectures/sintad-ai-agent" class="arch-switch-pill">
+            RFC-AI-301 · SINTAD AI Agent
+          </a>
+          <a routerLink="/architectures/nexusflow-v1" class="arch-switch-pill">
+            RFC-ERP-101 · NexusFlow
+          </a>
+          <a routerLink="/architectures/analytics-bridge" class="arch-switch-pill is-active" aria-current="page">
+            RFC-DATA-201 · Analytics Bridge
+          </a>
+        </nav>
+      </div>
+
+      <!-- Blueprint Hero Card (No badge above H1 per R-09; Specification Ledger per R-05/R-29) -->
+      <header class="eng-card p-6 sm:p-8 lg:p-10 mb-8">
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-2">
+          Unified Analytics Bridge v2.0
+        </h1>
+
+        <div class="flex flex-wrap items-center gap-2.5 mb-5 font-mono text-xs text-muted">
+          <span class="font-bold" style="color: var(--color-accent);">RFC-DATA-201 · PRODUCCIÓN VERIFICADA</span>
+          <span>·</span>
+          <span>Versión 2.0 (Universal Translation Engine)</span>
+          <span>·</span>
+          <span>AICSAC / SUMAX</span>
+          <span>·</span>
+          <span>Multi-Cloud (On-Prem + GCP + AWS)</span>
+        </div>
+
+        <p class="text-secondary-theme text-base sm:text-lg max-w-4xl leading-relaxed mb-8">
+          Pipeline de ingeniería de datos en streaming que habilita consultas analíticas en sub-segundos sobre los datos transaccionales del ERP legacy SCE. Un motor con estado en <strong>Google Cloud Dataflow (Apache Beam Python)</strong> homologa las estructuras relacionales hacia un almacén <strong>Star Schema en BigQuery</strong>, expuesto mediante <strong>FastAPI en Cloud Run</strong> hacia el microfrontend Angular de la plataforma <strong>SUMAX en AWS</strong>.
         </p>
-        <p>
-          El componente central es un pipeline de procesamiento en <strong>Cloud Dataflow</strong> que actuará como un "motor de traducción universal". Este pipeline no solo ingerirá los datos, sino que los transformará en tiempo real, mapeando la estructura legacy de SCE al <strong>modelo de datos de negocio bien diseñado y validado del nuevo ERP SUMAX</strong>. Los datos limpios y estructurados se almacenarán en <strong>BigQuery</strong>, adoptando un esquema analítico denormalizado (Star Schema) para un rendimiento óptimo de las consultas.
-        </p>
-        <p>
-          Una API serverless de alto rendimiento en <strong>Cloud Run</strong> expondrá estas métricas a un nuevo módulo de dashboard dentro de la plataforma SUMAX. Esta arquitectura no solo resuelve la necesidad inmediata, sino que crea un activo de datos unificado y estratégico, listo para incorporar los datos de SUMAX en el futuro y habilitar capacidades avanzadas de IA.
-        </p>
 
-        <h2>2. Arquitectura de la Solución</h2>
-        
-        <h3>Diagrama Conceptual del Flujo de Datos</h3>
-        <ol>
-            <li><strong>On-Premise (Cliente):</strong> <code>MySQL DB (SCE)</code> -> <code>Agente CDC (Debezium)</code> publica eventos de cambio.</li>
-            <li><strong>GCP (Ingesta):</strong> Evento -> <code>Google Pub/Sub</code> (Cola de mensajes desacoplada).</li>
-            <li><strong>GCP (Transformación):</strong> <code>Pub/Sub</code> -> <code>Cloud Dataflow</code> (Mapea, limpia, une y enriquece los datos, transformando el modelo SCE al modelo analítico de SUMAX).</li>
-            <li><strong>GCP (Almacenamiento):</strong> <code>Cloud Dataflow</code> -> <code>Google BigQuery</code> (Puebla las tablas de hechos y dimensiones del Star Schema).</li>
-            <li><strong>GCP (Servicio):</strong> <code>API de Métricas (FastAPI en Cloud Run)</code> <- realiza consultas a <code>BigQuery</code>.</li>
-            <li><strong>AWS (Presentación):</strong> <code>SUMAX Frontend (Angular)</code> -> llama a la API en GCP -> Visualización del Dashboard.</li>
-        </ol>
+        <!-- Specification Ledger Strip -->
+        <div class="spec-ledger">
+          <div class="spec-ledger-cell">
+            <div class="spec-ledger-val is-accent">$1.83</div>
+            <div class="spec-ledger-lbl">Costo Mínimo por Cliente</div>
+            <div class="spec-ledger-sub">Rango de $1.83 a $4.33 USD/mes</div>
+          </div>
+          <div class="spec-ledger-cell">
+            <div class="spec-ledger-val">&lt;120ms</div>
+            <div class="spec-ledger-lbl">SLA Consultas API</div>
+            <div class="spec-ledger-sub">Star Schema en BigQuery</div>
+          </div>
+          <div class="spec-ledger-cell">
+            <div class="spec-ledger-val">15+ Tablas</div>
+            <div class="spec-ledger-lbl">Homologación en Vivo</div>
+            <div class="spec-ledger-sub">Legacy SCE hacia modelo SUMAX</div>
+          </div>
+          <div class="spec-ledger-cell">
+            <div class="spec-ledger-val">4 Repos</div>
+            <div class="spec-ledger-lbl">CI/CD Desacoplado</div>
+            <div class="spec-ledger-sub">On-Prem · GCP · AWS</div>
+          </div>
+        </div>
+      </header>
 
-        <h3>Componentes Principales</h3>
-        <ul>
-            <li><strong>Agente CDC (On-Premise):</strong> Servicio Java ligero desplegado con Docker que monitorea el <code>binlog</code> de MySQL sin impactar el rendimiento del ERP.</li>
-            <li><strong>Google Pub/Sub:</strong> Punto de entrada asíncrono y resiliente para todos los eventos de datos.</li>
-            <li><strong>Google Cloud Dataflow:</strong> Corazón de la solución. Ejecuta la lógica de negocio para convertir datos crudos y desestructurados en información de valor, lista para el análisis.</li>
-            <li><strong>Google BigQuery:</strong> Data warehouse serverless que actúa como la única fuente de verdad para toda la analítica operativa de la empresa.</li>
-            <li><strong>Google Cloud Run:</strong> Hostea la API de backend, escalando de cero a N instancias automáticamente para servir las peticiones del frontend de forma costo-eficiente.</li>
-        </ul>
+      <!-- Interactive Archify 3-Diagram Studio -->
+      <div class="mb-10">
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-4">
+          <div>
+            <div class="section-kicker mb-1.5">
+              <span>ESTUDIO INTERACTIVO MULTI-VISTA (3 ARTEFACTOS ARCHIFY)</span>
+            </div>
+            <h2 class="text-2xl font-bold">
+              {{ activeTab() === 'arch' ? '01 · Arquitectura Multi-Cloud de la Solución' : activeTab() === 'dataflow' ? '02 · Pipeline de Flujo de Datos en Tiempo Real (5 Etapas)' : '03 · Flujo CI/CD Multi-Repositorio y Despliegue' }}
+            </h2>
+          </div>
 
-        <h2>3. Stack Tecnológico Detallado</h2>
-        <ul>
-            <li><strong>Plataforma Cloud:</strong> <strong>Híbrida (GCP para el pipeline de datos, AWS para el frontend)</strong>.
-                <ul><li><em>Justificación:</em> Aprovecha la superioridad del stack de datos de GCP y la experiencia del equipo de AICSAC, mientras se integra de forma nativa con la plataforma SUMAX existente en AWS.</li></ul>
-            </li>
-            <li><strong>Base de Datos Analítica:</strong> <strong>Google BigQuery</strong>.
-                <ul><li><em>Justificación:</em> Su arquitectura serverless y su rendimiento en consultas sobre esquemas denormalizados lo hacen la opción ideal. El modelo de pago por consulta minimiza los costos.</li></ul>
-            </li>
-            <li><strong>Backend/Procesamiento:</strong>
-                <ul>
-                    <li><strong>Pipeline de Datos:</strong> <strong>Google Cloud Dataflow</strong> con el SDK de <strong>Python</strong>.
-                        <ul><li><em>Justificación:</em> Es la herramienta perfecta para la transformación con estado (stateful) requerida para unir lógicamente los registros de SCE. Python acelera el desarrollo y se alinea con las habilidades del equipo.</li></ul>
-                    </li>
-                    <li><strong>API de Servicio:</strong> <strong>FastAPI</strong> en contenedor Docker sobre <strong>Google Cloud Run</strong>.
-                        <ul><li><em>Justificación:</em> Combinación de alto rendimiento, escalado a cero y facilidad de desarrollo para el equipo de AICSAC.</li></ul>
-                    </li>
-                </ul>
-            </li>
-            <li><strong>Frontend:</strong> <strong>Angular (Microfrontend)</strong>.
-                <ul><li><em>Justificación:</em> Permite un desarrollo desacoplado y una integración limpia en la plataforma SUMAX.</li></ul>
-            </li>
-        </ul>
+          <!-- Switcher between the 3 Analytics Bridge diagrams -->
+          <div class="flex flex-wrap items-center gap-2" role="group" aria-label="Seleccionar vista de diagrama Analytics Bridge">
+            <button
+              type="button"
+              (click)="activeTab.set('arch')"
+              [attr.aria-pressed]="activeTab() === 'arch'"
+              class="tab-pill btn-tactile"
+              [class.is-active]="activeTab() === 'arch'"
+            >
+              <span>01 · Arquitectura Global</span>
+            </button>
+            <button
+              type="button"
+              (click)="activeTab.set('dataflow')"
+              [attr.aria-pressed]="activeTab() === 'dataflow'"
+              class="tab-pill btn-tactile"
+              [class.is-active]="activeTab() === 'dataflow'"
+            >
+              <span>02 · Dataflow (5 Etapas)</span>
+            </button>
+            <button
+              type="button"
+              (click)="activeTab.set('repoflow')"
+              [attr.aria-pressed]="activeTab() === 'repoflow'"
+              class="tab-pill btn-tactile"
+              [class.is-active]="activeTab() === 'repoflow'"
+            >
+              <span>03 · Flujo CI/CD Repos</span>
+            </button>
+          </div>
+        </div>
 
-        <h2>4. Plan de Implementación (Fases)</h2>
-        <ul>
-            <li><strong>Fase 1 (MVP - Creación de la Base Analítica - 1.5 a 2.5 meses):</strong> El objetivo es construir un pipeline funcional de extremo a extremo.</li>
-            <li><strong>Fase 2 (Escalado y Personalización - 3 a 5 meses):</strong> Expandir el esquema y desarrollar personalización.</li>
-            <li><strong>Fase 3 (Optimización y Futuro - 6+ meses):</strong> Optimización de costos e innovación con IA.</li>
-        </ul>
+        @if (activeTab() === 'arch') {
+          <app-archify-viewer
+            src="/architectures/analytics-bridge_diagram.html"
+            title="Unified Analytics Bridge: Solution Architecture"
+            diagramType="ARCHITECTURE"
+            height="620px"
+          ></app-archify-viewer>
+        } @else if (activeTab() === 'dataflow') {
+          <app-archify-viewer
+            src="/architectures/analytics-bridge_dataflow.html"
+            title="Unified Analytics Bridge: Real-Time Data Pipeline"
+            diagramType="DATAFLOW"
+            height="580px"
+          ></app-archify-viewer>
+        } @else {
+          <app-archify-viewer
+            src="/architectures/analytics-bridge_repoflow.html"
+            title="Unified Analytics Bridge: Multi-Repo CI/CD & Deployment Flow"
+            diagramType="WORKFLOW"
+            height="600px"
+          ></app-archify-viewer>
+        }
+      </div>
 
-        <h2>5. Análisis de Costos de Producción</h2>
-        <p>Costo estimado mensual por cliente: <strong>$1.83 - $4.33 USD / mes</strong></p>
+      <!-- 2-Column Technical Specification Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-8 space-y-6 blueprint-spec">
+          <!-- Section 1 -->
+          <article class="eng-card p-6 sm:p-8">
+            <h2>
+              <span class="sec-num">01</span>
+              <span>Recorrido de Extremo a Extremo del Dato</span>
+            </h2>
+            <p>
+              Diseñé el puente analítico para transformar mutaciones transaccionales crudas en métricas operativas sin añadir carga de lectura al servidor MySQL del cliente:
+            </p>
+            <ul class="blueprint-list">
+              <li>El servidor <code>MySQL DB (SCE)</code> registra cambios en su binlog y el agente local <code>Debezium en Docker</code> los captura en sub-segundos.</li>
+              <li>Los eventos JSON crudos se publican de forma asíncrona en el tópico <code>eventos-crudos</code> de <code>Google Pub/Sub</code>.</li>
+              <li>Un pipeline con estado en <code>Cloud Dataflow</code> limpia, une y homologa las estructuras legacy hacia el modelo canónico de <strong>SUMAX</strong>.</li>
+              <li><code>Google BigQuery</code> consolida tablas de hechos particionadas por fecha y tablas de dimensiones desnormalizadas bajo un diseño Star Schema.</li>
+              <li>El servicio <code>FastAPI en Cloud Run</code> ejecuta consultas analíticas parametrizadas solicitadas por el microfrontend Angular alojado en AWS.</li>
+            </ul>
+          </article>
 
-        <hr class="my-8">
+          <!-- Section 2: Dataflow Diagram in Context -->
+          <article class="eng-card p-6 sm:p-8">
+            <h2>
+              <span class="sec-num">02</span>
+              <span>Pipeline de Transformación (ETL/ELT en 5 Etapas)</span>
+            </h2>
+            <p>
+              Diagrama interactivo del linaje de datos a través de las cinco etapas (Sources, Ingest, Transform, Store y Consume):
+            </p>
+            <app-archify-viewer
+              src="/architectures/analytics-bridge_dataflow.html"
+              title="Unified Analytics Bridge: Real-Time Data Pipeline"
+              diagramType="DATAFLOW"
+              height="560px"
+            ></app-archify-viewer>
+          </article>
 
-        <h2>Estructura de Repositorios & CI/CD</h2>
-        <p>Cuatro repositorios desacoplados con pipelines independientes:</p>
-        <ol>
-            <li><code>analytics-bridge-agent</code>: Agente On-Premise.</li>
-            <li><code>analytics-bridge-pipeline</code>: Pipeline de Dataflow.</li>
-            <li><code>analytics-bridge-api</code>: API de métricas.</li>
-            <li><code>analytics-bridge-frontend</code>: Microfrontend Angular.</li>
-        </ol>
+          <!-- Section 3: Multi-Repo CI/CD Workflow -->
+          <article class="eng-card p-6 sm:p-8">
+            <h2>
+              <span class="sec-num">03</span>
+              <span>Estructura Multi-Repositorio y Entrega Continua</span>
+            </h2>
+            <p>
+              Dividí el sistema en <strong>cuatro repositorios independientes</strong> con pipelines de despliegue aislados hacia On-Premise, GCP y AWS:
+            </p>
+            <div class="blueprint-table-wrap">
+              <table class="blueprint-table">
+                <thead>
+                  <tr>
+                    <th>Repositorio</th>
+                    <th>Stack</th>
+                    <th>Artefacto y Destino de Despliegue</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>analytics-bridge-agent</code></td>
+                    <td>Java + Debezium</td>
+                    <td>Imagen Docker en Artifact Registry desplegada en la VM On-Premise del cliente.</td>
+                  </tr>
+                  <tr>
+                    <td><code>analytics-bridge-pipeline</code></td>
+                    <td>Python + Apache Beam</td>
+                    <td>Flex Template en Cloud Storage ejecutado como job de streaming en Cloud Dataflow.</td>
+                  </tr>
+                  <tr>
+                    <td><code>analytics-bridge-api</code></td>
+                    <td>Python + FastAPI</td>
+                    <td>Contenedor serverless en Artifact Registry desplegado en Google Cloud Run.</td>
+                  </tr>
+                  <tr>
+                    <td><code>analytics-bridge-frontend</code></td>
+                    <td>Angular Microfrontend</td>
+                    <td>Bundle estático en AWS S3 y CloudFront integrado en la plataforma web SUMAX.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
-        <h3>Diagrama de Flujo de los Repositorios (Interactive Archify)</h3>
-        <app-archify-viewer
-          src="/architectures/analytics-bridge_repoflow.html"
-          title="Multi-Repo CI/CD and Target Environments Flow"
-          height="580px"
-        ></app-archify-viewer>
+            <app-archify-viewer
+              src="/architectures/analytics-bridge_repoflow.html"
+              title="Unified Analytics Bridge: Multi-Repo CI/CD Flow"
+              diagramType="WORKFLOW"
+              height="580px"
+            ></app-archify-viewer>
+          </article>
+        </div>
 
-        <h3>Diagrama Arquitectónico de la Solución (Interactive Archify)</h3>
-        <p>Componentes principales de la solución y sus límites de seguridad entre On-Premise, GCP y AWS:</p>
-        <app-archify-viewer
-          src="/architectures/analytics-bridge_diagram.html"
-          title="Unified Analytics Bridge Solution Architecture"
-          height="600px"
-        ></app-archify-viewer>
+        <!-- Right Sidebar (4 cols) -->
+        <aside class="lg:col-span-4 space-y-6">
+          <div class="eng-card p-6">
+            <h3 class="font-mono text-xs uppercase tracking-wider text-muted font-bold mb-4">
+              Fases de Implementación y Costos
+            </h3>
+            <div class="space-y-3 text-sm">
+              <div class="py-2 border-b border-contrast">
+                <div class="font-mono text-xs text-muted">FASE 1 · MVP (1.5 a 2.5 meses)</div>
+                <div class="font-semibold mt-0.5">Pipeline extremo a extremo y Star Schema base</div>
+              </div>
+              <div class="py-2 border-b border-contrast">
+                <div class="font-mono text-xs text-muted">FASE 2 · ESCALADO (3 a 5 meses)</div>
+                <div class="font-semibold mt-0.5">Métricas personalizadas y aislamiento multi-tenant</div>
+              </div>
+              <div class="py-2 border-b border-contrast">
+                <div class="font-mono text-xs text-muted">FASE 3 · MODELOS ML (6+ meses)</div>
+                <div class="font-semibold mt-0.5">Proyecciones de demanda sobre BigQuery ML</div>
+              </div>
+              <div class="flex justify-between pt-2">
+                <span class="font-bold">Costo por Cliente</span>
+                <span class="font-mono text-base font-bold" style="color: var(--color-accent);">$1.83 a $4.33 / mes</span>
+              </div>
+            </div>
+          </div>
 
-        <h3>Diagrama de Flujo de Datos en Tiempo Real (Interactive Archify)</h3>
-        <p>El recorrido de una mutación desde MySQL On-Premise hasta el Data Warehouse y la interfaz de usuario:</p>
-        <app-archify-viewer
-          src="/architectures/analytics-bridge_dataflow.html"
-          title="Real-Time Data Pipeline Stream"
-          height="560px"
-        ></app-archify-viewer>
+          <div class="eng-card p-6">
+            <h3 class="font-mono text-xs uppercase tracking-wider text-muted font-bold mb-3">
+              Stack Multi-Cloud
+            </h3>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="tech-chip">Google Cloud Dataflow</span>
+              <span class="tech-chip">Apache Beam Python</span>
+              <span class="tech-chip">Google BigQuery</span>
+              <span class="tech-chip">FastAPI on Cloud Run</span>
+              <span class="tech-chip">Google Pub/Sub</span>
+              <span class="tech-chip">Debezium CDC</span>
+              <span class="tech-chip">AWS S3 & CloudFront</span>
+              <span class="tech-chip">Angular Microfrontend</span>
+            </div>
+          </div>
 
-      </article>
-
-      <div class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
-         <a routerLink="/contact" class="inline-block text-primary font-semibold hover:underline">Contact →</a>
+          <div class="eng-card p-6">
+            <h3 class="font-mono text-xs uppercase tracking-wider text-muted font-bold mb-2">
+              Ingeniería de Datos en Streaming
+            </h3>
+            <p class="text-xs text-muted mb-4">
+              Diseño pipelines con Apache Beam y almacenes analíticos en BigQuery sobre bases operacionales existentes.
+            </p>
+            <a routerLink="/contact" class="btn-tactile btn-primary-eng w-full">
+              <span>Agendar Revisión de Arquitectura</span>
+            </a>
+          </div>
+        </aside>
       </div>
     </section>
   `,
   styles: [`
     :host { display: block; }
+    .arch-switch-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.75rem;
+      padding: 0.45rem 0.85rem;
+      border-radius: 0.375rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      color: var(--color-muted);
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border-strong);
+      text-decoration: none;
+      transition: all var(--duration-fast) var(--ease-out);
+    }
+    .arch-switch-pill.is-active {
+      color: var(--color-accent-contrast);
+      border-color: var(--color-accent);
+      background-color: var(--color-accent);
+      font-weight: 600;
+    }
+    .tab-pill {
+      min-height: 2.75rem;
+      padding: 0.45rem 0.9rem;
+      border-radius: 0.375rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      color: var(--color-muted);
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border-strong);
+    }
+    .tab-pill.is-active {
+      color: var(--color-accent-contrast);
+      background-color: var(--color-accent);
+      border-color: var(--color-accent);
+      font-weight: 600;
+    }
+    .sec-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 0.25rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8rem;
+      color: var(--color-accent);
+      background-color: var(--color-surface-2);
+      border: 1px solid var(--color-border-strong);
+      flex-shrink: 0;
+    }
   `],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AnalyticsBridgeComponent {}
+export class AnalyticsBridgeComponent {
+  readonly activeTab = signal<'arch' | 'dataflow' | 'repoflow'>('arch');
+}
+

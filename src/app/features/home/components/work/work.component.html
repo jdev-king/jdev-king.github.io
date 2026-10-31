@@ -1,177 +1,148 @@
 <div class="relative">
-  <!-- Section header with badge -->
-  <div class="flex items-center justify-between mb-8 pb-4 border-b border-contrast">
-    <div>
-      <div class="flex items-center gap-2 mb-1.5 font-mono text-xs">
-        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-semibold">
-          <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
-          TRACK RECORD
-        </span>
-        <span class="text-muted">// EXPERIENCIA PROFESIONAL</span>
+  <!-- Asymmetric 4/8 Editorial Career Ledger (RHYTHM 3 variation per R-05) -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+    <!-- Left Column (4 cols): Sticky Section Summary -->
+    <div class="lg:col-span-4 lg:sticky lg:top-24">
+      <div class="section-kicker mb-2">
+        <span>04 / TRAYECTORIA PROFESIONAL</span>
       </div>
-      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-mono font-bold text-white">
-        Engineering Journey
+      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight mb-3">
+        Experiencia en Ingeniería y Liderazgo Técnico
       </h2>
-    </div>
-  </div>
-
-  <!-- Work experience list with timeline look -->
-  <div class="relative border-l-2 border-contrast/70 ml-3 sm:ml-4 pl-6 sm:pl-8 space-y-8">
-    @for (work of workExperience; track $index) {
-    <div
-      class="work-card relative group p-5 sm:p-6 rounded-xl border border-contrast bg-surface hover:border-blue-500/50 transition-all duration-200 cursor-pointer shadow-lg hover:shadow-blue-500/5 hover:-translate-y-1"
-      (click)="openSidebar(work)"
-      role="button"
-      tabindex="0"
-      (keydown.enter)="openSidebar(work)"
-      (keydown.space)="openSidebar(work)"
-    >
-      <!-- Timeline Node Marker -->
-      <div
-        class="absolute -left-[31px] sm:-left-[39px] top-6 w-3.5 h-3.5 rounded-full border-2 border-surface transition-all duration-200 group-hover:scale-125"
-        [class.bg-emerald-400]="work.endDate >= currentDate"
-        [class.bg-blue-500]="work.endDate < currentDate"
-        [class.shadow-emerald]="work.endDate >= currentDate"
-      ></div>
-
-      <!-- Card Top: Dates & Role Status -->
-      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-        <div class="flex items-center gap-2 font-mono text-xs">
-          <span class="px-2.5 py-0.5 rounded bg-blue-500/10 text-blue-400 font-semibold border border-blue-500/20">
-            {{ work.startDate | date : "yyyy" }} — {{ work.endDate >= currentDate ? 'Presente' : (work.endDate | date : "yyyy") }}
-          </span>
-          <span class="text-muted font-medium">
-            ({{ calculateDuration(work.startDate, work.endDate) }})
-          </span>
-        </div>
-
-        <span class="text-xs font-mono text-muted group-hover:text-blue-400 transition-colors flex items-center gap-1">
-          <span>Detalles</span>
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-          </svg>
-        </span>
-      </div>
-
-      <!-- Company & Position -->
-      <div class="mb-3">
-        <h3 class="text-lg sm:text-xl font-mono font-bold text-white group-hover:text-blue-400 transition-colors">
-          {{ work.position }}
-        </h3>
-        <div class="text-sm font-semibold text-blue-400/90 mt-0.5">
-          {{ work.company }}
-        </div>
-      </div>
-
-      <!-- Summary Description -->
-      <p class="text-sm text-gray-300 leading-relaxed mb-4 line-clamp-2">
-        {{ work.description }}
+      <p class="text-sm sm:text-base text-secondary-theme leading-relaxed mb-4">
+        Más de 4 años construyendo sistemas empresariales de comercio exterior, arquitecturas híbridas GraphRAG e integraciones cloud en tiempo real.
       </p>
-
-      <!-- Tech Stack Badges -->
-      <div class="flex flex-wrap gap-1.5">
-        @for (tech of work.tech.slice(0, 6); track tech) {
-        <span class="px-2.5 py-0.5 rounded bg-gray-800/80 text-[11px] font-mono text-gray-300 border border-gray-700/50">
-          {{ tech }}
-        </span>
-        }
-        @if (work.tech.length > 6) {
-        <span class="px-2 py-0.5 rounded bg-gray-800/40 text-[11px] font-mono text-muted">
-          +{{ work.tech.length - 6 }} más
-        </span>
-        }
+      <div class="p-4 rounded bg-elevated border border-contrast font-mono text-xs text-muted">
+        Selecciona el botón de desglose en cualquier etapa para abrir el registro completo de entregas técnicas.
       </div>
     </div>
-    }
-  </div>
 
-  <!-- Responsive Sidebar / Drawer -->
-  <div
-    [class]="'fixed top-0 right-0 h-full bg-[#0d1117] border-l border-contrast shadow-2xl transform transition-transform duration-300 ease-out z-50 overflow-y-auto ' + sidebarClasses()"
-    [class.translate-x-0]="sidebarVisible()"
-    [class.translate-x-full]="!sidebarVisible()"
-    role="dialog"
-    aria-modal="true"
-    [attr.aria-label]="'Work details for ' + selectedWork()?.company"
-  >
-    @if (selectedWork()) {
-    <div class="p-6 sm:p-8">
-      <!-- Header -->
-      <div class="flex justify-between items-start mb-6 pb-4 border-b border-contrast">
-        <div class="flex-1 pr-4">
-          <div class="text-xs font-mono text-blue-400 font-semibold mb-1">
-            {{ selectedWork()?.company }}
+    <!-- Right Column (8 cols): Chronological Ledger Rows -->
+    <div class="lg:col-span-8 ledger-list">
+      @for (work of workExperience; track $index) {
+        <article class="ledger-entry">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+            <div class="flex items-center gap-2 font-mono text-xs">
+              <span class="date-badge" [class.is-current]="$index === 0">
+                {{ work.startDate | date : "yyyy" }} a {{ $index === 0 ? 'Presente' : (work.endDate | date : "yyyy") }}
+              </span>
+              <span class="text-muted">
+                · {{ calculateDuration(work.startDate, work.endDate) }}
+              </span>
+            </div>
+
+            <button
+              type="button"
+              class="btn-tactile btn-secondary-eng text-xs"
+              (click)="openSidebar(work)"
+            >
+              <span>Ver desglose ({{ work.responsibilities.length }} entregas)</span>
+            </button>
           </div>
-          <h3 class="text-xl sm:text-2xl font-mono font-bold text-white">
-            {{ selectedWork()?.position }}
-          </h3>
-          <p class="text-xs font-mono text-muted mt-1">
-            {{ selectedWork()?.startDate | date : "MMM YYYY" }} —
-            {{ selectedWork()?.endDate ? (selectedWork()?.endDate | date : "MMM YYYY") : "Presente" }}
-            • {{ calculateDuration(selectedWork()!.startDate, selectedWork()!.endDate) }}
-          </p>
-        </div>
-        <button
-          class="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-colors cursor-pointer"
-          (click)="closeSidebar()"
-          aria-label="Cerrar panel"
-        >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        </button>
-      </div>
 
-      <!-- Content -->
-      <div class="space-y-6">
-        <!-- Overview -->
-        <div>
-          <h4 class="text-xs font-mono uppercase tracking-wider text-muted font-bold mb-2">
-            Resumen de Impacto
-          </h4>
-          <p class="text-sm text-gray-200 leading-relaxed bg-surface p-4 rounded-xl border border-contrast">
-            {{ selectedWork()?.description }}
-          </p>
-        </div>
+          <div class="mb-3">
+            <h3 class="text-xl font-bold tracking-tight">
+              {{ work.position }}
+            </h3>
+            <div class="text-xs font-mono font-semibold mt-0.5" style="color: var(--color-accent);">
+              {{ work.company }}
+            </div>
+          </div>
 
-        <!-- Responsibilities -->
-        <div>
-          <h4 class="text-xs font-mono uppercase tracking-wider text-muted font-bold mb-3">
-            Responsabilidades & Logros Clave
-          </h4>
-          <ul class="space-y-3">
-            @for (resp of selectedWork()?.responsibilities; track resp) {
-            <li class="flex items-start gap-3 text-sm text-gray-300 leading-relaxed">
-              <span class="w-1.5 h-1.5 rounded-full bg-blue-400 mt-2 flex-shrink-0"></span>
-              <span>{{ resp }}</span>
-            </li>
+          <p class="text-sm sm:text-base text-secondary-theme leading-relaxed mb-4">
+            {{ work.description }}
+          </p>
+
+          <!-- Preview top 2 responsibilities inline -->
+          <ul class="blueprint-list text-sm mb-4">
+            @for (resp of work.responsibilities.slice(0, 2); track resp) {
+              <li>{{ resp }}</li>
             }
           </ul>
+
+          <!-- Tech Stack Chips -->
+          <div class="flex flex-wrap gap-1.5 pt-3 border-t border-contrast">
+            @for (tech of work.tech; track tech) {
+              <span class="tech-chip">{{ tech }}</span>
+            }
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+
+  <!-- Slide-Over Detail Drawer (Closable via Escape or button per R-26/R-32) -->
+  <div
+    [class]="'work-drawer ' + sidebarClasses()"
+    [class.is-open]="sidebarVisible()"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="'Detalles de experiencia en ' + selectedWork()?.company"
+  >
+    @if (selectedWork()) {
+      <div class="p-6 sm:p-8">
+        <div class="flex justify-between items-start gap-4 mb-6 pb-5 border-b border-contrast">
+          <div>
+            <div class="font-mono text-xs font-bold uppercase tracking-wider mb-1" style="color: var(--color-accent);">
+              {{ selectedWork()?.company }}
+            </div>
+            <h3 class="text-2xl font-bold">
+              {{ selectedWork()?.position }}
+            </h3>
+            <p class="font-mono text-xs text-muted mt-1.5">
+              {{ selectedWork()?.startDate | date : "MMM yyyy" }} a
+              {{ selectedWork()?.endDate ? (selectedWork()?.endDate | date : "MMM yyyy") : "Presente" }}
+              · {{ calculateDuration(selectedWork()!.startDate, selectedWork()!.endDate) }}
+            </p>
+          </div>
+
+          <button
+            type="button"
+            class="btn-tactile btn-secondary-eng"
+            (click)="closeSidebar()"
+            aria-label="Cerrar panel de detalles (Escape)"
+          >
+            Cerrar
+          </button>
         </div>
 
-        <!-- Technologies -->
-        <div>
-          <h4 class="text-xs font-mono uppercase tracking-wider text-muted font-bold mb-3">
-            Stack Tecnológico Utilizado
-          </h4>
-          <div class="flex flex-wrap gap-2">
-            @for (tech of selectedWork()?.tech; track tech) {
-            <span class="px-3 py-1 rounded-lg bg-surface border border-contrast text-xs font-mono text-gray-200">
-              {{ tech }}
-            </span>
-            }
+        <div class="space-y-6 blueprint-spec">
+          <div>
+            <h4 class="font-mono text-xs uppercase tracking-wider text-muted font-bold mb-2">
+              Alcance del Rol
+            </h4>
+            <p class="p-4 rounded bg-elevated border border-contrast text-sm">
+              {{ selectedWork()?.description }}
+            </p>
+          </div>
+
+          <div>
+            <h4 class="font-mono text-xs uppercase tracking-wider text-muted font-bold mb-3">
+              Entregas de Ingeniería y Resultados
+            </h4>
+            <ul class="blueprint-list text-sm">
+              @for (resp of selectedWork()?.responsibilities; track $index) {
+                <li>{{ resp }}</li>
+              }
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="font-mono text-xs uppercase tracking-wider text-muted font-bold mb-3">
+              Tecnologías Utilizadas
+            </h4>
+            <div class="flex flex-wrap gap-2">
+              @for (tech of selectedWork()?.tech; track $index) {
+                <span class="tech-chip">{{ tech }}</span>
+              }
+            </div>
           </div>
         </div>
       </div>
-    </div>
     }
   </div>
 
-  <!-- Overlay -->
   @if (sidebarVisible()) {
-  <div
-    class="fixed inset-0 backdrop-blur-sm bg-black/60 transition-opacity duration-300 z-40"
-    (click)="closeSidebar()"
-  ></div>
+    <div class="drawer-scrim" (click)="closeSidebar()"></div>
   }
 </div>

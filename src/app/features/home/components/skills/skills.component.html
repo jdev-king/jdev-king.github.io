@@ -1,83 +1,71 @@
 <div class="skills-section">
-  <!-- Header with badge -->
-  <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 pb-4 border-b border-contrast">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 pb-5 border-b border-contrast">
     <div>
-      <div class="flex items-center gap-2 mb-1.5 font-mono text-xs">
-        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-semibold">
-          <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
-          CAPABILITIES
-        </span>
-        <span class="text-muted">// MATRIZ DE COMPETENCIAS</span>
+      <div class="section-kicker mb-2">
+        <span>05 / MATRIZ DE CAPACIDADES TÉCNICAS</span>
       </div>
-      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-mono font-bold text-white">
-        Skills & Technical Stack
+      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight">
+        Stack Tecnológico y Dominios de Especialidad
       </h2>
     </div>
 
     <!-- Category Filter Tabs -->
-    <div class="flex flex-wrap gap-1.5 self-start md:self-end">
-      <button
-        *ngFor="let cat of categories"
-        type="button"
-        (click)="setCategory(cat)"
-        class="px-3 py-1 rounded-lg text-xs font-mono font-medium border transition-all cursor-pointer"
-        [class.bg-blue-600]="selectedCategory() === cat"
-        [class.text-white]="selectedCategory() === cat"
-        [class.border-blue-500]="selectedCategory() === cat"
-        [class.bg-surface]="selectedCategory() !== cat"
-        [class.text-muted]="selectedCategory() !== cat"
-        [class.border-contrast]="selectedCategory() !== cat"
-      >
-        {{ cat }}
-      </button>
+    <div class="flex flex-wrap gap-1.5 self-start md:self-end" role="group" aria-label="Filtrar stack por dominio">
+      @for (cat of categories; track cat) {
+        <button
+          type="button"
+          (click)="setCategory(cat)"
+          [attr.aria-pressed]="selectedCategory() === cat"
+          class="filter-pill btn-tactile"
+          [class.is-active]="selectedCategory() === cat"
+        >
+          {{ cat }}
+        </button>
+      }
     </div>
   </div>
 
   <!-- Skills Grid -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div
-      *ngFor="let category of visibleCategories(); trackBy: trackByCategory"
-      class="p-6 rounded-xl border border-contrast bg-surface hover:border-blue-500/40 transition-all duration-200 shadow-lg hover:-translate-y-1"
-    >
-      <div class="flex items-center justify-between mb-5 pb-3 border-b border-contrast/60">
-        <h3 class="text-lg font-mono font-bold text-white flex items-center gap-2">
-          <span>{{ category.title }}</span>
-        </h3>
-        <span class="text-xs font-mono text-muted">
-          {{ category.skills.length }} áreas
-        </span>
-      </div>
+    @for (category of visibleCategories(); track category.title) {
+      <article class="eng-card eng-card-interactive p-6 sm:p-7">
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-contrast">
+          <h3 class="text-xl font-bold tracking-tight">
+            {{ category.title }}
+          </h3>
+          <span class="font-mono text-xs text-muted">
+            0{{ category.skills.length }} Dominios
+          </span>
+        </div>
 
-      <div class="space-y-5">
-        @for (skill of category.skills; track $index) {
-        <div class="space-y-2">
-          <!-- Skill Name & Proficiency Bar -->
-          <div class="flex items-center justify-between font-mono text-xs">
-            <span class="font-bold text-gray-200">{{ skill.name }}</span>
-            <span class="text-blue-400 font-semibold">{{ skill.proficiency }}%</span>
-          </div>
+        <div class="space-y-6">
+          @for (skill of category.skills; track skill.name) {
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between font-mono text-xs">
+                <span class="font-semibold text-primary-theme">{{ skill.name }}</span>
+                <span class="font-bold" style="color: var(--color-accent);">{{ skill.proficiency }}%</span>
+              </div>
 
-          <!-- Progress Bar -->
-          <div class="w-full h-1.5 bg-gray-800 rounded-full overflow-hidden">
-            <div
-              class="h-full bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full transition-all duration-500"
-              [style.width.%]="skill.proficiency"
-            ></div>
-          </div>
+              <!-- Compositor-accelerated Progress Bar -->
+              <div class="skill-bar-track">
+                <div
+                  class="skill-bar-fill"
+                  [style.transform]="'scaleX(' + (skill.proficiency / 100) + ')'"
+                ></div>
+              </div>
 
-          <!-- Tools Chips -->
-          @if (skill.tools.length) {
-          <div class="flex flex-wrap gap-1.5 pt-1">
-            @for (tool of skill.tools; track $index) {
-            <span class="px-2 py-0.5 rounded bg-gray-800/80 text-[11px] font-mono text-gray-300 border border-gray-700/50">
-              {{ tool }}
-            </span>
-            }
-          </div>
+              @if (skill.tools.length) {
+                <div class="flex flex-wrap gap-1.5 pt-1">
+                  @for (tool of skill.tools; track tool) {
+                    <span class="tech-chip">{{ tool }}</span>
+                  }
+                </div>
+              }
+            </div>
           }
         </div>
-        }
-      </div>
-    </div>
+      </article>
+    }
   </div>
 </div>

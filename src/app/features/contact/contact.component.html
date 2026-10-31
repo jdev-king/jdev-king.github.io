@@ -1,48 +1,90 @@
-<div class="contact-container">
-	<div class="contact-grid">
-		<!-- Contact Info Section -->
-		<div class="contact-info">
-			<h1 class="text-2xl font-mono">Let's Connect</h1>
-			<p>I'm always interested in hearing about new projects and opportunities. Feel free to reach out!</p>
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+	<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+		<!-- Left Column: Direct Channels (No pill badge above H1 per R-09) -->
+		<div class="lg:col-span-7 eng-card p-6 sm:p-8 lg:p-10">
+			<h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-2">
+				Contacto Directo de Ingeniería
+			</h1>
+			<p class="font-mono text-xs text-muted mb-5">
+				JESUS DIEZ (&#64;JDEV-KING) · LIMA, PERÚ · ROLES TECH LEAD & ARQUITECTURA CLOUD / IA
+			</p>
 
-			<div class="social-links">
-                <a href="mailto:jesussebastiandiezplasencia@gmail.com" target="_blank" class="social-item">
-                    <fa-icon [icon]="faEnvelope"></fa-icon>
-                    <span>{{ 'jesussebastiandiezplasencia@gmail.com' }}</span>
-                </a>
+			<p class="text-secondary-theme text-base sm:text-lg leading-relaxed mb-8">
+				Disponible para roles de liderazgo técnico (Tech Lead / Staff AI Engineer), diseño de arquitecturas GraphRAG sobre Kubernetes, pipelines de datos en streaming e interoperabilidad de ERPs empresariales.
+			</p>
 
-				<div class="social-icons">
-                    <a href="https://github.com/jdev-king" target="_blank" aria-label="GitHub">
-                        <fa-icon [icon]="faGithub" class="fa-xl"></fa-icon>
-                    </a>
-                    <a href="https://www.linkedin.com/in/jesusdiezp/" target="_blank" aria-label="LinkedIn">
-                        <fa-icon [icon]="faLinkedin" class="fa-xl"></fa-icon>
-                    </a>
-                    <a href="https://instagram.com/jdev_king" target="_blank" aria-label="Instagram">
-                        <fa-icon [icon]="faInstagram" class="fa-xl"></fa-icon>
-                    </a>
+			<div class="space-y-4">
+				<a
+					href="mailto:jesussebastiandiezplasencia@gmail.com"
+					class="contact-channel-card eng-card eng-card-interactive"
+				>
+					<div class="channel-icon" aria-hidden="true">
+						<fa-icon [icon]="faEnvelope"></fa-icon>
+					</div>
+					<div class="min-w-0 flex-1">
+						<div class="font-mono text-xs text-muted uppercase">Correo Electrónico Directo</div>
+						<div class="font-mono text-sm sm:text-base font-semibold truncate" style="color: var(--color-text);">
+							jesussebastiandiezplasencia&#64;gmail.com
+						</div>
+					</div>
+					<span class="font-mono text-xs link-accent">Escribir correo</span>
+				</a>
+
+				<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+					<a
+						href="https://www.linkedin.com/in/jesusdiezp/"
+						target="_blank"
+						rel="noopener noreferrer"
+						aria-label="Perfil de LinkedIn de Jesus Diez"
+						class="social-card eng-card eng-card-interactive"
+					>
+						<fa-icon [icon]="faLinkedin" class="text-xl" style="color: var(--color-accent);" aria-hidden="true"></fa-icon>
+						<div>
+							<div class="font-bold text-sm">LinkedIn</div>
+							<div class="font-mono text-xs text-muted">/in/jesusdiezp</div>
+						</div>
+					</a>
+
+					<a
+						href="https://github.com/jdev-king"
+						target="_blank"
+						rel="noopener noreferrer"
+						aria-label="Perfil de GitHub de Jesus Diez"
+						class="social-card eng-card eng-card-interactive"
+					>
+						<fa-icon [icon]="faGithub" class="text-xl" style="color: var(--color-accent);" aria-hidden="true"></fa-icon>
+						<div>
+							<div class="font-bold text-sm">GitHub</div>
+							<div class="font-mono text-xs text-muted">&#64;jdev-king</div>
+						</div>
+					</a>
+
+					<a
+						href="https://instagram.com/jdev_king"
+						target="_blank"
+						rel="noopener noreferrer"
+						aria-label="Perfil de Instagram de Jesus Diez"
+						class="social-card eng-card eng-card-interactive"
+					>
+						<fa-icon [icon]="faInstagram" class="text-xl" style="color: var(--color-accent);" aria-hidden="true"></fa-icon>
+						<div>
+							<div class="font-bold text-sm">Instagram</div>
+							<div class="font-mono text-xs text-muted">&#64;jdev_king</div>
+						</div>
+					</a>
 				</div>
 			</div>
 		</div>
 
-		<!-- Contact Form Section
-		<form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
-			<div class="form-group">
-				<label for="name">Name</label>
-				<input type="text" id="name" formControlName="name" placeholder="Your name" />
-			</div>
-
-			<div class="form-group">
-				<label for="email">Email</label>
-				<input type="email" id="email" formControlName="email" placeholder="your@email.com" />
-			</div>
-
-			<div class="form-group">
-				<label for="message">Message</label>
-				<textarea id="message" formControlName="message" placeholder="Your message" rows="5"></textarea>
-			</div>
-
-			<button type="submit" [disabled]="!contactForm.valid">Send Message</button>
-		</form> -->
+		<!-- Right Column: Consultation Scope -->
+		<div class="lg:col-span-5 eng-card p-6 sm:p-8 space-y-6 blueprint-spec">
+			<h2 class="text-xl font-bold">Áreas de Especialización</h2>
+			<ul class="blueprint-list text-sm">
+				<li>Diseño de sistemas GraphRAG híbridos con reducción del 95% en costos de inferencia mediante Redis Semantic Cache, Neo4j y modelos Gemini Flash.</li>
+				<li>Integración en tiempo real sin bloqueos de lectura (Debezium Binlog CDC) entre MySQL, SAP Business One o CargoWise y Google Cloud / AWS.</li>
+				<li>Construcción de pipelines en streaming con Apache Beam (Cloud Dataflow) hacia almacenes dimensionales Star Schema en BigQuery.</li>
+				<li>Operación de clusters Kubernetes (GKE), infraestructura como código con Terraform y flujos CI/CD multi-repositorio bajo seguridad Zero-Trust.</li>
+			</ul>
+		</div>
 	</div>
-</div>
+</section>

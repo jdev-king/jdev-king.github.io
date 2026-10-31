@@ -7,27 +7,32 @@ import { RouterModule } from '@angular/router';
 	standalone: true,
 	imports: [CommonModule, RouterModule],
 	template: `
-		<footer class="mt-20 border-t border-contrast bg-surface/80 backdrop-blur-sm py-12">
-			<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-				<div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-contrast/60">
+		<footer class="site-footer mt-24">
+			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+				<div class="footer-top flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8">
 					<div>
-						<div class="flex items-center gap-2 mb-1">
-							<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-							<span class="text-xs font-mono font-semibold text-emerald-400">DISPONIBLE PARA TECH LEAD & STAFF AI ROLES</span>
+						<div class="section-kicker mb-2">
+							<span>DISPONIBLE PARA ROLES TECH LEAD & ARQUITECTURA DE SISTEMAS</span>
 						</div>
-						<h3 class="text-lg font-mono font-bold text-white">Jesus Diez</h3>
-						<p class="text-xs font-mono text-muted">
-							Diseño e implementación de sistemas de IA, GraphRAG y plataformas distribuidas en la nube.
+						<h2 class="text-xl font-bold tracking-tight" style="color: var(--color-text);">
+							Jesus Diez · <span class="font-mono text-base font-normal text-muted">&#64;jdev-king</span>
+						</h2>
+						<p class="text-sm text-muted max-w-xl mt-1">
+							Diseño e implementación de sistemas de IA en producción, GraphRAG híbrido, captura de datos en tiempo real (CDC) e interoperabilidad cloud en GCP y AWS.
 						</p>
 					</div>
 
-					<div class="flex items-center gap-3">
+					<div class="flex flex-wrap items-center gap-3">
+						<a routerLink="/contact" class="btn-tactile btn-primary-eng">
+							<span>Contactar para Proyectos o Roles</span>
+						</a>
 						<button
 							type="button"
 							(click)="scrollToTop()"
-							class="px-3 py-1.5 rounded-lg border border-contrast hover:border-blue-500/50 text-xs font-mono text-muted hover:text-white transition-all flex items-center gap-1.5 cursor-pointer"
+							class="btn-tactile btn-secondary-eng"
+							aria-label="Volver al principio de la página"
 						>
-							<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
 							</svg>
 							<span>Volver arriba</span>
@@ -35,16 +40,16 @@ import { RouterModule } from '@angular/router';
 					</div>
 				</div>
 
-				<div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 text-xs font-mono text-muted">
+				<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-6 text-xs font-mono text-muted">
 					<div>
-						© {{ currentYear }} Jesus Diez (&#64;jdev-king). Hecho con Angular 19, Tailwind CSS & Archify.
+						© {{ currentYear }} Jesus Diez (&#64;jdev-king). Especificaciones compiladas con Angular 19 y Archify.
 					</div>
-					<div class="flex items-center gap-4">
-						<a routerLink="/" class="hover:text-blue-400 transition-colors">Inicio</a>
-						<a routerLink="/architectures" class="hover:text-blue-400 transition-colors">Arquitecturas</a>
-						<a routerLink="/contact" class="hover:text-blue-400 transition-colors">Contacto</a>
-						<a href="https://github.com/jdev-king" target="_blank" rel="noopener noreferrer" class="hover:text-blue-400 transition-colors">GitHub</a>
-						<a href="https://www.linkedin.com/in/jesusdiezp/" target="_blank" rel="noopener noreferrer" class="hover:text-blue-400 transition-colors">LinkedIn</a>
+					<div class="flex flex-wrap items-center gap-3">
+						<a routerLink="/" class="footer-link">Inicio</a>
+						<a routerLink="/architectures" class="footer-link">Arquitecturas RFC</a>
+						<a routerLink="/contact" class="footer-link">Contacto</a>
+						<a href="https://github.com/jdev-king" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub</a>
+						<a href="https://www.linkedin.com/in/jesusdiezp/" target="_blank" rel="noopener noreferrer" class="footer-link">LinkedIn</a>
 					</div>
 				</div>
 			</div>
@@ -52,6 +57,27 @@ import { RouterModule } from '@angular/router';
 	`,
 	styles: [`
 		:host { display: block; }
+		.site-footer {
+			background-color: var(--color-bg-elevated);
+			border-top: 1px solid var(--color-border);
+		}
+		.footer-top {
+			border-bottom: 1px solid var(--color-border);
+		}
+		.footer-link {
+			display: inline-flex;
+			align-items: center;
+			min-height: 2.75rem;
+			padding: 0 0.5rem;
+			color: var(--color-muted);
+			text-decoration: none;
+			transition: color var(--duration-fast) var(--ease-out);
+		}
+		@media (hover: hover) and (pointer: fine) {
+			.footer-link:hover {
+				color: var(--color-accent);
+			}
+		}
 	`],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })

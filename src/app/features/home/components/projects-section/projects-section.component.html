@@ -1,188 +1,141 @@
-<!-- Header Section with Responsive Title and Controls -->
-<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 md:mb-8 gap-4 pb-4 border-b border-contrast">
+<!-- Header Section -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 pb-5 border-b border-contrast gap-4">
   <div>
-    <div class="flex items-center gap-2 mb-1.5 font-mono text-xs">
-      <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-semibold">
-        <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
-        OPEN SOURCE
-      </span>
-      <span class="text-muted">// REPOSITORIOS & PROYECTOS</span>
+    <div class="section-kicker mb-2">
+      <span>06 / REPOSITORIOS E INGENIERÍA OPEN SOURCE</span>
     </div>
-    <h2 class="text-2xl sm:text-3xl md:text-4xl font-mono font-bold text-white">
-      Featured Projects
-      @if (isLoading()) {
-      <span class="ml-2 text-sm text-muted animate-pulse font-normal">(Cargando...)</span>
-      } @else {
-      <span class="ml-2 text-sm text-muted font-normal">({{ gitHubRepos().length }})</span>
+    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">
+      Proyectos y Repositorios en GitHub
+      @if (!isLoading() && gitHubRepos().length > 0) {
+        <span class="ml-2 text-base font-mono text-muted font-normal">({{ gitHubRepos().length }})</span>
       }
     </h2>
   </div>
 
-  <!-- Navigation Arrows -->
+  <!-- Navigation Controls -->
   <div class="flex items-center gap-2">
     <button
       type="button"
       (click)="navigateProjects('prev')"
       [disabled]="!canNavigatePrev()"
-      class="p-2 rounded-lg border border-contrast bg-surface text-gray-200 disabled:opacity-40 hover:enabled:border-blue-500/50 hover:enabled:text-blue-400 transition-all cursor-pointer"
-      aria-label="Proyectos anteriores"
+      class="btn-tactile btn-secondary-eng disabled:opacity-40"
+      aria-label="Repositorios anteriores"
     >
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-      </svg>
+      Anterior
     </button>
     <button
       type="button"
       (click)="navigateProjects('next')"
       [disabled]="!canNavigateNext()"
-      class="p-2 rounded-lg border border-contrast bg-surface text-gray-200 disabled:opacity-40 hover:enabled:border-blue-500/50 hover:enabled:text-blue-400 transition-all cursor-pointer"
-      aria-label="Siguientes proyectos"
+      class="btn-tactile btn-secondary-eng disabled:opacity-40"
+      aria-label="Siguientes repositorios"
     >
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-      </svg>
+      Siguiente
     </button>
   </div>
 </div>
-<!-- Marquee View for Continuous Scrolling -->
-@if (!isGridView()) { @if (isLoading()) {
-<div class="flex justify-center items-center h-48 md:h-64">
-  <div class="flex items-center space-x-3">
-    <div
-      class="animate-spin rounded-full h-8 w-8 border-b-2 border-white"
-    ></div>
-    <p class="text-gray-400">Loading projects...</p>
-  </div>
-</div>
-} @else if (gitHubRepos().length === 0) {
-<div class="flex justify-center items-center h-48 md:h-64">
-  <p class="text-gray-400">No projects found.</p>
-</div>
-} @else {
-<div
-  class="w-full inline-flex flex-nowrap overflow-hidden p-2 md:p-[0.5rem] [mask-image:_linear-gradient(to_right,transparent_0,_black_64px,_black_calc(100%-64px),transparent_100%)] md:[mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-200px),transparent_100%)]"
->
-  <div class="flex whitespace-nowrap animate-marquee hover:pause">
-    <!-- First set of projects -->
-    <div class="flex shrink-0">
-      @for (project of visibleProjects(); track trackByProject($index, project))
-      {
-      <div class="w-[280px] sm:w-[320px] md:w-[400px] mx-2 md:mx-4">
-        <div class="bg-surface rounded-lg p-4 md:p-6">
-          <img
-            [src]="project.readmeImageUrl"
-            [alt]="project.name"
-            class="rounded-lg mb-3 md:mb-4 w-full h-32 sm:h-40 md:h-48 object-contain"
-            loading="lazy"
-          />
-          <h3 class="text-lg md:text-xl mb-2 font-semibold line-clamp-1">
-            {{ project.name }}
-          </h3>
-          <p
-            class="text-muted text-sm md:text-base mb-3 md:mb-4 line-clamp-2"
-          >
-            {{ project.description || "No description available" }}
-          </p>
-          <button
-            class="w-full sm:w-auto border border-contrast px-3 md:px-4 py-2 rounded-full text-sm md:text-base link-accent"
-            (click)="openExternalLink(project.html_url)"
-          >
-            Read more →
-          </button>
-        </div>
-      </div>
-      }
+
+@if (isLoading()) {
+  <div class="eng-card p-8 text-center" role="status" aria-live="polite">
+    <div class="font-mono text-xs font-semibold mb-1" style="color: var(--color-accent);">
+      SINCRONIZANDO REPOSITORIOS PÚBLICOS
     </div>
-    <!-- Duplicate set for seamless loop -->
-    <div class="flex shrink-0" aria-hidden="true">
-      @for (project of visibleProjects(); track trackByProject($index, project))
-      {
-      <div class="w-[280px] sm:w-[320px] md:w-[400px] mx-2 md:mx-4">
-        <div class="bg-surface rounded-lg p-4 md:p-6">
-          <img
-            [src]="project.readmeImageUrl"
-            [alt]="project.name"
-            class="rounded-lg mb-3 md:mb-4 w-full h-32 sm:h-40 md:h-48 object-contain"
-            loading="lazy"
-          />
-          <h3 class="text-lg md:text-xl mb-2 font-semibold line-clamp-1">
-            {{ project.name }}
-          </h3>
-          <p
-            class="text-muted text-sm md:text-base mb-3 md:mb-4 line-clamp-2"
-          >
-            {{ project.description || "No description available" }}
-          </p>
-          <button
-            class="w-full sm:w-auto border border-contrast px-3 md:px-4 py-2 rounded-full text-sm md:text-base link-accent"
-            (click)="openExternalLink(project.html_url)"
-          >
-            Read more →
-          </button>
-        </div>
-      </div>
-      }
+    <p class="text-sm text-secondary-theme">
+      Consultando los repositorios de &#64;jdev-king desde la API pública de GitHub...
+    </p>
+  </div>
+} @else if (hasError()) {
+  <div class="eng-card p-8 text-center" role="alert">
+    <div class="font-mono text-xs font-semibold mb-1" style="color: var(--color-accent);">
+      LÍMITE DE CONSULTA O ERROR DE CONEXIÓN CON GITHUB API
+    </div>
+    <p class="text-sm text-secondary-theme max-w-lg mx-auto mb-4">
+      No fue posible recuperar la lista de repositorios en este momento. Puedes volver a intentar la consulta o abrir el perfil directamente en GitHub.
+    </p>
+    <div class="flex flex-wrap items-center justify-center gap-3">
+      <button type="button" class="btn-tactile btn-primary-eng" (click)="loadRepos()">
+        Reintentar consulta
+      </button>
+      <a href="https://github.com/jdev-king" target="_blank" rel="noopener noreferrer" class="btn-tactile btn-secondary-eng">
+        Abrir github.com/jdev-king
+      </a>
     </div>
   </div>
-</div>
-}
-<!-- Grid View for Organized Display -->
-} @else { @if (isLoading()) {
-<div class="flex justify-center items-center h-48 md:h-64">
-  <div class="flex items-center space-x-3">
-    <div
-      class="animate-spin rounded-full h-8 w-8 border-b-2 border-white"
-    ></div>
-    <p class="text-gray-400">Loading projects...</p>
-  </div>
-</div>
 } @else if (gitHubRepos().length === 0) {
-<div class="flex justify-center items-center h-48 md:h-64">
-  <p class="text-gray-400">No projects found.</p>
-</div>
+  <div class="eng-card p-8 text-center" role="status">
+    <div class="font-mono text-xs font-semibold mb-1" style="color: var(--color-accent);">
+      SIN REPOSITORIOS PÚBLICOS EN LA VISTA ACTUAL
+    </div>
+    <p class="text-sm text-secondary-theme max-w-lg mx-auto mb-4">
+      La consulta no devolvió repositorios activos sin fork. Puedes recargar la lista o consultar todos los repositorios en GitHub.
+    </p>
+    <div class="flex flex-wrap items-center justify-center gap-3">
+      <button type="button" class="btn-tactile btn-primary-eng" (click)="loadRepos()">
+        Recargar repositorios
+      </button>
+      <a href="https://github.com/jdev-king" target="_blank" rel="noopener noreferrer" class="btn-tactile btn-secondary-eng">
+        Abrir github.com/jdev-king
+      </a>
+    </div>
+  </div>
 } @else {
-<!-- Dynamic Grid Layout -->
-<div [class]="gridCssClasses()">
-  @for (project of visibleProjects(); track trackByProject($index, project)) {
-  <div class="w-full group">
-    <div class="bg-surface rounded-lg p-4 md:p-6">
-      <div class="relative overflow-hidden rounded-lg mb-3 md:mb-4">
-        <img [src]="project.readmeImageUrl" [alt]="project.name" class="w-full h-36 sm:h-40 md:h-48 object-contain" loading="lazy" />
-      </div>
-
-      <div class="space-y-2 md:space-y-3">
-        <h3 class="text-lg md:text-xl font-semibold line-clamp-1">
-          {{ project.name }}
-        </h3>
-
-        <p class="text-muted text-sm md:text-base line-clamp-2 leading-relaxed">
-          {{ project.description || "No description available" }}
-        </p>
-
-        <!-- Project Stats/Info -->
-        @if (project.language || project.stargazers_count) {
-        <div class="flex items-center justify-between text-xs text-muted">
-          @if (project.language) {
-          <span class="flex items-center">
-            <span class="w-2 h-2 rounded-full bg-blue-500 mr-1"></span>
-            {{ project.language }}
-          </span>
-          } @if (project.stargazers_count !== undefined &&
-          project.stargazers_count > 0) {
-          <span class="flex items-center">
-            <fa-icon [icon]="faStar" class="mr-1"></fa-icon>
-            {{ project.stargazers_count }}
-          </span>
+  <div [class]="gridCssClasses()">
+    @for (project of visibleProjects(); track project.name) {
+      <article class="eng-card eng-card-interactive flex flex-col justify-between overflow-hidden">
+        <div>
+          @if (project.readmeImageUrl) {
+            <div class="repo-preview-box">
+              <img
+                [src]="project.readmeImageUrl"
+                [alt]="'Vista previa del repositorio ' + project.name"
+                width="320"
+                height="144"
+                class="w-full h-36 object-contain p-3"
+                loading="lazy"
+              />
+            </div>
           }
+
+          <div class="p-5">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="font-mono text-xs text-muted">jdev-king /</span>
+              @if (project.language) {
+                <span class="tech-chip">{{ project.language }}</span>
+              }
+            </div>
+
+            <h3 class="text-lg font-bold tracking-tight line-clamp-1 mb-2">
+              {{ project.name }}
+            </h3>
+
+            <p class="text-muted text-sm line-clamp-2 leading-relaxed">
+              {{ project.description || "Repositorio de arquitectura de software e inteligencia artificial." }}
+            </p>
+          </div>
         </div>
-        }
 
-        <button class="w-full border border-contrast px-3 md:px-4 py-2 rounded-full text-sm md:text-base link-accent" (click)="openExternalLink(project.html_url)">View Project</button>
-      </div>
-    </div>
+        <div class="px-5 pb-5 pt-3 border-t border-contrast flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2 text-xs font-mono text-muted">
+            @if (project.stargazers_count !== undefined && project.stargazers_count > 0) {
+              <span class="flex items-center gap-1" style="color: var(--color-accent);">
+                <fa-icon [icon]="faStar" aria-hidden="true"></fa-icon>
+                <span>{{ project.stargazers_count }}</span>
+              </span>
+            } @else {
+              <span>GitHub Repo</span>
+            }
+          </div>
+
+          <a
+            [href]="project.html_url"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-tactile btn-secondary-eng text-xs"
+          >
+            <span>Ver repositorio</span>
+          </a>
+        </div>
+      </article>
+    }
   </div>
-  }
-</div>
-
-<!-- Back to Marquee View Button removed for minimalist design -->
-} }
+}

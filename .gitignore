@@ -3,6 +3,7 @@
 # Compiled output
 /dist
 /tmp
+/temp
 /out-tsc
 /bazel-out
 
@@ -51,3 +52,4 @@ Thumbs.db
 .claude/
 .hermes/
 .qwen/
+.opencode/

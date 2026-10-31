@@ -33,16 +33,16 @@ export class SkillsComponent {
       icon: 'fas fa-brain',
       skills: [
         {
-          name: 'Generative AI & LLMs',
+          name: 'Generative AI & Multi-Agent Factory',
           level: 'Advanced',
           proficiency: 95,
-          tools: ['Gemini 1.5/2.5 Flash', 'Claude 3.5 Sonnet', 'GPT-4o', 'Prompt Engineering', 'LangChain', 'Flowise', 'LightRAG'],
+          tools: ['Gemini 1.5/2.5 Flash', 'Claude Sonnet/Opus', 'LiteLLM & Langfuse', 'EventCatalog MCP', 'LightRAG', 'Flowise', 'LangChain'],
         },
         {
           name: 'Knowledge Graphs & Vectors',
           level: 'Advanced',
           proficiency: 92,
-          tools: ['Neo4j Cypher', 'CloudNativePG pgvector', 'Pinecone', 'Redis Semantic Cache', 'Vertex AI RAG Engine'],
+          tools: ['Neo4j Cypher', 'CloudNativePG pgvector', 'Redis Semantic Cache', 'Pinecone', 'Vertex AI RAG Engine'],
         },
       ],
     },
@@ -51,16 +51,16 @@ export class SkillsComponent {
       icon: 'fas fa-cloud',
       skills: [
         {
-          name: 'Cloud Platforms',
+          name: 'Multi-Cloud & Data Platforms',
           level: 'Advanced',
-          proficiency: 90,
-          tools: ['Google Cloud (GCP)', 'Amazon Web Services (AWS)', 'Cloud Run', 'BigQuery', 'Pub/Sub', 'Dataflow'],
+          proficiency: 92,
+          tools: ['AWS (S3, SQS, ECR, EC2, CodeArtifact)', 'GCP (GKE, Cloud Run, Dataflow, BigQuery)', 'Azure Functions & Key Vault', 'Apache Superset (Fork BI)'],
         },
         {
-          name: 'DevOps & Orchestration',
+          name: 'DevOps, Security & Governance',
           level: 'Advanced',
-          proficiency: 88,
-          tools: ['Kubernetes (GKE)', 'Docker Compose', 'Terraform IaC', 'GitLab CI/CD', 'GitHub Actions', 'MCP Servers'],
+          proficiency: 90,
+          tools: ['Kubernetes (GKE)', 'Docker / WSL2', 'Terraform IaC', 'GitLab CI/CD', 'Semantic Release', 'HMAC-SHA256 & AES-256'],
         },
       ],
     },
@@ -69,16 +69,16 @@ export class SkillsComponent {
       icon: 'fas fa-code',
       skills: [
         {
-          name: 'Backend & Data Streaming',
+          name: 'Backend, Middleware & B2B Protocols',
           level: 'Advanced',
-          proficiency: 92,
-          tools: ['Python', 'FastAPI', 'Java', 'Spring Boot', 'Apache Beam', 'Debezium CDC', 'PostgreSQL', 'MySQL'],
+          proficiency: 94,
+          tools: ['Java 21', 'Spring Boot 3.5', 'Python / FastAPI', 'PySpark & Apache Beam', 'Debezium CDC', 'ANSI X12 / EDIFACT Smooks', 'JAXB / StAX / Woodstox', 'MuleSoft & CargoWise'],
         },
         {
-          name: 'Frontend & UI Engineering',
+          name: 'Frontend & Architecture Visualization',
           level: 'Advanced',
           proficiency: 88,
-          tools: ['TypeScript', 'Angular 19', 'Tailwind CSS', 'Microfrontends', 'Responsive UX', 'Archify'],
+          tools: ['TypeScript', 'Angular 19', 'Tailwind CSS', 'Microfrontends', 'EventCatalog', 'Archify'],
         },
       ],
     },
@@ -87,10 +87,10 @@ export class SkillsComponent {
       icon: 'fas fa-vial',
       skills: [
         {
-          name: 'Testing & Verification',
+          name: 'Deterministic QA & Verification',
           level: 'Advanced',
-          proficiency: 85,
-          tools: ['Pytest', 'Jest', 'Jasmine / Karma', 'TDD / BDD', 'Integration Testing'],
+          proficiency: 88,
+          tools: ['Playwright CLI', 'Pytest', 'JUnit / Mockito', 'Gitleaks', 'SonarQube', 'TDD / BDD'],
         },
       ],
     },

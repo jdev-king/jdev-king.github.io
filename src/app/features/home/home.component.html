@@ -1,68 +1,146 @@
-<div class="min-h-screen px-4 sm:px-6 lg:px-8 py-6 max-w-7xl mx-auto">
-	<!-- Hero Section -->
-	<section id="hero-section" class="mb-16 lg:mb-24">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+	<!-- 1. Hero Section -->
+	<section id="hero-section" class="mb-14 sm:mb-20 lg:mb-28">
 		<app-hero-section />
 	</section>
 
-	<!-- Scroll-Scrubbed Architecture Pipeline Showcase -->
-	<section id="pipeline" class="mb-20 lg:mb-28">
+	<!-- 2. Sticky Scroll-Scrubbed Architecture Engine -->
+	<section id="pipeline" class="mb-16 sm:mb-24 lg:mb-32">
 		<app-scroll-scrubber />
 	</section>
 
-    <!-- Work Experience (deferred) -->
-    @defer (on viewport) {
-      <section id="work" class="mb-20 lg:mb-28">
-        <app-work />
-      </section>
-    } @placeholder {
-      <section class="mb-16">
-        <div class="rounded-xl border border-contrast bg-surface p-6 animate-pulse">
-          <div class="h-6 w-32 bg-gray-700 rounded mb-4"></div>
-          <div class="h-4 w-11/12 bg-gray-800 rounded"></div>
-        </div>
-      </section>
-    }
+	<!-- 3. Featured Architecture Case Studies (Hierarchical Flagship + 2 Supporting Split per R-14) -->
+	<section id="architectures-showcase" class="mb-16 sm:mb-24 lg:mb-32">
+		<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 pb-5 border-b border-contrast">
+			<div>
+				<div class="section-kicker mb-2">
+					<span>02 / ESPECIFICACIONES DE ARQUITECTURA (RFCs)</span>
+				</div>
+				<h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight">
+					Arquitecturas de Sistemas y Casos de Estudio
+				</h2>
+			</div>
+			<a routerLink="/architectures" class="btn-tactile btn-secondary-eng self-start sm:self-auto">
+				<span>Abrir Laboratorio Archify (6 Diagramas)</span>
+			</a>
+		</div>
 
-    <!-- Skills Section (deferred) -->
-    @defer (on viewport) {
-      <section id="skills" class="mb-20 lg:mb-28">
-        <app-skills />
-      </section>
-    } @placeholder {
-      <section class="mb-16">
-        <div class="rounded-xl border border-contrast bg-surface p-6 animate-pulse" aria-busy="true" aria-live="polite">
-          <div class="h-6 w-40 bg-gray-700 rounded mb-4"></div>
-          <div class="h-4 w-full bg-gray-800 rounded"></div>
-        </div>
-      </section>
-    }
+		<!-- Flagship Full-Width Monograph Card (R-14 Hierarchy) -->
+		<article class="eng-card eng-card-interactive overflow-hidden mb-6">
+			<div class="px-6 py-3 bg-elevated border-b border-contrast flex flex-wrap items-center justify-between gap-2 font-mono text-xs">
+				<span class="font-bold" style="color: var(--color-accent);">
+					ARQUITECTURA PRINCIPAL · {{ flagshipArchitecture.code }}
+				</span>
+				<span class="text-muted">{{ flagshipArchitecture.diagramsCount }}</span>
+			</div>
 
-	<!-- Projects Carousel / Grid -->
+			<div class="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+				<div class="lg:col-span-8">
+					<h3 class="text-2xl sm:text-3xl font-bold tracking-tight mb-1.5">
+						{{ flagshipArchitecture.title }}
+					</h3>
+					<div class="font-mono text-xs text-muted mb-4">
+						{{ flagshipArchitecture.subtitle }}
+					</div>
+					<p class="text-sm sm:text-base text-secondary-theme leading-relaxed">
+						{{ flagshipArchitecture.summary }}
+					</p>
+				</div>
+
+				<div class="lg:col-span-4 flex flex-col gap-3 lg:border-l lg:border-contrast lg:pl-6">
+					<div class="grid grid-cols-3 lg:grid-cols-1 gap-2.5">
+						@for (m of flagshipArchitecture.metrics; track m.label) {
+							<div class="p-3 rounded bg-elevated border border-contrast flex items-baseline justify-between gap-2">
+								<span class="text-xs text-muted">{{ m.label }}</span>
+								<span class="font-mono text-sm font-bold" style="color: var(--color-accent);">{{ m.value }}</span>
+							</div>
+						}
+					</div>
+					<a [routerLink]="['/architectures', flagshipArchitecture.id]" class="btn-tactile btn-primary-eng w-full justify-between mt-1">
+						<span>Inspeccionar RFC-AI-301</span>
+						<span aria-hidden="true">→</span>
+					</a>
+				</div>
+			</div>
+		</article>
+
+		<!-- 2 Supporting RFC Specifications -->
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+			@for (arch of supportingArchitectures; track arch.id) {
+				<article class="eng-card eng-card-interactive flex flex-col justify-between overflow-hidden">
+					<div>
+						<div class="px-6 py-3 bg-elevated border-b border-contrast flex items-center justify-between font-mono text-xs">
+							<span class="font-bold text-primary-theme">{{ arch.code }}</span>
+							<span class="text-muted">{{ arch.diagramsCount }}</span>
+						</div>
+						<div class="p-6">
+							<h3 class="text-xl font-bold tracking-tight mb-1">
+								{{ arch.title }}
+							</h3>
+							<div class="font-mono text-xs text-muted mb-3">
+								{{ arch.subtitle }}
+							</div>
+							<p class="text-sm text-secondary-theme leading-relaxed">
+								{{ arch.summary }}
+							</p>
+						</div>
+					</div>
+					<div class="px-6 py-4 bg-elevated border-t border-contrast flex flex-wrap items-center justify-between gap-3">
+						<span class="font-mono text-xs font-bold" style="color: var(--color-accent);">
+							{{ arch.metric }}
+						</span>
+						<a [routerLink]="['/architectures', arch.id]" class="btn-tactile btn-secondary-eng text-xs">
+							<span>Inspeccionar RFC</span>
+							<span aria-hidden="true">→</span>
+						</a>
+					</div>
+				</article>
+			}
+		</div>
+	</section>
+
+	<!-- 3.5. Enterprise Products & B2B Integrations Catalog (SINTAD · AICSAC) -->
+	<section id="enterprise-pipeline" class="mb-16 sm:mb-24 lg:mb-32">
+		<app-enterprise-pipeline />
+	</section>
+
+	<!-- 4. Work Experience Ledger -->
+	<section id="work" class="mb-16 sm:mb-24 lg:mb-32">
+		<app-work />
+	</section>
+
+	<!-- 5. Skills & Technical Capabilities Matrix -->
+	<section id="skills" class="mb-16 sm:mb-24 lg:mb-32">
+		<app-skills />
+	</section>
+
+	<!-- 6. Featured Open Source Projects -->
 	@defer (on viewport) {
-		<section id="projects" class="mb-20 lg:mb-28">
+		<section id="projects" class="mb-16 sm:mb-24 lg:mb-32">
 			<app-projects />
 		</section>
 	} @placeholder {
-		<section class="mb-16">
-			<div class="rounded-xl border border-contrast bg-surface p-6 animate-pulse">
-				<div class="h-6 w-36 bg-gray-700 rounded mb-4"></div>
-				<div class="h-4 w-full bg-gray-800 rounded"></div>
+		<section id="projects" class="mb-16 sm:mb-24 lg:mb-32">
+			<div class="eng-card p-6" role="status">
+				<div class="font-mono text-xs text-muted">
+					Sección de repositorios Open Source lista para cargar al entrar en pantalla.
+				</div>
 			</div>
 		</section>
 	}
 
-    <!-- Articles Section (deferred) -->
-    @defer (on viewport) {
-      <section id="articles" class="mt-16 mb-16">
-        <app-articles />
-      </section>
-    } @placeholder {
-      <section class="mt-16 mb-16">
-        <div class="rounded-xl border border-contrast bg-surface p-6 animate-pulse">
-          <div class="h-6 w-36 bg-gray-700 rounded mb-4"></div>
-          <div class="h-4 w-full bg-gray-800 rounded"></div>
-          <div class="h-4 w-10/12 bg-gray-800 rounded mt-2"></div>
-        </div>
-      </section>
-    }
+	<!-- 7. Technical Articles on Medium -->
+	@defer (on viewport) {
+		<section id="articles" class="mb-12 sm:mb-16">
+			<app-articles />
+		</section>
+	} @placeholder {
+		<section id="articles" class="mb-12 sm:mb-16">
+			<div class="eng-card p-6" role="status">
+				<div class="font-mono text-xs text-muted">
+					Sección de artículos técnicos lista para cargar al entrar en pantalla.
+				</div>
+			</div>
+		</section>
+	}
 </div>

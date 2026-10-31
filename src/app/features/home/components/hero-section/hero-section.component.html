@@ -1,114 +1,104 @@
-<div class="relative flex flex-col lg:flex-row lg:justify-between lg:items-center gap-10 lg:gap-14 py-4">
-  <!-- Content Section -->
-  <div class="flex-1 flex flex-col justify-center order-2 lg:order-1 z-10">
-    <!-- Status Pill -->
-    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/25 text-blue-400 text-xs font-mono font-medium mb-5 w-fit">
-      <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
-      <span>{{ heroContent.badge }}</span>
-    </div>
+<div class="hero-shell">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+    <!-- Left Column: Narrative & Primary Actions (No pill badge above H1 per R-09) -->
+    <div class="lg:col-span-7 flex flex-col justify-center">
+      <!-- Display Headline -->
+      <h1 class="hero-display reveal-up">
+        Arquitectura de Sistemas <span class="hero-accent">IA, GraphRAG Híbrido</span> e Interoperabilidad Cloud.
+      </h1>
 
-    <!-- Main Title -->
-    <h1 class="hero-title text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-mono font-bold tracking-tight text-white mb-5 leading-tight">
-      {{ heroContent.headlinePrefix }}<br />
-      <span class="bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
-        {{ heroContent.headlineAccent }}
-      </span>
-    </h1>
+      <!-- Role & Attribution Subheadline -->
+      <p class="hero-role font-mono text-xs sm:text-sm mb-4 reveal-up reveal-delay-1">
+        {{ heroContent.roleLine }}
+      </p>
 
-    <!-- Description -->
-    <p class="hero-description text-muted text-sm sm:text-base lg:text-lg leading-relaxed max-w-2xl mb-8">
-      {{ heroContent.description }}
-    </p>
+      <!-- Lead Copy -->
+      <p class="hero-lead reveal-up reveal-delay-2">
+        {{ heroContent.description }}
+      </p>
 
-    <!-- Key Metrics Ribbon -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
-      <div
-        *ngFor="let m of heroMetrics"
-        class="p-3 rounded-xl bg-surface border border-contrast hover:border-blue-500/40 transition-colors"
-      >
-        <div class="text-xl sm:text-2xl font-mono font-bold text-white">
-          {{ m.value }}
-        </div>
-        <div class="text-xs font-mono text-blue-400 font-semibold">
-          {{ m.label }}
-        </div>
-        <div class="text-[10px] text-muted truncate mt-0.5">
-          {{ m.note }}
-        </div>
-      </div>
-    </div>
-
-    <!-- CTA & Social Buttons -->
-    <div class="flex flex-wrap items-center gap-4 pt-2">
-      <a
-        routerLink="/architectures"
-        class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-sm font-semibold transition-all duration-200 shadow-lg shadow-blue-500/20 hover:scale-[1.02]"
-      >
-        <span>Explorar Arquitecturas</span>
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-        </svg>
-      </a>
-
-      <a
-        href="#work"
-        class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-surface hover:bg-surface-hover text-white border border-contrast hover:border-blue-500/40 font-mono text-sm font-medium transition-all duration-200"
-      >
-        <span>Ver Experiencia</span>
-        <svg class="w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-        </svg>
-      </a>
-
-      <!-- Social Links -->
-      <div class="hero-social flex items-center gap-3 sm:gap-4 ml-auto pt-2 sm:pt-0">
-        <a 
-          *ngFor="let link of socialLinks; trackBy: trackBySocialLink"
-          [href]="link.href" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          class="social-link p-2.5 rounded-lg border border-contrast bg-surface text-muted hover:text-blue-400 hover:border-blue-500/50 transition-all duration-200"
-          [attr.aria-label]="link.label"
-          [title]="link.name"
-        >
-          <fa-icon [icon]="link.icon" class="text-lg"></fa-icon>
+      <!-- Primary Actions + Socials -->
+      <div class="flex flex-wrap items-center gap-3.5 mt-4 reveal-up reveal-delay-3">
+        <a routerLink="/architectures" class="btn-tactile btn-primary-eng">
+          <span>Inspeccionar Especificaciones RFC</span>
+          <span aria-hidden="true">→</span>
         </a>
+
+        <a
+          href="#pipeline"
+          (click)="scrollToSection($event, 'pipeline')"
+          class="btn-tactile btn-secondary-eng"
+        >
+          <span>Recorrer Pipeline en Vivo</span>
+        </a>
+
+        <!-- Social Icons -->
+        <div class="flex items-center gap-2 sm:ml-auto">
+          @for (link of socialLinks; track link.name) {
+            <a
+              [href]="link.href"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="social-btn btn-tactile"
+              [attr.aria-label]="link.label"
+              [title]="link.name"
+            >
+              <fa-icon [icon]="link.icon" class="text-base" aria-hidden="true"></fa-icon>
+            </a>
+          }
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Profile Image / Interactive Tech Visual -->
-  <div class="flex-1 flex justify-center lg:justify-end order-1 lg:order-2 z-10">
-    <div class="hero-image relative w-full max-w-md sm:max-w-lg lg:max-w-xl group">
-      <!-- Glow Underlay -->
-      <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-500 rounded-2xl blur-xl opacity-25 group-hover:opacity-40 transition duration-500"></div>
-
-      <!-- Image Card -->
-      <div class="relative rounded-2xl overflow-hidden border border-contrast bg-surface shadow-2xl">
-        <img
-          [src]="heroContent.image.src"
-          [alt]="heroContent.image.alt"
-          class="w-full h-72 sm:h-88 lg:h-96 object-cover object-center filter contrast-105 group-hover:scale-102 transition duration-500"
-          loading="eager"
-        />
-
-        <!-- Overlay Badge Details -->
-        <div class="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/90 via-black/60 to-transparent backdrop-blur-[2px]">
-          <div class="flex items-center justify-between text-xs font-mono text-gray-300">
-            <span class="flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              Tech Lead & Architect
+    <!-- Right Column: Portrait & Production RFC Dossier (No fake terminal chrome per R-05) -->
+    <div class="lg:col-span-5 reveal-up reveal-delay-2">
+      <div class="hero-dossier eng-card overflow-hidden">
+        <!-- Portrait with explicit dimensions & fetchpriority="high" (R-40) -->
+        <div class="portrait-frame">
+          <img
+            [src]="heroContent.image.src"
+            [alt]="heroContent.image.alt"
+            width="600"
+            height="360"
+            fetchpriority="high"
+            class="portrait-img"
+          />
+          <div class="portrait-caption">
+            <span class="font-mono text-xs font-semibold" style="color: #f5f4f0;">
+              Jesus Sebastian Diez Plasencia
             </span>
-            <span class="text-muted">AICSAC & Sintad</span>
+            <span class="font-mono text-xs" style="color: #c6c4be;">
+              Lima, Perú · GCP & AWS
+            </span>
           </div>
-          <div class="flex flex-wrap gap-1 mt-2">
-            <span class="px-2 py-0.5 rounded bg-white/10 text-[11px] font-mono text-gray-200">GCP</span>
-            <span class="px-2 py-0.5 rounded bg-white/10 text-[11px] font-mono text-gray-200">AWS</span>
-            <span class="px-2 py-0.5 rounded bg-white/10 text-[11px] font-mono text-gray-200">GraphRAG</span>
-            <span class="px-2 py-0.5 rounded bg-white/10 text-[11px] font-mono text-gray-200">Neo4j</span>
-            <span class="px-2 py-0.5 rounded bg-white/10 text-[11px] font-mono text-gray-200">FastAPI</span>
-            <span class="px-2 py-0.5 rounded bg-white/10 text-[11px] font-mono text-gray-200">Debezium</span>
+        </div>
+
+        <!-- Direct Production RFC Index Ledger -->
+        <div class="dossier-ledger">
+          <div class="dossier-ledger-header font-mono text-xs text-muted">
+            ÍNDICE DE SISTEMAS DOCUMENTADOS EN PRODUCCIÓN
           </div>
+          @for (rfc of rfcIndex; track rfc.id) {
+            <a
+              [routerLink]="['/architectures', rfc.id]"
+              class="dossier-row"
+            >
+              <div class="min-w-0">
+                <div class="flex items-center gap-2">
+                  <span class="font-mono text-xs font-bold" style="color: var(--color-accent);">
+                    {{ rfc.code }}
+                  </span>
+                  <span class="font-semibold text-sm text-primary-theme truncate">
+                    {{ rfc.title }}
+                  </span>
+                </div>
+                <div class="font-mono text-xs text-muted mt-0.5 truncate">
+                  {{ rfc.spec }}
+                </div>
+              </div>
+              <span class="font-mono text-xs text-muted shrink-0">Ver RFC</span>
+            </a>
+          }
         </div>
       </div>
     </div>

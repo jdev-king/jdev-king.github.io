@@ -1,169 +1,169 @@
-import { Component, ChangeDetectionStrategy, signal, OnInit, OnDestroy, HostListener } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  signal,
+  OnInit,
+  OnDestroy,
+  HostListener,
+  inject
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
+import { Subscription, filter } from 'rxjs';
 
 interface NavigationItem {
   readonly href: string;
   readonly label: string;
-  readonly isExternal?: boolean;
+  readonly sectionId?: string;
+  readonly isRoute?: boolean;
 }
 
 interface ProfileInfo {
   readonly name: string;
   readonly handle: string;
+  readonly role: string;
 }
 
-/**
- * Responsive Header Widget Component
- *
- * Features:
- * - Mobile-first responsive design with hamburger menu
- * - Smooth animations and transitions
- * - Accessibility improvements (ARIA labels, keyboard navigation)
- * - OnPush change detection for optimal performance
- * - Type-safe navigation configuration
- */
 @Component({
   selector: 'app-header-widget',
+  standalone: true,
   imports: [CommonModule, RouterModule, FontAwesomeModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <header
-      class="sticky top-0 z-50 bg-surface/90 backdrop-blur-md border-b border-contrast mb-8 lg:mb-12 relative"
-    >
-      <!-- Top Scroll Progress Bar -->
-      <div
-        class="absolute top-0 left-0 h-[3px] bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 z-50 transition-all duration-75 ease-out shadow-sm shadow-blue-500/50"
-        [style.width.%]="scrollPercent()"
-      ></div>
+    <header class="site-header">
+      <!-- Compositor-accelerated Scroll Progress Hairline -->
+      <div class="scroll-progress-track" aria-hidden="true">
+        <div
+          class="scroll-progress-bar"
+          [style.transform]="'scaleX(' + scrollRatio() + ')'"
+        ></div>
+      </div>
 
-      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16 lg:h-20">
-          <!-- Logo/Brand Section -->
-          <div class="flex-shrink-0">
-            <a routerLink="/" class="group flex flex-col">
-              <span class="text-xl sm:text-2xl font-mono font-bold tracking-tight group-hover:text-blue-400 transition-colors">
-                {{ profileInfo.name }}
-              </span>
-              <span class="text-xs sm:text-sm font-mono text-muted -mt-0.5">
-                {{ profileInfo.handle }}
-              </span>
-            </a>
-          </div>
+      <div class="header-inner max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16 sm:h-[4.25rem]">
+          <!-- Brand / Identity -->
+          <a
+            routerLink="/"
+            (click)="onBrandClick($event)"
+            class="brand-link group flex items-center gap-3"
+          >
+            <div class="brand-monogram" aria-hidden="true">
+              <span>JD</span>
+            </div>
+            <div class="flex flex-col">
+              <div class="flex items-center gap-2">
+                <span class="brand-name">{{ profileInfo.name }}</span>
+              </div>
+              <span class="brand-handle">{{ profileInfo.handle }} · {{ profileInfo.role }}</span>
+            </div>
+          </a>
 
           <!-- Desktop Navigation -->
           <nav
-            class="hidden lg:flex items-center gap-1.5"
+            class="hidden lg:flex items-center gap-1"
             role="navigation"
-            aria-label="Main navigation"
+            aria-label="Navegación principal"
           >
+            @for (item of navigationItems; track item.label) {
+              <a
+                [href]="item.href"
+                (click)="navigateItem($event, item)"
+                class="nav-pill"
+                [class.is-active]="isItemActive(item)"
+                [attr.aria-current]="isItemActive(item) ? 'page' : null"
+              >
+                {{ item.label }}
+              </a>
+            }
+
+            <div class="nav-divider" aria-hidden="true"></div>
+
             <a
-              *ngFor="let item of navigationItems; trackBy: trackByNavItem"
-              [href]="item.href"
-              [target]="item.isExternal ? '_blank' : '_self'"
-              [rel]="item.isExternal ? 'noopener noreferrer' : null"
-              class="nav-link px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-all duration-200"
-              [class.text-blue-400]="activeHref() === item.href"
-              [class.bg-blue-500_10]="activeHref() === item.href"
-              [class.text-muted]="activeHref() !== item.href"
-              [attr.aria-label]="item.label"
-              [attr.aria-current]="activeHref() === item.href ? 'page' : null"
+              routerLink="/architectures"
+              class="cta-arch-btn btn-tactile"
+              [class.is-active-route]="currentPath().startsWith('/architectures')"
             >
-              {{ item.label }}
+              <span>RFCs & Archify</span>
             </a>
-            
-            <div class="w-px h-5 bg-contrast mx-2"></div>
 
             <button
-              class="p-2 rounded-lg border border-contrast hover:border-blue-500/40 text-muted hover:text-white transition-all cursor-pointer"
+              type="button"
+              class="theme-btn btn-tactile"
               (click)="toggleTheme()"
               [attr.aria-pressed]="theme() === 'light'"
-              aria-label="Toggle theme"
+              aria-label="Cambiar tema claro u oscuro"
+              [title]="theme() === 'light' ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro'"
             >
               @if (theme() === 'light') {
-                <fa-icon [icon]="faSun" class="text-amber-500"></fa-icon>
+                <fa-icon [icon]="faSun" aria-hidden="true"></fa-icon>
               } @else {
-                <fa-icon [icon]="faMoon" class="text-blue-400"></fa-icon>
+                <fa-icon [icon]="faMoon" aria-hidden="true"></fa-icon>
               }
             </button>
           </nav>
 
-          <!-- Mobile Menu Button -->
-          <button
-            class="lg:hidden p-2 rounded-md transition-colors duration-300 focus:outline-none"
-            [attr.aria-expanded]="isMobileMenuOpen()"
-            aria-controls="mobile-menu"
-            aria-label="Toggle navigation menu"
-            (click)="toggleMobileMenu()"
-          >
-            <svg
-              class="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                *ngIf="!isMobileMenuOpen()"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 6h16M4 12h16M4 18h16"
-              ></path>
-              <path
-                *ngIf="isMobileMenuOpen()"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              ></path>
-            </svg>
-          </button>
-        </div>
-
-        <!-- Mobile Navigation Menu -->
-        <div
-          id="mobile-menu"
-          class="lg:hidden transition-all duration-300 ease-in-out"
-          [class]="
-            'lg:hidden transition-all duration-300 ease-in-out ' +
-            (isMobileMenuOpen()
-              ? 'max-h-screen opacity-100 visible'
-              : 'max-h-0 opacity-0 invisible overflow-hidden')
-          "
-          [attr.aria-hidden]="!isMobileMenuOpen()"
-        >
-          <nav
-            class="py-4 space-y-2"
-            role="navigation"
-            aria-label="Mobile navigation"
-          >
+          <!-- Mobile Actions -->
+          <div class="flex items-center gap-2 lg:hidden">
             <button
-              class="block px-4 py-3 rounded-md border border-contrast"
+              type="button"
+              class="theme-btn btn-tactile"
               (click)="toggleTheme()"
               [attr.aria-pressed]="theme() === 'light'"
-              aria-label="Toggle theme"
+              aria-label="Cambiar tema claro u oscuro"
             >
               @if (theme() === 'light') {
-                <fa-icon [icon]="faSun"></fa-icon>
+                <fa-icon [icon]="faSun" aria-hidden="true"></fa-icon>
               } @else {
-                <fa-icon [icon]="faMoon"></fa-icon>
+                <fa-icon [icon]="faMoon" aria-hidden="true"></fa-icon>
               }
             </button>
-            <a
-              *ngFor="let item of navigationItems; trackBy: trackByNavItem"
-              [href]="item.href"
-              [target]="item.isExternal ? '_blank' : '_self'"
-              [rel]="item.isExternal ? 'noopener noreferrer' : null"
-              class="block px-4 py-3 transition-colors duration-300 font-medium rounded-md"
-              [attr.aria-label]="item.label"
-              (click)="closeMobileMenu()"
-              [attr.aria-current]="item.href.startsWith('#') && activeHref() === item.href ? 'page' : null"
+
+            <button
+              type="button"
+              class="mobile-toggle btn-tactile"
+              [attr.aria-expanded]="isMobileMenuOpen()"
+              aria-controls="mobile-menu"
+              aria-label="Abrir o cerrar menú de navegación"
+              (click)="toggleMobileMenu()"
             >
-              {{ item.label }}
-            </a>
-          </nav>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                @if (!isMobileMenuOpen()) {
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16M4 12h16M4 17h12" />
+                } @else {
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                }
+              </svg>
+              <span class="font-mono text-xs font-semibold">{{ isMobileMenuOpen() ? 'Cerrar' : 'Menú' }}</span>
+            </button>
+          </div>
         </div>
+
+        <!-- Mobile Menu Drawer -->
+        @if (isMobileMenuOpen()) {
+          <div id="mobile-menu" class="mobile-drawer lg:hidden">
+            <nav class="flex flex-col gap-1 py-3" role="navigation" aria-label="Navegación móvil">
+              @for (item of navigationItems; track item.label) {
+                <a
+                  [href]="item.href"
+                  (click)="navigateItem($event, item); closeMobileMenu()"
+                  class="mobile-nav-item"
+                  [class.is-active]="isItemActive(item)"
+                >
+                  <span>{{ item.label }}</span>
+                </a>
+              }
+              <a
+                routerLink="/architectures"
+                (click)="closeMobileMenu()"
+                class="mobile-nav-item is-highlight mt-1"
+              >
+                <span>Explorar RFCs & Diagramas Archify</span>
+              </a>
+            </nav>
+          </div>
+        }
       </div>
     </header>
   `,
@@ -171,90 +171,239 @@ interface ProfileInfo {
     `
       :host {
         display: block;
+        position: sticky;
+        top: 0;
+        z-index: 100;
       }
 
-      .nav-link {
+      .site-header {
         position: relative;
-        display: inline-block;
+        background-color: var(--color-header-glass);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border-bottom: 1px solid var(--color-border);
       }
 
-      .nav-link::before {
-        content: '';
+      .scroll-progress-track {
         position: absolute;
-        bottom: -4px;
+        top: 0;
         left: 0;
-        width: 0;
+        right: 0;
         height: 2px;
-        background-color: currentColor;
-        transition: width 0.3s ease;
+        background: transparent;
+        overflow: hidden;
+        z-index: 10;
       }
 
-      .nav-link:hover::before {
+      .scroll-progress-bar {
         width: 100%;
+        height: 100%;
+        transform-origin: 0 50%;
+        background-color: var(--color-accent);
+        will-change: transform;
       }
 
-      /* Smooth mobile menu animation */
-      #mobile-menu {
-        transform-origin: top;
+      .brand-link {
+        text-decoration: none;
+        color: var(--color-text);
+        min-height: 2.75rem;
       }
 
-      /* Focus styles for better accessibility */
-      .nav-link:focus {
-        outline: 2px solid var(--color-text);
-        outline-offset: 4px;
-        border-radius: 4px;
+      .brand-monogram {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 0.375rem;
+        background-color: var(--color-surface-2);
+        border: 1px solid var(--color-border-strong);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Fira Code', monospace;
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: var(--color-accent);
+        transition: border-color var(--duration-fast) var(--ease-out);
       }
 
-      /* Enhanced mobile menu styling */
-      @media (max-width: 1023px) {
-        .container {
-          padding-left: 1rem;
-          padding-right: 1rem;
+      @media (hover: hover) and (pointer: fine) {
+        .brand-link:hover .brand-monogram {
+          border-color: var(--color-accent);
         }
       }
 
-      /* Backdrop blur fallback */
-      @supports not (backdrop-filter: blur(12px)) {
-        header {
-          background-color: var(--color-bg);
+      .brand-name {
+        font-family: 'Space Grotesk', sans-serif;
+        font-weight: 700;
+        font-size: 1.05rem;
+        letter-spacing: -0.02em;
+        color: var(--color-text);
+      }
+
+      .brand-handle {
+        font-family: 'Fira Code', monospace;
+        font-size: 0.72rem;
+        color: var(--color-muted);
+      }
+
+      .nav-pill {
+        display: inline-flex;
+        align-items: center;
+        min-height: 2.75rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.375rem;
+        font-size: 0.825rem;
+        font-weight: 500;
+        color: var(--color-muted);
+        text-decoration: none;
+        transition: color var(--duration-fast) var(--ease-out),
+                    background-color var(--duration-fast) var(--ease-out);
+      }
+
+      @media (hover: hover) and (pointer: fine) {
+        .nav-pill:hover {
+          color: var(--color-text);
+          background-color: var(--color-surface-2);
         }
+      }
+
+      .nav-pill.is-active {
+        color: var(--color-text);
+        background-color: var(--color-surface-2);
+        font-weight: 600;
+      }
+
+      .nav-divider {
+        width: 1px;
+        height: 1.25rem;
+        background-color: var(--color-border);
+        margin: 0 0.5rem;
+      }
+
+      .cta-arch-btn {
+        min-height: 2.75rem;
+        padding: 0.5rem 0.9rem;
+        border-radius: 0.375rem;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.76rem;
+        font-weight: 600;
+        color: var(--color-text);
+        background-color: var(--color-surface);
+        border: 1px solid var(--color-border-strong);
+        margin-right: 0.375rem;
+      }
+
+      .cta-arch-btn.is-active-route {
+        background-color: var(--color-accent);
+        border-color: var(--color-accent);
+        color: var(--color-accent-contrast);
+      }
+
+      @media (hover: hover) and (pointer: fine) {
+        .cta-arch-btn:hover {
+          border-color: var(--color-accent);
+          background-color: var(--color-surface-2);
+        }
+        .cta-arch-btn.is-active-route:hover {
+          background-color: var(--color-accent-hover);
+          color: var(--color-accent-contrast);
+        }
+      }
+
+      .theme-btn {
+        min-width: 2.75rem;
+        min-height: 2.75rem;
+        padding: 0;
+        border-radius: 0.375rem;
+        background-color: var(--color-surface);
+        border: 1px solid var(--color-border-strong);
+        color: var(--color-text);
+      }
+
+      .mobile-toggle {
+        min-height: 2.75rem;
+        padding: 0 0.75rem;
+        border-radius: 0.375rem;
+        background-color: var(--color-surface);
+        border: 1px solid var(--color-border-strong);
+        color: var(--color-text);
+      }
+
+      @media (hover: hover) and (pointer: fine) {
+        .theme-btn:hover,
+        .mobile-toggle:hover {
+          border-color: var(--color-accent);
+          background-color: var(--color-surface-2);
+        }
+      }
+
+      .mobile-drawer {
+        border-top: 1px solid var(--color-border);
+      }
+
+      .mobile-nav-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 2.75rem;
+        padding: 0.65rem 0.875rem;
+        border-radius: 0.375rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--color-text-secondary);
+        text-decoration: none;
+      }
+
+      .mobile-nav-item.is-active {
+        background-color: var(--color-surface-2);
+        color: var(--color-text);
+        font-weight: 600;
+      }
+
+      .mobile-nav-item.is-highlight {
+        background-color: var(--color-accent);
+        color: var(--color-accent-contrast);
+        font-family: 'Fira Code', monospace;
+        font-size: 0.8rem;
+        font-weight: 600;
       }
     `,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
 })
 export class HeaderWidgetComponent implements OnInit, OnDestroy {
+  private readonly router = inject(Router);
+  private routerSub?: Subscription;
+
   readonly faSun = faSun;
   readonly faMoon = faMoon;
-  /**
-   * Profile information configuration
-   */
+
   readonly profileInfo: ProfileInfo = {
     name: 'Jesus Diez',
     handle: '@jdev-king',
+    role: 'AI & Cloud Architect',
   };
 
-  /**
-   * Navigation items configuration
-   */
   readonly navigationItems: NavigationItem[] = [
-    { href: '/', label: 'Home' },
-    { href: '#pipeline', label: 'Pipeline Scrubber' },
-    { href: '#work', label: 'Experience' },
-    { href: '#skills', label: 'Skills' },
-    { href: '#projects', label: 'Projects' },
-    { href: '/architectures', label: 'Architectures' },
-    { href: '/contact', label: 'Contact' },
+    { href: '#hero-section', label: 'Inicio', sectionId: 'hero-section' },
+    { href: '#pipeline', label: 'Pipeline', sectionId: 'pipeline' },
+    { href: '#enterprise-pipeline', label: 'Productos & B2B', sectionId: 'enterprise-pipeline' },
+    { href: '#work', label: 'Experiencia', sectionId: 'work' },
+    { href: '#skills', label: 'Stack', sectionId: 'skills' },
+    { href: '#projects', label: 'Open Source', sectionId: 'projects' },
+    { href: '/contact', label: 'Contacto', isRoute: true },
   ];
 
   readonly isMobileMenuOpen = signal(false);
-  readonly activeHref = signal<string>('');
-  readonly scrollPercent = signal<number>(0);
-
-  private observer?: IntersectionObserver;
-
+  readonly activeSection = signal<string>('hero-section');
+  readonly currentPath = signal<string>('/');
+  readonly scrollRatio = signal<number>(0);
   readonly theme = signal<'dark' | 'light'>('dark');
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    if (this.isMobileMenuOpen()) {
+      this.closeMobileMenu();
+    }
+  }
 
   @HostListener('window:scroll', [])
   onScroll(): void {
@@ -262,65 +411,119 @@ export class HeaderWidgetComponent implements OnInit, OnDestroy {
     const doc = document.documentElement;
     const total = doc.scrollHeight - window.innerHeight;
     const current = window.scrollY;
-    this.scrollPercent.set(total > 0 ? Math.min(Math.max((current / total) * 100, 0), 100) : 0);
+    const ratio = total > 0 ? Math.min(Math.max(current / total, 0), 1) : 0;
+    this.scrollRatio.set(ratio);
+
+    if (this.currentPath() === '/' || this.currentPath() === '') {
+      this.detectActiveSection();
+    }
   }
 
-  /**
-   * Toggle mobile menu visibility
-   */
+  private detectActiveSection(): void {
+    const sectionIds = ['hero-section', 'pipeline', 'architectures-showcase', 'enterprise-pipeline', 'work', 'skills', 'projects', 'articles'];
+    const viewportMid = window.innerHeight * 0.35;
+    let currentId = 'hero-section';
+
+    for (const id of sectionIds) {
+      const el = document.getElementById(id);
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= viewportMid) {
+          currentId = id;
+        }
+      }
+    }
+    this.activeSection.set(currentId);
+  }
+
+  isItemActive(item: NavigationItem): boolean {
+    const path = this.currentPath();
+    if (item.isRoute) {
+      return path === item.href || path.startsWith(item.href + '/');
+    }
+    if (path !== '/' && path !== '') {
+      return false;
+    }
+    return this.activeSection() === item.sectionId;
+  }
+
+  onBrandClick(event: Event): void {
+    if (this.currentPath() === '/' || this.currentPath() === '') {
+      event.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  navigateItem(event: Event, item: NavigationItem): void {
+    event.preventDefault();
+    if (item.isRoute) {
+      this.router.navigateByUrl(item.href);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    const targetId = item.sectionId || item.href.replace('#', '');
+    if (this.currentPath() !== '/' && this.currentPath() !== '') {
+      this.router.navigateByUrl('/').then(() => {
+        setTimeout(() => {
+          this.scrollToElement(targetId);
+        }, 120);
+      });
+    } else {
+      this.scrollToElement(targetId);
+    }
+  }
+
+  private scrollToElement(id: string): void {
+    if (id === 'hero-section') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    const el = document.getElementById(id);
+    if (el) {
+      const y = el.getBoundingClientRect().top + window.scrollY - 84;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  }
+
   toggleMobileMenu(): void {
-    this.isMobileMenuOpen.update((current) => !current);
+    this.isMobileMenuOpen.update((v) => !v);
   }
 
-  /**
-   * Close mobile menu
-   */
   closeMobileMenu(): void {
     this.isMobileMenuOpen.set(false);
   }
 
-  /**
-   * TrackBy function for navigation items to optimize *ngFor performance
-   * @param index - The index of the item
-   * @param item - The navigation item
-   * @returns The unique identifier for the item
-   */
-  trackByNavItem(index: number, item: NavigationItem): string {
-    return item.href;
-  }
-
   ngOnInit(): void {
-    const initial = localStorage.getItem('theme') as 'dark' | 'light' | null;
-    if (initial) this.theme.set(initial);
-    document.documentElement.setAttribute('data-theme', this.theme());
-    this.onScroll();
-    const ids = ['hero-section', 'pipeline', 'work', 'skills', 'projects', 'articles'];
-    this.observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => (a.boundingClientRect.top > b.boundingClientRect.top ? 1 : -1));
-        if (visible.length) {
-          const id = visible[0].target.id;
-          this.activeHref.set(`#${id}`);
-        }
-      },
-      { rootMargin: '-20% 0px -60% 0px', threshold: [0, 0.25, 0.5, 0.75, 1] }
-    );
-    ids.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) this.observer!.observe(el);
-    });
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('theme') as 'dark' | 'light' | null;
+      if (saved === 'light' || saved === 'dark') {
+        this.theme.set(saved);
+      }
+      document.documentElement.setAttribute('data-theme', this.theme());
+      this.currentPath.set(window.location.pathname || '/');
+      this.onScroll();
+    }
+
+    this.routerSub = this.router.events
+      .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
+      .subscribe((e) => {
+        this.currentPath.set(e.urlAfterRedirects.split('?')[0].split('#')[0] || '/');
+        this.closeMobileMenu();
+      });
   }
 
   ngOnDestroy(): void {
-    this.observer?.disconnect();
+    this.routerSub?.unsubscribe();
   }
 
   toggleTheme(): void {
     const next = this.theme() === 'dark' ? 'light' : 'dark';
     this.theme.set(next);
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
+    if (typeof document !== 'undefined') {
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    }
   }
 }
+

@@ -21,13 +21,6 @@ export class GitHubService {
       Accept: 'application/vnd.github.v3+json',
       ...(token && { Authorization: `token ${token}` }), // Only add Authorization header if token exists
     });
-
-    // Log warning if no token is available (for development debugging)
-    if (!token && !environment.production) {
-      console.warn(
-        'GitHub token not found. API requests may be rate-limited. Set NG_APP_GITHUB_TOKEN environment variable.'
-      );
-    }
   }
 
   /**
@@ -106,41 +99,23 @@ export class GitHubService {
    * @returns Observable of repositories with their first README image
    */
   getUserReposWithReadmeImage(username: string): Observable<RepoWithImage[]> {
-    // Check cache first
     if (this.cachedReposWithImages[username]) {
       return of(this.cachedReposWithImages[username]);
     }
 
     return this.getUserRepos(username).pipe(
-      mergeMap((repos) => {
-        if (repos.length === 0) {
-          return of([]);
-        }
-
-        // Create an array of observables for each repo's README image
-        const repoObservables = repos
+      map((repos) =>
+        repos
           .filter(
             (repo) =>
               repo.name !== 'jdev-king' && repo.name !== 'jdev-king.github.io'
           )
-          .map((repo) =>
-            this.getReadmeFirstImage(username, repo.name).pipe(
-              map((imageUrl) => {
-                return { ...repo, readmeImageUrl: imageUrl };
-              }),
-              catchError(() => {
-                // If README fetch fails, return repo without image
-                return of({
-                  ...repo,
-                  readmeImageUrl: null,
-                });
-              })
-            )
-          );
-        return forkJoin(repoObservables);
-      }),
+          .map((repo) => ({
+            ...repo,
+            readmeImageUrl: null,
+          }))
+      ),
       tap((repos) => {
-        // Cache the result
         this.cachedReposWithImages[username] = repos;
       })
     );
