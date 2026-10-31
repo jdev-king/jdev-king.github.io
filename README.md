@@ -1,59 +1,34 @@
-# JdevKingGithubIo
+# jdev-king.github.io // Engineering Systems Portfolio & RFC Studio
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.6.
+Repositorio del portafolio de ingeniería y estudio interactivo de arquitecturas (RFCs) de **Jesus Sebastian Diez Plasencia (`@jdev-king`)**, construido con **Angular 19**, **Tailwind CSS v4** y diagramas interactivos compilados con **Archify**.
 
-## Development server
+> Para el archivo README diseñado específicamente para el perfil personal de GitHub (`github.com/jdev-king`), consulta [`GITHUB_PROFILE_README.md`](./GITHUB_PROFILE_README.md).
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
-```
+## Arquitectura del Proyecto
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+| Directorio / Archivo | Propósito |
+| :--- | :--- |
+| [`DESIGN.md`](./DESIGN.md) | Especificación del sistema visual (`Editorial Engineering Monograph`), paleta de alto contraste WCAG AA (Carbon Obsidian / Warm Archival Paper + Signal Orange / Deep Vermilion) y escala tipográfica (`Outfit` + `Plus Jakarta Sans` + `Fira Code`). |
+| [`GITHUB_PROFILE_README.md`](./GITHUB_PROFILE_README.md) | Monografía técnica independiente lista para copiarse al repositorio de perfil `jdev-king/jdev-king`. |
+| `public/architectures/*.html` | Seis artefactos interactivos autónomos generados con **Archify** (`sintad-ai-agent_diagram.html`, `nexusflow_diagram.html`, `nexusflow_sequenceOutbound.html`, `analytics-bridge_diagram.html`, `analytics-bridge_dataflow.html`, `analytics-bridge_repoflow.html`). |
+| `src/app/features/home/` | Página principal con motor de arquitectura scroll-scrubbed (`ScrollScrubberComponent`), catálogo de productos corporativos e integraciones B2B (`EnterprisePipelineComponent`), trayectoria (`WorkComponent`), matriz de stack (`SkillsComponent`), repositorios Open Source (`ProjectsComponent`) y publicaciones (`ArticlesComponent`). |
+| `src/app/features/architectures/` | Galería de especificaciones y páginas de detalle RFC (`RFC-AI-301`, `RFC-ERP-101`, `RFC-DATA-201`) con visor interactivo `ArchifyViewerComponent`. |
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Desarrollo y Compilación Local
 
 ```bash
-ng generate --help
+# Instalar dependencias
+npm install
+
+# Iniciar servidor de desarrollo (http://localhost:4200)
+npm start
+
+# Compilar bundle de producción en dist/
+npm run build
 ```
 
-## Building
 
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
